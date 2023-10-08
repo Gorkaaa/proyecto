@@ -1,4 +1,4 @@
-package gaoMarket;
+package main;
 
 public class GAOmarket {
 

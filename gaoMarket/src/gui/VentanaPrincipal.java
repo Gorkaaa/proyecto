@@ -1,4 +1,4 @@
-package ventanas;
+package gui;
 
 public class VentanaPrincipal {
 
