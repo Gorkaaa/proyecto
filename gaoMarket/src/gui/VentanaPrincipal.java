@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import domain.Producto;
@@ -16,11 +17,17 @@ public class VentanaPrincipal extends JFrame{
 		setSize(640, 480);
 		setTitle("GAOmarket");
 		
+		//Prueba de como añadir un panel "carta" de cada producto
+		/*
 		Producto p = new Producto("Producto1", "descipcion 1........................",
 				"Acer_Wallpaper_01_3840x2400.jpg", 15.7, 2, null);
 		CartaProducto cartaP1 = new CartaProducto();
 		cartaP1.Dibujar(p);
 		
+		CartaProducto cp1 = new CartaProducto();
+		JPanel cartaProducto = cp1.Dibujar(p);
+		this.add(cartaProducto);
+		*/
 		
 		setVisible(true);
 	}

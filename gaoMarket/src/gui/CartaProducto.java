@@ -4,6 +4,8 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,20 +15,23 @@ import javax.swing.JPanel;
 
 import domain.Producto;
 
-public class CartaProducto extends JPanel{
+public class CartaProducto extends JPanel implements MouseListener{
 
-	public static final String RUTA_CARPETA_IMG = "../resources/Imagenes/";
+	public static final String RUTA_CARPETA_IMG = "../../resources/Imagenes/";
 	public static final String MONEDA = "€";
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public void Dibujar(Producto p) {
-		JLabel imgProd = new JLabel(new ImageIcon(RUTA_CARPETA_IMG+p.getImagen()));
+	public JPanel Dibujar(Producto p) {
+		addMouseListener(this);
+		
+		JLabel imgProd = new JLabel(new ImageIcon(RUTA_CARPETA_IMG + p.getImagen()));
 		JLabel nombre = new JLabel(p.getNombre());
 		JComboBox<Integer> stock = new JComboBox<Integer>();
-		for(int i = 0; i<p.getCantidad(); i++) {
+		int cantidadStock = p.getCantidad();
+		for(int i = 0; i <= cantidadStock; i++) {
 			stock.addItem(i);
 		}
 		JLabel precio = new JLabel("Precio: " + p.getPrecio() + MONEDA);
@@ -53,8 +58,38 @@ public class CartaProducto extends JPanel{
 		
 		this.add(imgProd, "Center");
 		this.add(panel_Sur, "South");
+		
+		return this;
 	}
+	// Escuchador el cual permite que cuando se clicke en el panel de la "carta" de cada producto
+	// se habra una ventana emergente con informacion extra del producto
 	
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		//DialogoDetealleProducto dialogoDetalleProducto = new DialogoDetealleProducto(frame);
+		//dialogoDetalleProducto.setVisible(true);	
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub	
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
 	
 	//Prueba main
 	public static void main(String[] args) {
