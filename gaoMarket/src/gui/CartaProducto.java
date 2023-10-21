@@ -63,8 +63,6 @@ public class CartaProducto extends JPanel implements MouseListener{
 	}
 	// Escuchador el cual permite que cuando se clicke en el panel de la "carta" de cada producto
 	// se habra una ventana emergente con informacion extra del producto
-	
-	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		//DialogoDetealleProducto dialogoDetalleProducto = new DialogoDetealleProducto(frame);

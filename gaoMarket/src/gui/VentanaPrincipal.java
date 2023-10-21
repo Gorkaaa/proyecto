@@ -1,5 +1,7 @@
 package gui;
 
+import java.util.logging.Logger;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -11,8 +13,9 @@ public class VentanaPrincipal extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(VentanaPrincipal.class.getName());
 	
-	public VentanaPrincipal() {
+	public VentanaPrincipal() {		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(640, 480);
 		setTitle("GAOmarket");
@@ -30,20 +33,15 @@ public class VentanaPrincipal extends JFrame{
 		*/
 		
 		setVisible(true);
-	}
-	
-	
+	}	
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
-
 			@Override
 			public void run() {
 				new VentanaPrincipal();
 			}
-			
 		});
-
 	}
-
+	
 }

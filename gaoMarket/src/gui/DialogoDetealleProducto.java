@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -33,6 +34,7 @@ public class DialogoDetealleProducto extends JDialog{
 		JLabel descripcion = new JLabel(p.getDescripcion());
 		
 		JPanel panelDerecho = new JPanel();
+		panelDerecho.setLayout(new BoxLayout(panelDerecho, BoxLayout.Y_AXIS));
 		
 		JButton botonAceptar = new JButton("ACEPTAR");
 
