@@ -44,7 +44,6 @@ public class VentanaInicioSesion extends JFrame {
                 }
                 
                 // Limpia los campos después del intento de inicio de sesión
-                cajaCorreo.setText("");
                 cajaContrasena.setText("");
             }
         });

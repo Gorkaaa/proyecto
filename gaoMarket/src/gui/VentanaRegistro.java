@@ -11,16 +11,27 @@ public class VentanaRegistro extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private JTextField cajaUsuario;
-	private JTextField cajaCorreo;
-    private JPasswordField cajaContrasena;
+	protected JTextField cajaNombre;
+	protected JTextField cajaApellidos;
+	protected JTextField cajaUsuario;
+	protected JTextField cajaCorreo;
+    protected JTextField cajaTelefono;
+    protected JPasswordField cajaContrasena;
+
     
     public VentanaRegistro() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(450, 180);
+        setSize(500, 200);
         
         // Crear componentes
-        JLabel usuarioLabel = new JLabel("Usuario:");
+        JLabel nombreLabel = new JLabel("Nombre:");
+        cajaNombre = new JTextField(15);
+        JLabel apellidosLabel = new JLabel("Apellidos:");
+        cajaApellidos = new JTextField(30);  
+        JLabel telefonoLabel = new JLabel("Número de teléfono:");
+        cajaTelefono = new JTextField(30);
+        
+        JLabel usuarioLabel = new JLabel("Nombre Usuario:");
         cajaUsuario = new JTextField(15);
         JLabel correoLabel = new JLabel("Correo electrónico:");
         cajaCorreo = new JTextField(40);
@@ -32,11 +43,14 @@ public class VentanaRegistro extends JFrame {
         botonRegistrarse.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String usuario = cajaUsuario.getText();
+            	String usuario = cajaUsuario.getText();
                 char[] contrasena = cajaContrasena.getPassword();
                 JOptionPane.showMessageDialog(null, "Registrado con éxito: " + usuario);
                 
                 // Limpia los campos después del registro
+                cajaNombre.setText("");
+                cajaApellidos.setText("");
+                cajaTelefono.setText("");
                 cajaUsuario.setText("");
                 cajaCorreo.setText("");
                 cajaContrasena.setText("");
@@ -45,6 +59,13 @@ public class VentanaRegistro extends JFrame {
         
         // Crear un panel para organizar los componentes
         JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(7, 2));
+        panel.add(nombreLabel);
+        panel.add(cajaNombre);
+        panel.add(apellidosLabel);
+        panel.add(cajaApellidos);
+        panel.add(telefonoLabel);
+        panel.add(cajaTelefono);
         panel.add(usuarioLabel);
         panel.add(cajaUsuario);
         panel.add(correoLabel);
