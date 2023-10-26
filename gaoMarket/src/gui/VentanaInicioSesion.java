@@ -7,29 +7,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class VentanaInicioSesion extends JFrame {
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
 	private JTextField cajaCorreo;
-    private JPasswordField cajaContrasena;
-
+	private JPasswordField cajaContrasena;
+	
     public VentanaInicioSesion() {
-        super("Inicio de Sesión");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(450, 180);
-
+    	super("Inicio de Sesión");
+    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	setSize(450, 180);
+    	
         // Crear componentes
-        JLabel correoLabel = new JLabel("Correo electrónico:");
-        cajaCorreo = new JTextField(40);
-        JLabel contrasenaLabel = new JLabel("Contraseña:");
-        cajaContrasena = new JPasswordField(15);
-        JButton botonIniciarSesion = new JButton("Iniciar Sesión");
-        JButton botonRegistrar = new JButton("Registrarse");
-
-        // Agregar ActionListener al botón de inicio de sesión
-        botonIniciarSesion.addActionListener(new ActionListener() {
+    	JLabel correoLabel = new JLabel("Correo electrónico:");
+    	cajaCorreo = new JTextField(40);
+    	JLabel contrasenaLabel = new JLabel("Contraseña:");
+    	cajaContrasena = new JPasswordField(15);
+    	JButton botonIniciarSesion = new JButton("Iniciar Sesión");
+    	JButton botonRegistrar = new JButton("Registrarse");
+    	
+    	// Agregar ActionListener al botón de inicio de sesión
+    	botonIniciarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String correo = cajaCorreo.getText();
@@ -68,12 +68,12 @@ public class VentanaInicioSesion extends JFrame {
         panel.add(botonRegistrar);
         
         this.add(panel);
-    }
+     }
 
     // Método para verificar las credenciales
     private boolean verificarCredenciales(String correo, String contrasena) {
     	
-        return correo.equals("correo") && contrasena.equals("contrasena");
+    	return correo.equals("correo") && contrasena.equals("contrasena");
     }
 
     public static void main(String[] args) {
