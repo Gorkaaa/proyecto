@@ -1,24 +1,30 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-abstract public class Persona {
+abstract public class Persona implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	protected String nombre;
 	protected String apellidos;
 	protected String nomUsuario;
 	protected int numTelefono;
 	protected String correoElectronico;
-	protected String contraseña;
+	protected String contrasenya;
 	
 	public Persona(String nombre, String apellidos, String nomUsuario, int numTelefono, String correoElectronico,
-			String contraseña) {
+			String contrasenya) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.nomUsuario = nomUsuario;
 		this.numTelefono = numTelefono;
 		this.correoElectronico = correoElectronico;
-		this.contraseña = contraseña;
+		this.contrasenya = contrasenya;
 	}
 	
 	public Persona() {
@@ -28,7 +34,7 @@ abstract public class Persona {
 		this.nomUsuario = "";
 		this.numTelefono = 0;
 		this.correoElectronico = "";
-		this.contraseña = "";
+		this.contrasenya = "";
 	}
 
 	public String getNombre() {
@@ -71,19 +77,19 @@ abstract public class Persona {
 		this.correoElectronico = correoElectronico;
 	}
 
-	public String getContraseña() {
-		return contraseña;
+	public String getContrasenya() {
+		return contrasenya;
 	}
 
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
+	public void setContrasenya(String contrasenya) {
+		this.contrasenya = contrasenya;
 	}
 
 	@Override
 	public String toString() {
 		return "Persona [nombre=" + nombre + ", apellidos=" + apellidos + ", nomUsuario=" + nomUsuario
-				+ ", numTelefono=" + numTelefono + ", correoElectronico=" + correoElectronico + ", contraseña="
-				+ contraseña + "]";
+				+ ", numTelefono=" + numTelefono + ", correoElectronico=" + correoElectronico + ", contrasenya="
+				+ contrasenya + "]";
 	}
 
 	@Override
@@ -104,7 +110,7 @@ abstract public class Persona {
 				&& Objects.equals(nomUsuario, other.nomUsuario) && numTelefono == other.numTelefono;
 	}	
 	
-	public abstract boolean verificarUsuario(String nomUsuario, String contraseña);
+	public abstract boolean verificarUsuario(String nomUsuario, String contrasenya);
 	
 	public abstract boolean estaRegistrado();
 
