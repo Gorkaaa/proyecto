@@ -7,31 +7,31 @@ public class Alimento extends Producto{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected TipoAlimentacion tipoAlimentacion;
+	protected TipoAlimento tipoAlimento;
 
 	
 	public Alimento(String nombre, String descripcion, String imagen, Double precio, int cantidad,
-			TipoAlimentacion tipoAlimentacion) {
+			TipoAlimento tipoAlimento) {
 		super(nombre, imagen, precio, cantidad);
-		this.tipoAlimentacion = tipoAlimentacion;
+		this.tipoAlimento = tipoAlimento;
 	}
 
 	public Alimento() {
 		super();
-		this.tipoAlimentacion = TipoAlimentacion.CARNICOS;
+		this.tipoAlimento = TipoAlimento.CARNICOS;
 	}
 
-	public TipoAlimentacion getTipoAlimentacion() {
-		return tipoAlimentacion;
+	public TipoAlimento getTipoAliment0() {
+		return tipoAlimento;
 	}
 
-	public void setTipoAlimentacion(TipoAlimentacion tipoAlimentacion) {
-		this.tipoAlimentacion = tipoAlimentacion;
+	public void setTipoAlimento(TipoAlimento tipoAlimento) {
+		this.tipoAlimento = tipoAlimento;
 	}
 
 	@Override
 	public String toString() {
-		return "Alimento [tipoAlimentacion=" + tipoAlimentacion + ", id=" + id + ", nombre=" + nombre + ", imagen="
+		return "Alimento [tipoAlimento=" + tipoAlimento + ", id=" + id + ", nombre=" + nombre + ", imagen="
 				+ imagen + ", precio=" + precio + ", cantidad=" + cantidad + "]";
 	}
 	

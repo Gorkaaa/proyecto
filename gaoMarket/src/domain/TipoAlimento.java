@@ -1,5 +1,5 @@
 package domain;
 
-public enum TipoAlimentacion {
+public enum TipoAlimento {
 	CARNICOS, VEGETALES, BEBIDAS, CONGELADOS, DULCES;
 }
