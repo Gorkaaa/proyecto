@@ -11,16 +11,19 @@ public class GestorMarket {
 	protected Map<String, List<Persona>> mapaPersonas;
 	protected Map<TipoAlimento,List<Producto>> mapaAlimentos;
 	protected Map<TipoHigieneYBelleza, List<Producto>> mapaHigieneYBelleza;
+	protected Map<TipoLimpieza, List<Producto>> mapaLimpieza;
 
 	public GestorMarket(List<Persona> personas, List<Producto> productos, Map<String, List<Persona>> mapaPersonas,
 			Map<TipoAlimento, List<Producto>> mapaAlimentos,
-			Map<TipoHigieneYBelleza, List<Producto>> mapaHigieneYBelleza) {
+			Map<TipoHigieneYBelleza, List<Producto>> mapaHigieneYBelleza,
+			Map<TipoLimpieza, List<Producto>> mapaLimpieza) {
 		super();
 		this.personas = personas;
 		this.productos = productos;
 		this.mapaPersonas = mapaPersonas;
 		this.mapaAlimentos = mapaAlimentos;
 		this.mapaHigieneYBelleza = mapaHigieneYBelleza;
+		this.mapaLimpieza = mapaLimpieza;
 	}
 
 
@@ -42,6 +45,10 @@ public class GestorMarket {
 		mapaHigieneYBelleza.put(TipoHigieneYBelleza.HIGIENE_INTIMA, new ArrayList<Producto>());
 		mapaHigieneYBelleza.put(TipoHigieneYBelleza.CUIDADO_CORPORAL, new ArrayList<Producto>());
 		mapaHigieneYBelleza.put(TipoHigieneYBelleza.PARAFARMACIA_SOLARES, new ArrayList<Producto>());
+		
+		this.mapaLimpieza = new HashMap<>();
+		mapaLimpieza.put(TipoLimpieza.UTENSILIOS, new ArrayList<Producto>());
+		mapaLimpieza.put(TipoLimpieza.PRODUCTOS_LIMPIEZA, new ArrayList<Producto>());
 	}
 
 	public List<Persona> getPersonas() {
@@ -75,12 +82,26 @@ public class GestorMarket {
 	public void setMapaAlimentos(Map<TipoAlimento, List<Producto>> mapaAlimentos) {
 		this.mapaAlimentos = mapaAlimentos;
 	}
-	
-	
 
-	
-	
-	
+
+	public Map<TipoHigieneYBelleza, List<Producto>> getMapaHigieneYBelleza() {
+		return mapaHigieneYBelleza;
+	}
+
+
+	public void setMapaHigieneYBelleza(Map<TipoHigieneYBelleza, List<Producto>> mapaHigieneYBelleza) {
+		this.mapaHigieneYBelleza = mapaHigieneYBelleza;
+	}
+
+
+	public Map<TipoLimpieza, List<Producto>> getMapaLimpieza() {
+		return mapaLimpieza;
+	}
+
+
+	public void setMapaLimpieza(Map<TipoLimpieza, List<Producto>> mapaLimpieza) {
+		this.mapaLimpieza = mapaLimpieza;
+	}
 	
 
 }
