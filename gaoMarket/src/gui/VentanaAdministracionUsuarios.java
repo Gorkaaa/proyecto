@@ -2,10 +2,13 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -28,14 +31,16 @@ public class VentanaAdministracionUsuarios extends JFrame{
 		setSize(640, 480);
 		setTitle("Lista de usuarios");
 		
+		//setLayout();
+		
 		DefaultListModel<Usuario> modeloUsuarios = new DefaultListModel<>();
 		//Prueba
-		/*List<Usuario> usuarios = new ArrayList<Usuario>();
+		List<Usuario> usuarios = new ArrayList<Usuario>();
 		usuarios.add(new Usuario());
 		usuarios.add(new Usuario());
 		usuarios.add(new Usuario());
 		usuarios.add(new Usuario());
-		modeloUsuarios.addAll(usuarios);*/
+		modeloUsuarios.addAll(usuarios);
 		
 		JList<Usuario> lstUsuarios = new JList<>(modeloUsuarios);
 		
@@ -77,6 +82,18 @@ public class VentanaAdministracionUsuarios extends JFrame{
 				
 		JScrollPane scrollPane = new JScrollPane(lstUsuarios);
 		add(scrollPane);
+		JButton botonBorrar = new JButton("Eliminar Usuario");
+		botonBorrar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(lstUsuarios.getSelectedIndex() != -1) {
+					System.out.println("Nada");
+				}
+			}
+		});
+		
+		//add(botonBorrar);
 		
 		setVisible(true);
 	}
