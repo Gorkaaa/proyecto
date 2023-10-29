@@ -1,24 +1,40 @@
 package gui;
 
-import java.util.logging.Logger;
+import java.awt.Container;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import domain.Producto;
+import domain.GestorMarket;
 
-public class VentanaPrincipal extends JFrame{	
+public class VentanaPrincipal extends JFrame {	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(VentanaPrincipal.class.getName());
 	
-	public VentanaPrincipal() {		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(640, 480);
-		setTitle("GAOmarket");
+	protected GestorMarket gestor;
+	protected VentanaInicioSesion ventanaInicioSesion;
+	protected VentanaCarroCompra ventanaCarroCompra;
+	protected ImageIcon iconoUsuario;
+	protected ImageIcon iconoCarro;
+	protected JButton botonCesta;
+	protected JButton botonUsuario;
+
+	public VentanaPrincipal(GestorMarket gestor) {
+		this.gestor = gestor;
+		Container cp = this.getContentPane();
+		
+		ventanaCarroCompra = new VentanaCarroCompra(gestor);
+		ventanaInicioSesion = new VentanaInicioSesion(gestor);
+		
+		iconoUsuario = new ImageIcon("resources/iconos/carritoCompra.png");
+		iconoCarro = new ImageIcon("resources/iconos/usuario.png");
+		
+		
 		
 		//Prueba de como añadir un panel "carta" de cada producto
 		/*
@@ -32,16 +48,13 @@ public class VentanaPrincipal extends JFrame{
 		this.add(cartaProducto);
 		*/
 		
-		setVisible(true);
-	}	
-
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new VentanaPrincipal();
-			}
-		});
-	}
-	
+		JPanel panel = new JPanel();
+		
+		
+		
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cambiar a DISPOSE_ON_CLOSE por si el usuario se equivoca, que no cierre todo el programa.
+		this.setSize(640, 480);
+		this.setTitle("GAO Market");
+		this.setVisible(false);
+	}		
 }

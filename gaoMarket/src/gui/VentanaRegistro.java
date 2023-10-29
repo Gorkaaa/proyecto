@@ -1,6 +1,9 @@
 package gui;
 
 import javax.swing.*;
+
+import domain.GestorMarket;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,9 +20,9 @@ public class VentanaRegistro extends JFrame {
 	protected JTextField cajaCorreo;
     protected JTextField cajaTelefono;
     protected JPasswordField cajaContrasena;
-
+    protected GestorMarket gestor;
     
-    public VentanaRegistro() {
+    public VentanaRegistro(GestorMarket gestor) {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 200);
         

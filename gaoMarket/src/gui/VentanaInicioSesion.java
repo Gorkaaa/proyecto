@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 
+import domain.GestorMarket;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,13 +14,11 @@ public class VentanaInicioSesion extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private JTextField cajaCorreo;
-	private JPasswordField cajaContrasena;
+	protected GestorMarket gestor;
+	protected JTextField cajaCorreo;
+	protected JPasswordField cajaContrasena;
 	
-    public VentanaInicioSesion() {
-    	super("Inicio de Sesión");
-    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	setSize(450, 180);
+    public VentanaInicioSesion(GestorMarket gestor) {
     	
         // Crear componentes
     	JLabel correoLabel = new JLabel("Correo electrónico:");
@@ -52,7 +52,7 @@ public class VentanaInicioSesion extends JFrame {
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	VentanaRegistro ventanaRegistro = new VentanaRegistro();
+            	VentanaRegistro ventanaRegistro = new VentanaRegistro(gestor);
                 ventanaRegistro.setVisible(true);
             }
         });
@@ -68,6 +68,11 @@ public class VentanaInicioSesion extends JFrame {
         panel.add(botonRegistrar);
         
         this.add(panel);
+        
+        this.setTitle("Inicio de Sesión");
+    	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	this.setSize(450, 180);
+    	this.setVisible(false);
      }
 
     // Método para verificar las credenciales
@@ -76,12 +81,4 @@ public class VentanaInicioSesion extends JFrame {
     	return correo.equals("correo") && contrasena.equals("contrasena");
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                VentanaInicioSesion ventana = new VentanaInicioSesion();
-                ventana.setVisible(true);
-            }
-        });
-    }
 }

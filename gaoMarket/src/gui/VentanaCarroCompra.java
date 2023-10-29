@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -8,8 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 
+import domain.GestorMarket;
 import domain.Producto;
 
 public class VentanaCarroCompra extends JFrame{
@@ -19,15 +20,14 @@ public class VentanaCarroCompra extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private DefaultListModel<Producto> modeloCarrito;
-	private JList<Producto> lstCarrito;
-	private JButton btnEliminar;
+	protected GestorMarket gestor;
+	protected DefaultListModel<Producto> modeloCarrito;
+	protected JList<Producto> lstCarrito;
+	protected JButton btnEliminar;
     
-	public VentanaCarroCompra() {
-		setTitle("Carrito de la Compra");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(400, 300);
-		setLayout(new BorderLayout());
+	public VentanaCarroCompra(GestorMarket gestor) {
+		this.gestor = gestor;
+		Container cp = this.getContentPane();
 		
 		modeloCarrito = new DefaultListModel<>();
 		lstCarrito = new JList<>(modeloCarrito);
@@ -37,18 +37,13 @@ public class VentanaCarroCompra extends JFrame{
 		JPanel panelInferior = new JPanel();
 		panelInferior.add(btnEliminar);
 		
-		add(carritoScrollPane, BorderLayout.CENTER);
-		add(panelInferior, BorderLayout.SOUTH);
+		cp.add(carritoScrollPane, BorderLayout.CENTER);
+		cp.add(panelInferior, BorderLayout.SOUTH);
 		
-		setVisible(true);
+		this.setTitle("Carrito de la Compra");
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setSize(400, 300);
+		this.setLayout(new BorderLayout());
 	}
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new VentanaCarroCompra();
-			}
-		});
-	}
 }
