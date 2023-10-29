@@ -23,8 +23,10 @@ public class VentanaRegistro extends JFrame {
     protected GestorMarket gestor;
     
     public VentanaRegistro(GestorMarket gestor) {
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(500, 200);
+    	this.gestor = gestor;
+		Container cp = this.getContentPane();
+		
+       
         
         // Crear componentes
         JLabel nombreLabel = new JLabel("Nombre:");
@@ -73,6 +75,12 @@ public class VentanaRegistro extends JFrame {
         panel.add(cajaContrasena);
         panel.add(botonRegistrarse);
         
-        this.add(panel);
+        cp.add(panel);
+        
+        this.setTitle("Registro de usuario");
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setSize(500, 200);
+        this.setVisible(false);
+        
     }
 }

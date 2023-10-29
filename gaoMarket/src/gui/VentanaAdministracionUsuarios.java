@@ -3,7 +3,6 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -23,7 +22,9 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
-import domain.*;
+import domain.Empleado;
+import domain.GestorMarket;
+import domain.Usuario;
 
 public class VentanaAdministracionUsuarios extends JFrame{
 
@@ -32,20 +33,21 @@ public class VentanaAdministracionUsuarios extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected static GestorMarket gestor;
+	protected GestorMarket gestor;
 	
 	public VentanaAdministracionUsuarios(GestorMarket gestor) {
-		this.gestor = gestor;
-		Container cp = this.getContentPane();
+		
+		
+		this.setLayout(new BorderLayout());
 		
 		DefaultListModel<Usuario> modeloUsuarios = new DefaultListModel<>();
 		DefaultListModel<Empleado> modeloEmpleados = new DefaultListModel<>();
 		//Prueba
 		List<Usuario> usuarios = new ArrayList<>();
-		usuarios.add(new Usuario("Nombre1", "Apellido1", "usu1", 666666661, "correo1@gmail.com", "contrasenya"));
-		usuarios.add(new Usuario("Nombre2", "Apellido2", "usu2", 666666662, "correo2@gmail.com", "contrasenya"));
-		usuarios.add(new Usuario("Nombre3", "Apellido3", "usu3", 666666663, "correo3@gmail.com", "contrasenya"));
-		usuarios.add(new Usuario("Nombre4", "Apellido4", "usu4", 666666664, "correo4@gmail.com", "contrasenya"));
+		usuarios.add(new Usuario("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya"));
+		usuarios.add(new Usuario("Nombre2", "Apellido2", "usu2", 666666666, "correo@gmail.com", "contrasenya"));
+		usuarios.add(new Usuario("Nombre3", "Apellido3", "usu3", 666666666, "correo@gmail.com", "contrasenya"));
+		usuarios.add(new Usuario("Nombre4", "Apellido4", "usu4", 666666666, "correo@gmail.com", "contrasenya"));
 		modeloUsuarios.addAll(usuarios);
 		
 		/*
@@ -137,23 +139,14 @@ public class VentanaAdministracionUsuarios extends JFrame{
 		panelBotones.add(botonAñadirUsuario);
 		panelBotones.add(botonBorrar);
 
-		cp.add(panelBotones, "South");
+		add(panelBotones, "South");
 		
-		this.setLayout(new BorderLayout());
 		
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(1000, 480);
 		this.setTitle("Lista de usuarios/empleados");
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setSize(1000, 480);
 		this.setVisible(false);
+		
 	}
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			public void run() {
-				VentanaAdministracionUsuarios ventana = new VentanaAdministracionUsuarios(gestor);
-				ventana.setVisible(true);
-			}
-		});
-	}
 }

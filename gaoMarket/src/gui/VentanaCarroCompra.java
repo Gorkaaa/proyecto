@@ -29,6 +29,8 @@ public class VentanaCarroCompra extends JFrame{
 		this.gestor = gestor;
 		Container cp = this.getContentPane();
 		
+		this.setLayout(new BorderLayout());
+		
 		modeloCarrito = new DefaultListModel<>();
 		lstCarrito = new JList<>(modeloCarrito);
 		btnEliminar = new JButton("Eliminar del carrito");
@@ -40,10 +42,11 @@ public class VentanaCarroCompra extends JFrame{
 		cp.add(carritoScrollPane, BorderLayout.CENTER);
 		cp.add(panelInferior, BorderLayout.SOUTH);
 		
+		
 		this.setTitle("Carrito de la Compra");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setSize(400, 300);
-		this.setLayout(new BorderLayout());
+		this.setVisible(false);
 	}
 
 }
