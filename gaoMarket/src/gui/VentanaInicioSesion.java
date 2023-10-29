@@ -70,7 +70,7 @@ public class VentanaInicioSesion extends JFrame {
         this.add(panel);
         
         this.setTitle("Inicio de Sesión");
-    	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	this.setSize(450, 180);
     	this.setVisible(false);
      }

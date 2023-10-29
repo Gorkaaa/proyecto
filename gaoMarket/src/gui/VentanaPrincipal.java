@@ -1,12 +1,17 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.JTextField;
 
 import domain.GestorMarket;
 
@@ -20,10 +25,11 @@ public class VentanaPrincipal extends JFrame {
 	protected VentanaInicioSesion ventanaInicioSesion;
 	protected VentanaCarroCompra ventanaCarroCompra;
 	protected ImageIcon iconoUsuario;
-	protected ImageIcon iconoCarro;
+	protected ImageIcon iconoCesta;
 	protected JButton botonCesta;
 	protected JButton botonUsuario;
-
+	protected JTextField barraBusqueda;
+	
 	public VentanaPrincipal(GestorMarket gestor) {
 		this.gestor = gestor;
 		Container cp = this.getContentPane();
@@ -31,10 +37,37 @@ public class VentanaPrincipal extends JFrame {
 		ventanaCarroCompra = new VentanaCarroCompra(gestor);
 		ventanaInicioSesion = new VentanaInicioSesion(gestor);
 		
-		iconoUsuario = new ImageIcon("resources/iconos/carritoCompra.png");
-		iconoCarro = new ImageIcon("resources/iconos/usuario.png");
+		iconoCesta = new ImageIcon("resources/iconos/carritoCompra.png");
+		iconoCesta = new ImageIcon(iconoCesta.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
+		botonCesta = new JButton(iconoCesta);
+		
+		botonCesta.addActionListener((ActionListener) new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ventanaCarroCompra.setVisible(true);
+			}
+			
+		});
+		
+		iconoUsuario = new ImageIcon("resources/iconos/usuario.png");
+		iconoUsuario = new ImageIcon(iconoUsuario.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
+		botonUsuario = new JButton(iconoUsuario);
+		
+		botonUsuario.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ventanaInicioSesion.setVisible(true);
+				
+			}
+		});
 		
 		
+		barraBusqueda = new JTextField(20);
+		
+		
+			
 		
 		//Prueba de como añadir un panel "carta" de cada producto
 		/*
@@ -48,7 +81,15 @@ public class VentanaPrincipal extends JFrame {
 		this.add(cartaProducto);
 		*/
 		
-		JPanel panel = new JPanel();
+		JPanel panelArriba = new JPanel();
+		JPanel panelArribaDerecha = new JPanel();
+		
+		panelArriba.add(barraBusqueda, BorderLayout.CENTER);
+		panelArribaDerecha.add(botonCesta, BorderLayout.EAST);
+		panelArribaDerecha.add(botonUsuario, BorderLayout.EAST);
+
+		cp.add(panelArribaDerecha, BorderLayout.EAST);
+		cp.add(panelArriba, BorderLayout.NORTH);
 		
 		
 		
