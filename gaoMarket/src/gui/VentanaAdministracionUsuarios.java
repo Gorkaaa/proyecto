@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -7,16 +8,21 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
+import domain.Empleado;
 import domain.Usuario;
 
 public class VentanaAdministracionUsuarios extends JFrame{
@@ -28,20 +34,29 @@ public class VentanaAdministracionUsuarios extends JFrame{
 	
 	public VentanaAdministracionUsuarios() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(640, 480);
-		setTitle("Lista de usuarios");
+		setSize(1000, 480);
+		setTitle("Lista de usuarios/empleados");
 		
-		//setLayout();
+		setLayout(new BorderLayout());
 		
 		DefaultListModel<Usuario> modeloUsuarios = new DefaultListModel<>();
+		DefaultListModel<Empleado> modeloEmpleados = new DefaultListModel<>();
 		//Prueba
-		List<Usuario> usuarios = new ArrayList<Usuario>();
-		usuarios.add(new Usuario());
-		usuarios.add(new Usuario());
-		usuarios.add(new Usuario());
-		usuarios.add(new Usuario());
+		List<Usuario> usuarios = new ArrayList<>();
+		usuarios.add(new Usuario("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya"));
+		usuarios.add(new Usuario("Nombre2", "Apellido2", "usu2", 666666666, "correo@gmail.com", "contrasenya"));
+		usuarios.add(new Usuario("Nombre3", "Apellido3", "usu3", 666666666, "correo@gmail.com", "contrasenya"));
+		usuarios.add(new Usuario("Nombre4", "Apellido4", "usu4", 666666666, "correo@gmail.com", "contrasenya"));
 		modeloUsuarios.addAll(usuarios);
 		
+		/*
+		List<Empleado> empleados = new ArrayList<>();
+		empleados.add(new Empleado("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
+		empleados.add(new Empleado("Nombre2", "Apellido2", "usu2", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
+		empleados.add(new Empleado("Nombre3", "Apellido3", "usu3", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
+		empleados.add(new Empleado("Nombre4", "Apellido4", "usu4", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
+		modeloEmpleados.addAll(empleados);*/
+
 		JList<Usuario> lstUsuarios = new JList<>(modeloUsuarios);
 		
 		//la lista solamente admite selección sencilla
@@ -58,8 +73,7 @@ public class VentanaAdministracionUsuarios extends JFrame{
 			public Component getListCellRendererComponent(JList<? extends Usuario> list, Usuario value, int index,
 					boolean isSelected, boolean cellHasFocus) {
 				//Se establece el valor del texto mostrado en el JLabel de la celda
-	            //setText(value.toString());
-	            setText("-----");
+	            setText(value.toString());
 
 	            
 				// Cuando se seleccione un usuario cambia el color de la celda
@@ -81,19 +95,50 @@ public class VentanaAdministracionUsuarios extends JFrame{
 		
 				
 		JScrollPane scrollPane = new JScrollPane(lstUsuarios);
-		add(scrollPane);
+		add(scrollPane, "Center");
+		
+		/*JRadioButton rb_Usuarios = new JRadioButton("Usuarios");
+		JRadioButton rb_Empleados = new JRadioButton("Empleados");
+
+        ButtonGroup grupoBotones = new ButtonGroup();
+        grupoBotones.add(rb_Usuarios);
+        grupoBotones.add(rb_Empleados);
+
+        JPanel panelIzq = new JPanel();
+        panelIzq.add(rb_Usuarios);
+        panelIzq.add(rb_Empleados);
+        add(panelIzq, "West");*/
+		
 		JButton botonBorrar = new JButton("Eliminar Usuario");
 		botonBorrar.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(lstUsuarios.getSelectedIndex() != -1) {
-					System.out.println("Nada");
+				if(!lstUsuarios.isSelectionEmpty()) {
+					int usuarioSeleccionado = lstUsuarios.getSelectedIndex();
+					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar el usuario?", "Confirmación de eliminación", JOptionPane.YES_NO_OPTION);
+					if (confirmacion == JOptionPane.YES_OPTION) {
+						modeloUsuarios.remove(usuarioSeleccionado);
+					}
 				}
 			}
 		});
 		
-		//add(botonBorrar);
+		JButton botonAñadirUsuario = new JButton("Añadir Usuario");
+		botonAñadirUsuario.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				VentanaRegistro ventanaRegistro = new VentanaRegistro();
+				ventanaRegistro.setVisible(true);				
+			}
+		});
+		
+		JPanel panelBotones = new JPanel();
+		panelBotones.add(botonAñadirUsuario);
+		panelBotones.add(botonBorrar);
+
+		add(panelBotones, "South");
 		
 		setVisible(true);
 	}

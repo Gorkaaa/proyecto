@@ -52,7 +52,7 @@ public class VentanaInicioSesion extends JFrame {
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                VentanaRegistro ventanaRegistro = new VentanaRegistro();
+            	VentanaRegistro ventanaRegistro = new VentanaRegistro();
                 ventanaRegistro.setVisible(true);
             }
         });
