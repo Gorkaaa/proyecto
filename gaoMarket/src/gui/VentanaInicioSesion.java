@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import domain.GestorMarket;
 
+import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,9 +18,14 @@ public class VentanaInicioSesion extends JFrame {
 	protected GestorMarket gestor;
 	protected JTextField cajaCorreo;
 	protected JPasswordField cajaContrasena;
+	protected VentanaRegistro ventanaRegistro;
 	
     public VentanaInicioSesion(GestorMarket gestor) {
-    	
+    	this.gestor = gestor;
+		Container cp = this.getContentPane();
+		
+		ventanaRegistro = new VentanaRegistro(gestor);
+		
         // Crear componentes
     	JLabel correoLabel = new JLabel("Correo electrónico:");
     	cajaCorreo = new JTextField(40);
@@ -52,8 +58,8 @@ public class VentanaInicioSesion extends JFrame {
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	VentanaRegistro ventanaRegistro = new VentanaRegistro(gestor);
                 ventanaRegistro.setVisible(true);
+                dispose();
             }
         });
 
@@ -67,7 +73,7 @@ public class VentanaInicioSesion extends JFrame {
         panel.add(botonIniciarSesion);
         panel.add(botonRegistrar);
         
-        this.add(panel);
+        cp.add(panel);
         
         this.setTitle("Inicio de Sesión");
     	this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
