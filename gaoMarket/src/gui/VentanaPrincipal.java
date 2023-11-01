@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -10,7 +11,8 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JTextField;
 
 import domain.GestorMarket;
@@ -28,6 +30,7 @@ public class VentanaPrincipal extends JFrame {
 	protected ImageIcon iconoUsuario;
 	protected ImageIcon iconoCesta;
 	protected ImageIcon iconoGestorUsuario;
+	protected ImageIcon iconoGAO;
 	protected JButton botonCesta;
 	protected JButton botonUsuario;
 	protected JButton botonGestionUsuario;
@@ -80,9 +83,6 @@ public class VentanaPrincipal extends JFrame {
 		
 		barraBusqueda = new JTextField(20);
 		
-		
-			
-		
 		//Prueba de como añadir un panel "carta" de cada producto
 		/*
 		Producto p = new Producto("Producto1", "descipcion 1........................",
@@ -95,21 +95,40 @@ public class VentanaPrincipal extends JFrame {
 		this.add(cartaProducto);
 		*/
 		
-		JPanel panelArriba = new JPanel();
-		JPanel panelArribaDerecha = new JPanel();
+		iconoGAO = new ImageIcon("resources/imagenes/GAOmarket.png");
+		iconoGAO = new ImageIcon(iconoGAO.getImage().getScaledInstance(404, 114, Image.SCALE_SMOOTH));
 		
-		panelArriba.add(barraBusqueda, BorderLayout.CENTER);
-		panelArribaDerecha.add(botonGestionUsuario, BorderLayout.EAST);
-		panelArribaDerecha.add(botonUsuario, BorderLayout.EAST);
-		panelArribaDerecha.add(botonCesta, BorderLayout.EAST);
+		JLabel imagenGAO = new JLabel();
+		imagenGAO.setIcon(iconoGAO);
+			
+		JLayeredPane panelArriba = new JLayeredPane();
+		panelArriba.setPreferredSize(new Dimension(1200, 130));
 
-		cp.add(panelArribaDerecha, BorderLayout.EAST);
+		panelArriba.add(barraBusqueda);
+		panelArriba.add(botonGestionUsuario);
+		panelArriba.add(botonUsuario);
+		panelArriba.add(botonCesta);
+		panelArriba.add(imagenGAO);
+
+		barraBusqueda.setBounds(550, 75, 280, 35);
+		botonGestionUsuario.setBounds(1060, 6, 45, 45);
+		botonUsuario.setBounds(1120, 6, 45, 45);
+		botonCesta.setBounds(1050, 60, 125, 60);
+		imagenGAO.setBounds(20, 10, 404, 114);
+		
 		cp.add(panelArriba, BorderLayout.NORTH);
 		
+		JLayeredPane panelAbajo = new JLayeredPane();
+        
+		panelAbajo.setBackground(Color.BLACK);
+		panelAbajo.setPreferredSize(new Dimension(1200, 600));
+		panelAbajo.setOpaque(true);
+		
+		 cp.add(panelAbajo);
 		
 		this.setTitle("GAO Market");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cambiar a DISPOSE_ON_CLOSE por si el usuario se equivoca, que no cierre todo el programa.
-		this.setSize(1000, 600);
+		this.setBounds(150, 40, 1200, 730);
 		this.setVisible(false);
 	}		
 }
