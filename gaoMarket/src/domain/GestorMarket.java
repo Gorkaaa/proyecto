@@ -4,19 +4,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class GestorMarket {
 	protected List<Persona> personas;
 	protected List<Producto> productos;
 	protected Map<String, List<Persona>> mapaPersonas;
-	protected Map<TipoAlimento,List<Producto>> mapaAlimentos;
-	protected Map<TipoHigieneYBelleza, List<Producto>> mapaHigieneYBelleza;
-	protected Map<TipoLimpieza, List<Producto>> mapaLimpieza;
+	protected Map<TipoAlimento, Set<Producto>> mapaAlimentos;
+	protected Map<TipoHigieneYBelleza, Set<Producto>> mapaHigieneYBelleza;
+	protected Map<TipoLimpieza, Set<Producto>> mapaLimpieza;
 
 	public GestorMarket(List<Persona> personas, List<Producto> productos, Map<String, List<Persona>> mapaPersonas,
-			Map<TipoAlimento, List<Producto>> mapaAlimentos,
-			Map<TipoHigieneYBelleza, List<Producto>> mapaHigieneYBelleza,
-			Map<TipoLimpieza, List<Producto>> mapaLimpieza) {
+			Map<TipoAlimento, Set<Producto>> mapaAlimentos,
+			Map<TipoHigieneYBelleza, Set<Producto>> mapaHigieneYBelleza,
+			Map<TipoLimpieza, Set<Producto>> mapaLimpieza) {
 		super();
 		this.personas = personas;
 		this.productos = productos;
@@ -34,17 +36,17 @@ public class GestorMarket {
 		this.mapaPersonas = new HashMap<>();
 		this.mapaAlimentos = new HashMap<>();
 		for (TipoAlimento alimento : TipoAlimento.values()) {
-			mapaAlimentos.put(alimento, new ArrayList<Producto>());
+			mapaAlimentos.put(alimento, new TreeSet<Producto>());
 		}
 		
 		this.mapaHigieneYBelleza = new HashMap<>();
 		for (TipoHigieneYBelleza higiene : TipoHigieneYBelleza.values()) {
-			mapaHigieneYBelleza.put(higiene, new ArrayList<Producto>());
+			mapaHigieneYBelleza.put(higiene, new TreeSet<Producto>());
 		}
 		
 		this.mapaLimpieza = new HashMap<>();
 		for (TipoLimpieza limpieza : TipoLimpieza.values()) {
-			mapaLimpieza.put(limpieza, new ArrayList<Producto>());
+			mapaLimpieza.put(limpieza, new TreeSet<Producto>());
 		}
 	}
 
@@ -72,31 +74,31 @@ public class GestorMarket {
 		this.mapaPersonas = mapaPersonas;
 	}
 
-	public Map<TipoAlimento, List<Producto>> getMapaAlimentos() {
+	public Map<TipoAlimento, Set<Producto>> getMapaAlimentos() {
 		return mapaAlimentos;
 	}
 
-	public void setMapaAlimentos(Map<TipoAlimento, List<Producto>> mapaAlimentos) {
+	public void setMapaAlimentos(Map<TipoAlimento, Set<Producto>> mapaAlimentos) {
 		this.mapaAlimentos = mapaAlimentos;
 	}
 
 
-	public Map<TipoHigieneYBelleza, List<Producto>> getMapaHigieneYBelleza() {
+	public Map<TipoHigieneYBelleza, Set<Producto>> getMapaHigieneYBelleza() {
 		return mapaHigieneYBelleza;
 	}
 
 
-	public void setMapaHigieneYBelleza(Map<TipoHigieneYBelleza, List<Producto>> mapaHigieneYBelleza) {
+	public void setMapaHigieneYBelleza(Map<TipoHigieneYBelleza, Set<Producto>> mapaHigieneYBelleza) {
 		this.mapaHigieneYBelleza = mapaHigieneYBelleza;
 	}
 
 
-	public Map<TipoLimpieza, List<Producto>> getMapaLimpieza() {
+	public Map<TipoLimpieza, Set<Producto>> getMapaLimpieza() {
 		return mapaLimpieza;
 	}
 
 
-	public void setMapaLimpieza(Map<TipoLimpieza, List<Producto>> mapaLimpieza) {
+	public void setMapaLimpieza(Map<TipoLimpieza, Set<Producto>> mapaLimpieza) {
 		this.mapaLimpieza = mapaLimpieza;
 	}
 	
