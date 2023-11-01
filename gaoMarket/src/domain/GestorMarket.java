@@ -33,22 +33,19 @@ public class GestorMarket {
 		this.productos = new ArrayList<>();
 		this.mapaPersonas = new HashMap<>();
 		this.mapaAlimentos = new HashMap<>();
-		mapaAlimentos.put(TipoAlimento.CARNICOS, new ArrayList<Producto>());
-		mapaAlimentos.put(TipoAlimento.VEGETALES, new ArrayList<Producto>());
-		mapaAlimentos.put(TipoAlimento.BEBIDAS, new ArrayList<Producto>());
-		mapaAlimentos.put(TipoAlimento.CONGELADOS, new ArrayList<Producto>());
-		mapaAlimentos.put(TipoAlimento.DULCES, new ArrayList<Producto>());
+		for (TipoAlimento alimento : TipoAlimento.values()) {
+			mapaAlimentos.put(alimento, new ArrayList<Producto>());
+		}
 		
 		this.mapaHigieneYBelleza = new HashMap<>();
-		mapaHigieneYBelleza.put(TipoHigieneYBelleza.AFEITADO_DEPILACION, new ArrayList<Producto>());
-		mapaHigieneYBelleza.put(TipoHigieneYBelleza.HIGIENE_BUCAL, new ArrayList<Producto>());
-		mapaHigieneYBelleza.put(TipoHigieneYBelleza.HIGIENE_INTIMA, new ArrayList<Producto>());
-		mapaHigieneYBelleza.put(TipoHigieneYBelleza.CUIDADO_CORPORAL, new ArrayList<Producto>());
-		mapaHigieneYBelleza.put(TipoHigieneYBelleza.PARAFARMACIA_SOLARES, new ArrayList<Producto>());
+		for (TipoHigieneYBelleza higiene : TipoHigieneYBelleza.values()) {
+			mapaHigieneYBelleza.put(higiene, new ArrayList<Producto>());
+		}
 		
 		this.mapaLimpieza = new HashMap<>();
-		mapaLimpieza.put(TipoLimpieza.UTENSILIOS, new ArrayList<Producto>());
-		mapaLimpieza.put(TipoLimpieza.PRODUCTOS_LIMPIEZA, new ArrayList<Producto>());
+		for (TipoLimpieza limpieza : TipoLimpieza.values()) {
+			mapaLimpieza.put(limpieza, new ArrayList<Producto>());
+		}
 	}
 
 	public List<Persona> getPersonas() {
