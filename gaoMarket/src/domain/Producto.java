@@ -3,7 +3,7 @@ package domain;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Producto implements Serializable {
+public class Producto implements Serializable, Comparable<Producto>{
 	/**
 	 * 
 	 */
@@ -104,6 +104,12 @@ public class Producto implements Serializable {
 			return false;
 		Producto other = (Producto) obj;
 		return id == other.id && Objects.equals(nombre, other.nombre);
+	}
+
+//	Ordena los productos por su nombre alfabeticamente
+	@Override
+	public int compareTo(Producto o) {
+		return this.nombre.compareTo(o.nombre);
 	}
 	
 }
