@@ -12,6 +12,7 @@ public class GAOmarket {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				gestor = new GestorMarket();
 				 VentanaPrincipal ventana = new VentanaPrincipal(gestor);
 				 ventana.setVisible(true);
 			}
