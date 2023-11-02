@@ -1,13 +1,22 @@
 package gui;
 
-import javax.swing.*;
 
 import domain.GestorMarket;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 public class VentanaInicioSesion extends JFrame {
 	/**
@@ -19,6 +28,8 @@ public class VentanaInicioSesion extends JFrame {
 	protected JTextField cajaCorreo;
 	protected JPasswordField cajaContrasena;
 	protected VentanaRegistro ventanaRegistro;
+	protected ImageIcon iconoUsuario;
+	protected ImageIcon iconoContrasena;
 	
     public VentanaInicioSesion(GestorMarket gestor) {
     	this.gestor = gestor;
@@ -27,9 +38,13 @@ public class VentanaInicioSesion extends JFrame {
 		ventanaRegistro = new VentanaRegistro(gestor);
 		
         // Crear componentes
-    	JLabel correoLabel = new JLabel("Correo electrónico:");
+		iconoUsuario = new ImageIcon("resources/iconos/usuario.png");
+		iconoUsuario = new ImageIcon(iconoUsuario.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
+    	JLabel correoLabel = new JLabel(iconoUsuario);
     	cajaCorreo = new JTextField(40);
-    	JLabel contrasenaLabel = new JLabel("Contraseña:");
+    	iconoContrasena = new ImageIcon("resources/iconos/llave.png");
+    	iconoContrasena = new ImageIcon(iconoContrasena.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
+    	JLabel contrasenaLabel = new JLabel(iconoContrasena);
     	cajaContrasena = new JPasswordField(15);
     	JButton botonIniciarSesion = new JButton("Iniciar Sesión");
     	JButton botonRegistrar = new JButton("Registrarse");
@@ -64,15 +79,24 @@ public class VentanaInicioSesion extends JFrame {
         });
 
         // Crear un panel para organizar los componentes
-        JPanel panel = new JPanel(new GridLayout(3, 2));
+        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panelCorreo = new JPanel();
+        JPanel panelContrasena = new JPanel();
+        JPanel panelCajas = new JPanel();
+        JPanel panelBotones = new JPanel();
+
         
-        panel.add(correoLabel);
-        panel.add(cajaCorreo);
-        panel.add(contrasenaLabel);
-        panel.add(cajaContrasena);
-        panel.add(botonIniciarSesion);
-        panel.add(botonRegistrar);
+        panelCorreo.add(correoLabel);
+        panelCorreo.add(cajaCorreo);
+        panelContrasena.add(contrasenaLabel);
+        panelContrasena.add(cajaContrasena);
+        panelCajas.add(panelCorreo);
+        panelCajas.add(panelContrasena);
+        panelBotones.add(botonIniciarSesion);
+        panelBotones.add(botonRegistrar);
         
+        panel.add(panelCajas, "Center");
+        panel.add(panelBotones, "South");
         cp.add(panel);
         
         this.setTitle("Inicio de Sesión");
