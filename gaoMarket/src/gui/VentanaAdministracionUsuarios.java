@@ -219,7 +219,6 @@ public class VentanaAdministracionUsuarios extends JFrame{
 					if (confirmacion == JOptionPane.YES_OPTION) {
 						usuarios.remove(usuarioSeleccionado);
 						tablaUsuarios.repaint();
-						System.out.println("Elimiar " + usuarioSeleccionado);
 					}
 				}
 			}
