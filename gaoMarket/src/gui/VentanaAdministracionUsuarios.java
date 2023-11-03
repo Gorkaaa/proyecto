@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,11 +12,15 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import domain.GestorMarket;
@@ -30,6 +35,7 @@ public class VentanaAdministracionUsuarios extends JFrame{
 	
 	protected GestorMarket gestor;
 	protected List<Usuario> usuarios;
+	protected DefaultTableModel mTablaUsuario;
 	
 	public VentanaAdministracionUsuarios(GestorMarket gestor) {
 		this.setLayout(new BorderLayout());
@@ -137,7 +143,11 @@ public class VentanaAdministracionUsuarios extends JFrame{
 	        }
 		}
 		
-		JTextField buscador = new JTextField(20);
+		JTextField buscador = new JTextField(40);
+		JPanel panelNorte = new JPanel();
+		panelNorte.add(new JLabel("Filtro de busqueda: "));
+		panelNorte.add(buscador);
+		add(panelNorte, "North");
 		
 		class RendererTabla extends JLabel implements TableCellRenderer{
 
@@ -153,12 +163,20 @@ public class VentanaAdministracionUsuarios extends JFrame{
 				
 				//Pone en negrita el string que aparece en las celdas
 				if(!buscador.getText().isBlank() && cellText.startsWith(buscador.getText())) {
-					setText(String.format("<html><b>%s</b>%s</htnml>",
+					setText(String.format("<html><b style='color:red'>%s</b>%s</htnml>",
 							buscador.getText(),
 							cellText.substring(buscador.getText().length())
 							));
 				}else {
 					setText(cellText);
+				}
+				
+				if(isSelected) {
+					setOpaque(true);
+					setBackground(Color.green);
+				}
+				else {
+					setOpaque(false);
 				}
 				
 				return this;
@@ -172,20 +190,40 @@ public class VentanaAdministracionUsuarios extends JFrame{
 		JScrollPane scrollPane = new JScrollPane(tablaUsuarios);
 		add(scrollPane, "Center");
 		
+		buscador.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				tablaUsuarios.repaint();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				tablaUsuarios.repaint();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				tablaUsuarios.repaint();
+			}
+		});
+		
 		JButton botonBorrar = new JButton("Eliminar Usuario");
-		/*botonBorrar.addActionListener(new ActionListener() {
+		botonBorrar.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!tablaUsuarios.isSelectionEmpty()) {
-					int usuarioSeleccionado = tablaUsuarios.getSelectedIndex();
+				int usuarioSeleccionado = tablaUsuarios.getSelectedRow();
+				if (usuarioSeleccionado != -1) {
 					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar el usuario?", "Confirmación de eliminación", JOptionPane.YES_NO_OPTION);
 					if (confirmacion == JOptionPane.YES_OPTION) {
-						modeloUsuarios.remove(usuarioSeleccionado);
+						usuarios.remove(usuarioSeleccionado);
+						tablaUsuarios.repaint();
+						System.out.println("Elimiar " + usuarioSeleccionado);
 					}
 				}
 			}
-		});*/
+		});
 		
 		JButton botonAñadirUsuario = new JButton("Añadir Usuario");
 		botonAñadirUsuario.addActionListener(new ActionListener() {
