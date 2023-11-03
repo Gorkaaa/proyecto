@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public class VentanaInicioSesion extends JFrame {
 	/**
@@ -45,7 +46,7 @@ public class VentanaInicioSesion extends JFrame {
     	iconoContrasena = new ImageIcon("resources/iconos/llave.png");
     	iconoContrasena = new ImageIcon(iconoContrasena.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
     	JLabel contrasenaLabel = new JLabel(iconoContrasena);
-    	cajaContrasena = new JPasswordField(15);
+    	cajaContrasena = new JPasswordField(40);
     	JButton botonIniciarSesion = new JButton("Iniciar Sesión");
     	JButton botonRegistrar = new JButton("Registrarse");
     	
@@ -92,6 +93,7 @@ public class VentanaInicioSesion extends JFrame {
         panelContrasena.add(cajaContrasena);
         panelCajas.add(panelCorreo);
         panelCajas.add(panelContrasena);
+        panelCajas.setBorder(new EmptyBorder(10,50,10,50));
         panelBotones.add(botonIniciarSesion);
         panelBotones.add(botonRegistrar);
         
