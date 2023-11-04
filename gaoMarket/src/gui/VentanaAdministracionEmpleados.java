@@ -23,10 +23,10 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import domain.Empleado;
 import domain.GestorMarket;
-import domain.Usuario;
 
-public class VentanaAdministracionUsuarios extends JFrame{
+public class VentanaAdministracionEmpleados extends JFrame{
 
 	/**
 	 * 
@@ -34,18 +34,18 @@ public class VentanaAdministracionUsuarios extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	protected GestorMarket gestor;
-	protected List<Usuario> usuarios;
-	protected DefaultTableModel mTablaUsuario;
+	protected List<Empleado> empleados;
+	protected DefaultTableModel mTablaEmpleado;
 	
-	public VentanaAdministracionUsuarios(GestorMarket gestor) {
+	public VentanaAdministracionEmpleados(GestorMarket gestor) {
 		this.setLayout(new BorderLayout());
 				
 		//Prueba
-		usuarios = new ArrayList<>();
-		usuarios.add(new Usuario("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya"));
-		usuarios.add(new Usuario("Nombre2", "Apellido2", "usu2", 666666666, "correo@gmail.com", "contrasenya"));
-		usuarios.add(new Usuario("Nombre3", "Apellido3", "usu3", 666666666, "correo@gmail.com", "contrasenya"));
-		usuarios.add(new Usuario("Nombre4", "Apellido4", "usu4", 666666666, "correo@gmail.com", "contrasenya"));
+		empleados = new ArrayList<>();
+		empleados.add(new Empleado("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
+		empleados.add(new Empleado("Nombre2", "Apellido2", "usu2", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
+		empleados.add(new Empleado("Nombre3", "Apellido3", "usu3", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
+		empleados.add(new Empleado("Nombre4", "Apellido4", "usu4", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
 		
 		class ModeloTabla extends AbstractTableModel {
 			
@@ -54,29 +54,30 @@ public class VentanaAdministracionUsuarios extends JFrame{
 			 */
 			private static final long serialVersionUID = 1L;
 			
-			String[] cabeceras = { "Nombre", "Apellidos", "Nombre Usuario", "Teléfono", "Correo", "Contraseña"};
+			String[] cabeceras = { "Nombre", "Apellidos", "Nombre Usuario", "Teléfono", "Correo", "Contraseña", "DNI"};
 				
-			public ModeloTabla(List<Usuario> usuarios) {
-				VentanaAdministracionUsuarios.this.usuarios = usuarios;
+			public ModeloTabla(List<Empleado> empleados) {
+				VentanaAdministracionEmpleados.this.empleados = empleados;
 			}
 
 			@Override
 			public Object getValueAt(int row, int column) {
-				Usuario u = usuarios.get(row);
+				Empleado e = empleados.get(row);
 				switch (column) {
-					case 0: return u.getNombre();
-					case 1: return u.getApellidos();
-					case 2: return u.getNomUsuario();
-					case 3: return u.getNumTelefono();
-					case 4: return u.getCorreoElectronico();
-					case 5: return u.getContrasenya();
+					case 0: return e.getNombre();
+					case 1: return e.getApellidos();
+					case 2: return e.getNomUsuario();
+					case 3: return e.getNumTelefono();
+					case 4: return e.getCorreoElectronico();
+					case 5: return e.getContrasenya();
+					case 6: return e.getDni();
 				}
 				return null;
 			}
 
 			@Override
 			public int getRowCount() {
-				return usuarios.size();
+				return empleados.size();
 			}
 
 			@Override
@@ -96,25 +97,28 @@ public class VentanaAdministracionUsuarios extends JFrame{
 	        
 	        @Override
 	        public void setValueAt(Object value, int row, int column) {
-	            Usuario u = usuarios.get(row);
+	        	Empleado e = empleados.get(row);
 	            switch (column) {
 	                case 0:
-	                    u.setNombre((String) value);
+	                    e.setNombre((String) value);
 	                    break;
 	                case 1:
-	                    u.setApellidos((String) value);
+	                    e.setApellidos((String) value);
 	                    break;
 	                case 2:
-	                    u.setNomUsuario((String) value);
+	                    e.setNomUsuario((String) value);
 	                    break;
 	                case 3:
-	                    u.setNumTelefono((int) value);
+	                    e.setNumTelefono((int) value);
 	                    break;
 	                case 4:
-	                    u.setCorreoElectronico((String) value);
+	                    e.setCorreoElectronico((String) value);
 	                    break;
 	                case 5:
-	                    u.setContrasenya((String) value);
+	                    e.setContrasenya((String) value);
+	                    break;
+	                case 6:
+	                    e.setDni((String) value);
 	                    break;
 	            }
 	            
@@ -163,27 +167,27 @@ public class VentanaAdministracionUsuarios extends JFrame{
 			
 		}
 		
-		ModeloTabla modeloTabla = new ModeloTabla(usuarios);
-		JTable tablaUsuarios = new JTable(modeloTabla);
-		tablaUsuarios.setDefaultRenderer(Object.class, new RendererTabla());
-		JScrollPane scrollPane = new JScrollPane(tablaUsuarios);
+		ModeloTabla modeloTabla = new ModeloTabla(empleados);
+		JTable tablaEmpleados = new JTable(modeloTabla);
+		tablaEmpleados.setDefaultRenderer(Object.class, new RendererTabla());
+		JScrollPane scrollPane = new JScrollPane(tablaEmpleados);
 		add(scrollPane, "Center");
 		
 		buscador.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				tablaUsuarios.repaint();
+				tablaEmpleados.repaint();
 			}
 			
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				tablaUsuarios.repaint();
+				tablaEmpleados.repaint();
 			}
 			
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				tablaUsuarios.repaint();
+				tablaEmpleados.repaint();
 			}
 		});
 		
@@ -192,19 +196,19 @@ public class VentanaAdministracionUsuarios extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int usuarioSeleccionado = tablaUsuarios.getSelectedRow();
-				if (usuarioSeleccionado != -1) {
-					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar el usuario?", "Confirmación de eliminación", JOptionPane.YES_NO_OPTION);
+				int empleadoSeleccionado = tablaEmpleados.getSelectedRow();
+				if (empleadoSeleccionado != -1) {
+					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar el empleado?", "Confirmación de eliminación", JOptionPane.YES_NO_OPTION);
 					if (confirmacion == JOptionPane.YES_OPTION) {
-						usuarios.remove(usuarioSeleccionado);
-						tablaUsuarios.repaint();
+						empleados.remove(empleadoSeleccionado);
+						tablaEmpleados.repaint();
 					}
 				}
 			}
 		});
 		
-		JButton botonAñadirUsuario = new JButton("Añadir Usuario");
-		botonAñadirUsuario.addActionListener(new ActionListener() {
+		JButton botonAñadirEmpleado = new JButton("Añadir Empleado");
+		botonAñadirEmpleado.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -214,12 +218,12 @@ public class VentanaAdministracionUsuarios extends JFrame{
 		});
 		
 		JPanel panelBotones = new JPanel();
-		panelBotones.add(botonAñadirUsuario);
+		panelBotones.add(botonAñadirEmpleado);
 		panelBotones.add(botonBorrar);
 
 		add(panelBotones, "South");
 		
-		this.setTitle("Lista de usuarios");
+		this.setTitle("Lista de empleados");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setSize(1000, 480);
 		this.setVisible(false);
