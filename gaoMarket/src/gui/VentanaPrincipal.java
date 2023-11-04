@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import domain.GestorMarket;
@@ -27,6 +28,7 @@ public class VentanaPrincipal extends JFrame {
 	protected VentanaInicioSesion ventanaInicioSesion;
 	protected VentanaCarroCompra ventanaCarroCompra;
 	protected VentanaAdministracionUsuarios ventanaAdministracionUsuarios;
+	protected VentanaAdministracionEmpleados ventanaAdministracionEmpleados;
 	protected ImageIcon iconoUsuario;
 	protected ImageIcon iconoCesta;
 	protected ImageIcon iconoGestorUsuario;
@@ -43,6 +45,7 @@ public class VentanaPrincipal extends JFrame {
 		ventanaCarroCompra = new VentanaCarroCompra(gestor);
 		ventanaInicioSesion = new VentanaInicioSesion(gestor);
 		ventanaAdministracionUsuarios = new VentanaAdministracionUsuarios(gestor);
+		ventanaAdministracionEmpleados = new VentanaAdministracionEmpleados(gestor);
 		
 		iconoCesta = new ImageIcon("resources/iconos/carritoCompra.png");
 		iconoCesta = new ImageIcon(iconoCesta.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
@@ -75,8 +78,13 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ventanaAdministracionUsuarios.setVisible(true);
-				
+				String[] gestion = {"Administrar Usuarios", "Administrar Empleados"};
+				String resp = (String) JOptionPane.showInputDialog( null, "Selecciona que quiere administar", "Modo de trabajo", JOptionPane.QUESTION_MESSAGE, null, gestion, "Administrar Usuarios");
+				if (resp.equals(gestion[0])){
+					ventanaAdministracionUsuarios.setVisible(true);
+				}else {
+					ventanaAdministracionEmpleados.setVisible(true);
+				}
 			}
 			
 		});
