@@ -212,8 +212,8 @@ public class VentanaAdministracionEmpleados extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaRegistro ventanaRegistro = new VentanaRegistro(gestor);
-				ventanaRegistro.setVisible(true);				
+				VentanaRegistroEmpleado ventanaRegistroEmpleado = new VentanaRegistroEmpleado(gestor);
+				ventanaRegistroEmpleado.setVisible(true);				
 			}
 		});
 		

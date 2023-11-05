@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class VentanaRegistro extends JFrame {
+public class VentanaRegistroEmpleado extends JFrame {
     /**
 	 * 
 	 */
@@ -27,14 +27,13 @@ public class VentanaRegistro extends JFrame {
 	protected JTextField cajaCorreo;
     protected JTextField cajaTelefono;
     protected JPasswordField cajaContrasena;
+    protected JTextField cajaDni;
     protected GestorMarket gestor;
     
-    public VentanaRegistro(GestorMarket gestor) {
+    public VentanaRegistroEmpleado(GestorMarket gestor) {
     	this.gestor = gestor;
 		Container cp = this.getContentPane();
 		
-       
-        
         // Crear componentes
         JLabel nombreLabel = new JLabel("Nombre:");
         cajaNombre = new JTextField(15);
@@ -42,13 +41,14 @@ public class VentanaRegistro extends JFrame {
         cajaApellidos = new JTextField(30);  
         JLabel telefonoLabel = new JLabel("Número de teléfono:");
         cajaTelefono = new JTextField(30);
-        
         JLabel usuarioLabel = new JLabel("Nombre Usuario:");
         cajaUsuario = new JTextField(15);
         JLabel correoLabel = new JLabel("Correo electrónico:");
         cajaCorreo = new JTextField(40);
         JLabel contrasenaLabel = new JLabel("Contraseña:");
         cajaContrasena = new JPasswordField(15);
+        JLabel dniLabel = new JLabel("DNI:");
+        cajaDni = new JTextField(9);
         JButton botonRegistrarse = new JButton("Registrarse");
         
         // Agregar ActionListener al botón de registro
@@ -67,7 +67,7 @@ public class VentanaRegistro extends JFrame {
         
         // Crear un panel para organizar los componentes
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(7, 2));
+        panel.setLayout(new GridLayout(8, 2));
         panel.add(nombreLabel);
         panel.add(cajaNombre);
         panel.add(apellidosLabel);
@@ -80,11 +80,13 @@ public class VentanaRegistro extends JFrame {
         panel.add(cajaCorreo);
         panel.add(contrasenaLabel);
         panel.add(cajaContrasena);
+        panel.add(dniLabel);
+        panel.add(cajaDni);
         panel.add(botonRegistrarse);
         
         cp.add(panel);
         
-        this.setTitle("Registro de usuario");
+        this.setTitle("Registro de empleado");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setSize(500, 200);
         this.setVisible(false);
