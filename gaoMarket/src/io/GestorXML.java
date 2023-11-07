@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -27,8 +28,10 @@ public class GestorXML {
 		try {
 			doc = builder.build(nomFich);
 		} catch (JDOMException e) {
-			System.out.println("Documento XML corrupto");
+            //logger.log(Level.SEVERE, "Documento XML no exist");
+			System.out.println("Documento XML no existe");
 		} catch (IOException e) {
+			//logger.log(Level.SEVERE, "Documento XML no exist");
 			System.out.println("Documento XML no existe");
 		}
 	}

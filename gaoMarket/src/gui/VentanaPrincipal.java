@@ -7,6 +7,11 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,6 +28,7 @@ public class VentanaPrincipal extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(VentanaPrincipal.class.getName());
 	
 	protected GestorMarket gestor;
 	protected VentanaInicioSesion ventanaInicioSesion;
@@ -41,6 +47,12 @@ public class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal(GestorMarket gestor) {
 		this.gestor = gestor;
 		Container cp = this.getContentPane();
+		
+		try (FileInputStream fis = new FileInputStream("io/logger.properties")) {
+	        LogManager.getLogManager().readConfiguration(fis);
+	    } catch (IOException e) {
+	        logger.log(Level.SEVERE, "No se pudo leer el fichero de configuración del logger");
+	    }
 		
 		ventanaCarroCompra = new VentanaCarroCompra(gestor);
 		ventanaInicioSesion = new VentanaInicioSesion(gestor);
@@ -140,5 +152,6 @@ public class VentanaPrincipal extends JFrame {
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cambiar a DISPOSE_ON_CLOSE por si el usuario se equivoca, que no cierre todo el programa.
 		this.setBounds(150, 40, 1200, 730);
 		this.setVisible(false);
+		logger.info("Programa finalizado");
 	}		
 }
