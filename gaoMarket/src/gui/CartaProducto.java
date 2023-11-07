@@ -2,6 +2,7 @@ package gui;
 
 
 import java.awt.BorderLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -17,8 +18,10 @@ import domain.*;
 
 public class CartaProducto extends JPanel implements MouseListener{
 
-	public static final String RUTA_CARPETA_IMG = "../../resources/Imagenes/";
+	public static final String RUTA_CARPETA_IMG = "resources/Imagenes";
 	public static final String MONEDA = "€";
+	protected ImageIcon iconoProd;
+	
 	/**
 	 * 
 	 */
@@ -27,7 +30,11 @@ public class CartaProducto extends JPanel implements MouseListener{
 	public JPanel Dibujar(Producto p) {
 		addMouseListener(this);
 		
-		JLabel imgProd = new JLabel(new ImageIcon(RUTA_CARPETA_IMG + p.getImagen()));
+		iconoProd = new ImageIcon(RUTA_CARPETA_IMG + p.getImagen());
+		iconoProd = new ImageIcon(iconoProd.getImage().getScaledInstance(404, 114, Image.SCALE_SMOOTH));
+		JLabel imgProd = new JLabel();
+		imgProd.setIcon(iconoProd);
+		
 		JLabel nombre = new JLabel(p.getNombre());
 		JComboBox<Integer> stock = new JComboBox<Integer>();
 		int cantidadStock = p.getCantidad();
@@ -91,8 +98,7 @@ public class CartaProducto extends JPanel implements MouseListener{
 	
 	//Prueba main
 	public static void main(String[] args) {
-		Producto p = new Producto("Producto1", "descipcion 1........................",
-				15.7, 2);
+		Producto p = new Producto("Producto1", "pan.jpg", 15.7, 2);
 		CartaProducto cartaP1 = new CartaProducto();
 		cartaP1.Dibujar(p);
 		

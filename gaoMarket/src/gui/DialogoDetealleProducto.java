@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,8 +17,10 @@ import domain.Producto;
 
 public class DialogoDetealleProducto extends JDialog{
 	
-	public static final String RUTA_CARPETA_IMG = "../../resources/Imagenes/";
+	public static final String RUTA_CARPETA_IMG = "resources/Imagenes";
 	public static final String MONEDA = "€";
+	protected ImageIcon iconoProd;
+
 
 	/**
 	 * 
@@ -27,7 +30,10 @@ public class DialogoDetealleProducto extends JDialog{
 	public DialogoDetealleProducto(JFrame parent, Producto p){
 		super(parent, "Mi Ventana de Diálogo", true); // El segundo parámetro (true) indica que el diálogo es modal
 		
-		JLabel imgProd = new JLabel(new ImageIcon(RUTA_CARPETA_IMG + p.getImagen()));
+		iconoProd = new ImageIcon(RUTA_CARPETA_IMG + p.getImagen());
+		iconoProd = new ImageIcon(iconoProd.getImage().getScaledInstance(404, 114, Image.SCALE_SMOOTH));
+		JLabel imgProd = new JLabel();
+		imgProd.setIcon(iconoProd);
 		JLabel nombre = new JLabel(p.getNombre());
 		JLabel precio = new JLabel("Precio: " + p.getPrecio() + MONEDA);
 		JLabel cantidadStock = new JLabel("Quedan " + p.getCantidad() + " de stock");
