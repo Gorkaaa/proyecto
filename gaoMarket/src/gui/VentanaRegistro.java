@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public class VentanaRegistro extends JFrame {
     /**
@@ -65,6 +66,19 @@ public class VentanaRegistro extends JFrame {
             }
         });
         
+        JButton botonInicioSesion = new JButton("Volver al inicio de sesión");
+		
+		botonInicioSesion.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				VentanaInicioSesion v = new VentanaInicioSesion(gestor);
+				v.setVisible(true);
+				dispose();				
+			}
+			
+		});
+        
         // Crear un panel para organizar los componentes
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(7, 2));
@@ -81,6 +95,8 @@ public class VentanaRegistro extends JFrame {
         panel.add(contrasenaLabel);
         panel.add(cajaContrasena);
         panel.add(botonRegistrarse);
+        panel.add(botonInicioSesion);
+        panel.setBorder(new EmptyBorder(10,20,10,20));
         
         cp.add(panel);
         
