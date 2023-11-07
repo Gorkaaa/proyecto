@@ -102,7 +102,7 @@ public class VentanaRegistro extends JFrame {
         
         this.setTitle("Registro de usuario");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(500, 200);
+        this.setBounds(700, 110, 450, 200);
         this.setVisible(false);
         
     }
