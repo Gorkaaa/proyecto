@@ -80,13 +80,15 @@ public class VentanaPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String[] gestion = {"Administrar Usuarios", "Administrar Empleados"};
 				String resp = (String) JOptionPane.showInputDialog( null, "Selecciona que quiere administar", "Modo de trabajo", JOptionPane.QUESTION_MESSAGE, null, gestion, "Administrar Usuarios");
-				if (resp.equals(gestion[0])){
-					ventanaAdministracionUsuarios.setVisible(true);
-				}else {
-					ventanaAdministracionEmpleados.setVisible(true);
+				if(resp != null){
+					if (resp.equals(gestion[0])){
+						ventanaAdministracionUsuarios.setVisible(true);
+						
+					} else {
+						ventanaAdministracionEmpleados.setVisible(true);
+					}
 				}
 			}
-			
 		});
 		
 		barraBusqueda = new JTextField(20);
