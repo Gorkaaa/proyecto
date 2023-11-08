@@ -2,8 +2,10 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Image;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -42,6 +44,10 @@ public class VentanaCarroCompra extends JFrame{
 		cp.add(carritoScrollPane, BorderLayout.CENTER);
 		cp.add(panelInferior, BorderLayout.SOUTH);
 		
+		ImageIcon iconoPrincipal = new ImageIcon("resources/iconos/iconoGAO.png");
+		iconoPrincipal = new ImageIcon(iconoPrincipal.getImage().getScaledInstance(207, 207, Image.SCALE_SMOOTH));
+		
+		this.setIconImage(iconoPrincipal.getImage());
 		
 		this.setTitle("Carrito de la Compra");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

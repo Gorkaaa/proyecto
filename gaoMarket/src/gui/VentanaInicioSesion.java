@@ -101,6 +101,11 @@ public class VentanaInicioSesion extends JFrame {
         panel.add(panelBotones, "South");
         cp.add(panel);
         
+        ImageIcon iconoPrincipal = new ImageIcon("resources/iconos/iconoGAO.png");
+		iconoPrincipal = new ImageIcon(iconoPrincipal.getImage().getScaledInstance(207, 207, Image.SCALE_SMOOTH));
+			
+		this.setIconImage(iconoPrincipal.getImage());
+        
         this.setTitle("Inicio de Sesión");
     	this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	this.setBounds(700, 70, 480, 180);

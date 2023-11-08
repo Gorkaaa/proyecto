@@ -4,9 +4,11 @@ import domain.GestorMarket;
 
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -99,6 +101,11 @@ public class VentanaRegistro extends JFrame {
         panel.setBorder(new EmptyBorder(10,20,10,20));
         
         cp.add(panel);
+        
+        ImageIcon iconoPrincipal = new ImageIcon("resources/iconos/iconoGAO.png");
+		iconoPrincipal = new ImageIcon(iconoPrincipal.getImage().getScaledInstance(207, 207, Image.SCALE_SMOOTH));
+		
+		this.setIconImage(iconoPrincipal.getImage());
         
         this.setTitle("Registro de usuario");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

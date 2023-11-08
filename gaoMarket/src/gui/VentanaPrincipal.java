@@ -146,7 +146,12 @@ public class VentanaPrincipal extends JFrame {
 		panelAbajo.setPreferredSize(new Dimension(1200, 600));
 		panelAbajo.setOpaque(true);
 		
-		 cp.add(panelAbajo);
+		cp.add(panelAbajo);
+		 
+		ImageIcon iconoPrincipal = new ImageIcon("resources/iconos/iconoGAO.png");
+		iconoPrincipal = new ImageIcon(iconoPrincipal.getImage().getScaledInstance(207, 207, Image.SCALE_SMOOTH));
+			
+		this.setIconImage(iconoPrincipal.getImage());
 		
 		this.setTitle("GAO Market");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cambiar a DISPOSE_ON_CLOSE por si el usuario se equivoca, que no cierre todo el programa.
