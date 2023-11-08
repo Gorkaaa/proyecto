@@ -85,7 +85,7 @@ public class Producto implements Serializable, Comparable<Producto>{
 	
 	@Override
 	public String toString() {
-		return "Producto [id=" + id + ", nombre=" + nombre + ", imagen=" + imagen
+		return "Producto [nombre=" + nombre + ", imagen=" + imagen
 				+ ", precio=" + precio + ", cantidad=" + cantidad + "]";
 	}
 
