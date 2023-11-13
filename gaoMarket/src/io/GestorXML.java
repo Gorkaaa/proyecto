@@ -13,15 +13,17 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import domain.GestorMarket;
 import domain.Producto;
 
 public class GestorXML {
 	
 	private String nomFichXML;
 	private Document doc;
+	private GestorMarket gestor;
 	
 	//Constructor
-	public GestorXML(String nomFich) {
+	public GestorXML(String nomFich, GestorMarket gestor) {
 		this.nomFichXML = nomFich;
 			
 		SAXBuilder builder = new SAXBuilder();
@@ -31,8 +33,7 @@ public class GestorXML {
             //logger.log(Level.SEVERE, "Documento XML no exist");
 			System.out.println("Documento XML no existe");
 		} catch (IOException e) {
-			//logger.log(Level.SEVERE, "Documento XML no exist");
-			System.out.println("Documento XML no existe");
+			gestor.getLogger().log(Level.SEVERE, "Documento XML no exist");
 		}
 	}
 		
@@ -42,8 +43,7 @@ public class GestorXML {
 		try {
 			outputter.output(doc, new FileWriter(nomFichXML));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			gestor.getLogger().log(Level.SEVERE, "Fichero " + nomFichXML + " no exist");;
 		}
 	}
 	

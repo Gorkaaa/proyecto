@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 public class GestorMarket {
 	protected List<Persona> personas;
@@ -14,6 +15,7 @@ public class GestorMarket {
 	protected Map<TipoAlimento, Set<Producto>> mapaAlimentos;
 	protected Map<TipoHigieneYBelleza, Set<Producto>> mapaHigieneYBelleza;
 	protected Map<TipoLimpieza, Set<Producto>> mapaLimpieza;
+	protected Logger logger;
 
 	public GestorMarket(List<Persona> personas, List<Producto> productos, Map<String, List<Persona>> mapaPersonas,
 			Map<TipoAlimento, Set<Producto>> mapaAlimentos,
@@ -102,5 +104,11 @@ public class GestorMarket {
 		this.mapaLimpieza = mapaLimpieza;
 	}
 	
+	public Logger getLogger() {
+		return logger;
+	}
+	public void setLogger( Logger logger ) {
+		this.logger = logger;
+	}
 
 }

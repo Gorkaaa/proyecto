@@ -48,7 +48,7 @@ public class VentanaPrincipal extends JFrame {
 		this.gestor = gestor;
 		Container cp = this.getContentPane();
 		
-		try (FileInputStream fis = new FileInputStream("io/logger.properties")) {
+		try (FileInputStream fis = new FileInputStream("src/io/logger.properties")) {
 	        LogManager.getLogManager().readConfiguration(fis);
 	    } catch (IOException e) {
 	        logger.log(Level.SEVERE, "No se pudo leer el fichero de configuración del logger");
