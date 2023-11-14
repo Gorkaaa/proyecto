@@ -21,7 +21,7 @@ public class Alimento extends Producto{
 		this.tipoAlimento = TipoAlimento.CARNICOS;
 	}
 
-	public TipoAlimento getTipoAliment0() {
+	public TipoAlimento getTipoAlimento() {
 		return tipoAlimento;
 	}
 
@@ -31,7 +31,7 @@ public class Alimento extends Producto{
 
 	@Override
 	public String toString() {
-		return "Alimento [tipoAlimento=" + tipoAlimento + ", id=" + id + ", nombre=" + nombre + ", imagen="
+		return "Alimento [tipoAlimento=" + tipoAlimento + ", nombre=" + nombre + ", imagen="
 				+ imagen + ", precio=" + precio + ", cantidad=" + cantidad + "]";
 	}
 	

@@ -30,7 +30,7 @@ public class HigieneYBelleza extends Producto {
 
 	@Override
 	public String toString() {
-		return "HigieneYBelleza [tipoHigieneYBelleza=" + tipoHigieneYBelleza + ", id=" + id + ", nombre=" + nombre
+		return "HigieneYBelleza [tipoHigieneYBelleza=" + tipoHigieneYBelleza + ", nombre=" + nombre
 				+ ", imagen=" + imagen + ", precio=" + precio + ", cantidad=" + cantidad + "]";
 	}
 
