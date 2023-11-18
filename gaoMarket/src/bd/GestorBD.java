@@ -7,9 +7,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
+import domain.Alimento;
 import domain.GestorMarket;
+import domain.HigieneYBelleza;
+import domain.Limpieza;
+import domain.TipoAlimento;
+import domain.TipoHigieneYBelleza;
+import domain.TipoLimpieza;
 import domain.Usuario;
 
 public class GestorBD {
@@ -149,8 +156,8 @@ public class GestorBD {
 	}
 	
 	// Metodo que devuelve todos los usuarios
-	public ArrayList<Usuario> listarUsuarios() {
-		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+	public List<Usuario> listarUsuarios() {
+		List<Usuario> usuarios = new ArrayList<>();
 		String sql = "select nombre, apellidos, nomUsuario, numTelefono, correoElectronico, "
 				+ "contrasena from usuario;";
 	    try {
@@ -181,5 +188,150 @@ public class GestorBD {
 	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarUsuarios: " + e);
 	    }
 	    return usuarios;
-	   }
+	}
+	////Consultas de Productos
+	
+	//Metodo que devuelve todos los alimentos
+	public List<Alimento> listarAlimentos() {
+		List<Alimento> alimentos = new ArrayList<>();
+		String sql = "SELECT nombre, descripcion, imagen, precio, cantidad, tipoAlimento "
+				+ "FROM alimentos";
+		try {
+			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
+	    	st = conn.createStatement();
+            ResultSet rs = realizarQuery(sql);
+            while (rs.next()) {
+            	String nombre = capitalize(rs.getString("nombre"));
+            	String descripcion = capitalize(rs.getString("descripcion"));
+            	String imagen = rs.getString("imagen");
+            	Double precio = rs.getDouble("precio");
+            	int cantidad = rs.getInt("cantidad");
+            	String tipoAlimento = rs.getString("tipoAlimento");
+            	Alimento a = new Alimento();
+            	a.setNombre(nombre);
+            	//a.setDescripcion(descripcion);
+            	a.setImagen(imagen);
+            	a.setPrecio(precio);
+            	a.setCantidad(cantidad);
+            	switch (tipoAlimento) { 
+                case "CARNICOS":
+                	a.setTipoAlimento(TipoAlimento.CARNICOS);
+                	break;
+                case "VEGETALES":
+                	a.setTipoAlimento(TipoAlimento.VEGETALES);
+                	break;
+                case "BEBIDAS":
+                	a.setTipoAlimento(TipoAlimento.BEBIDAS);
+                	break;
+                case "CONGELADOS":
+                	a.setTipoAlimento(TipoAlimento.CONGELADOS);
+                	break;
+                case "DULCES":
+                	a.setTipoAlimento(TipoAlimento.DULCES);
+                	break;
+              }
+            	alimentos.add(a);
+            }
+            
+          rs.close();
+  	      st.close();
+  	      conn.close();
+  	    } catch (SQLException e) {
+  	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarAlimentos: " + e);
+  	    }
+		return alimentos;
+	}
+	
+	//Metodo que devuelve todos los productos de limpieza
+	public List<Limpieza> listarLimpieza() {
+		List<Limpieza> lstLimpieza = new ArrayList<>();
+		String sql = "SELECT nombre, descripcion, imagen, precio, cantidad, tipoLimpieza "
+				+ "FROM limpieza";
+		try {
+			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
+	    	st = conn.createStatement();
+            ResultSet rs = realizarQuery(sql);
+            while (rs.next()) {
+            	String nombre = capitalize(rs.getString("nombre"));
+            	String descripcion = capitalize(rs.getString("descripcion"));
+            	String imagen = rs.getString("imagen");
+            	Double precio = rs.getDouble("precio");
+            	int cantidad = rs.getInt("cantidad");
+            	String tipoLimpieza = rs.getString("tipoLimpieza");
+            	Limpieza l = new Limpieza();
+            	l.setNombre(nombre);
+            	//l.setDescripcion(descripcion);
+            	l.setImagen(imagen);
+            	l.setPrecio(precio);
+            	l.setCantidad(cantidad);
+            	switch (tipoLimpieza) { 
+                case "UTENSILIOS":
+                	l.setTipoLimpieza(TipoLimpieza.UTENSILIOS);
+                	break;
+                case "PRODUCTOS_LIMPIEZA":
+                	l.setTipoLimpieza(TipoLimpieza.PRODUCTOS_LIMPIEZA);
+                	break;
+              }
+            	lstLimpieza.add(l);
+            }
+            
+          rs.close();
+  	      st.close();
+  	      conn.close();
+  	    } catch (SQLException e) {
+  	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarLimpieza: " + e);
+  	    }
+		return lstLimpieza;
+	}
+	
+	//Metodo que devuelve todos los productos Higiene y belleza
+	public List<HigieneYBelleza> listarHigieneYBelleza() {
+		List<HigieneYBelleza> lstHigieneYBelleza = new ArrayList<>();
+		String sql = "SELECT nombre, descripcion, imagen, precio, cantidad, tipoHigieneYBelleza "
+				+ "FROM HigieneYBelleza";
+		try {
+			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
+	    	st = conn.createStatement();
+            ResultSet rs = realizarQuery(sql);
+            while (rs.next()) {
+            	String nombre = capitalize(rs.getString("nombre"));
+            	String descripcion = capitalize(rs.getString("descripcion"));
+            	String imagen = rs.getString("imagen");
+            	Double precio = rs.getDouble("precio");
+            	int cantidad = rs.getInt("cantidad");
+            	String tipoAlimento = rs.getString("tipoAlimento");
+            	HigieneYBelleza hb = new HigieneYBelleza();
+            	hb.setNombre(nombre);
+            	//hb.setDescripcion(descripcion);
+            	hb.setImagen(imagen);
+            	hb.setPrecio(precio);
+            	hb.setCantidad(cantidad);
+            	switch (tipoAlimento) { 
+                case "AFEITADO_DEPILACION":
+                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.AFEITADO_DEPILACION);
+                	break;
+                case "HIGIENE_BUCAL":
+                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.HIGIENE_BUCAL);
+                	break;
+                case "HIGIENE_INTIMA":
+                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.HIGIENE_INTIMA);
+                	break;
+                case "CUIDADO_CORPORAL":
+                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.CUIDADO_CORPORAL);
+                	break;
+                case "PARAFARMACIA_SOLARES":
+                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.PARAFARMACIA_SOLARES);
+                	break;
+              }
+            	lstHigieneYBelleza.add(hb);
+            }
+            
+          rs.close();
+  	      st.close();
+  	      conn.close();
+  	    } catch (SQLException e) {
+  	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarHigieneYBelleza: " + e);
+  	    }
+		return lstHigieneYBelleza;
+	}
 }
