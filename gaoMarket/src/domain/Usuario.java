@@ -34,8 +34,7 @@ public class Usuario extends Persona {
 	}
 
 	@Override
-	public boolean estaRegistrado() {
-		
+	public boolean esEmpleado() {
 		return false;
 	}
 	

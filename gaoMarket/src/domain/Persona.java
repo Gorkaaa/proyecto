@@ -112,6 +112,7 @@ abstract public class Persona implements Serializable {
 	
 	public abstract boolean verificarUsuario(String nomUsuario, String contrasenya);
 	
-	public abstract boolean estaRegistrado();
+	public abstract boolean esEmpleado();
 
+	
 }

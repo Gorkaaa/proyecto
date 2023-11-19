@@ -70,32 +70,32 @@ public class GestorBD {
 	//// Consultas de Usuarios
 	
 	// Metodo que busca un usuario en la BD por su email y contraseña
-	public Usuario verificarCredenciales(String email, String password) { 
+	public Usuario verificarCredenciales(String nomUsuario, String password) { 
 		Usuario u = null;
 		 try{                  		         
 				conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	        	String sql = "SELECT * FROM usuario WHERE email = '" + email + "' AND contrasena = '"+ password +"'";
+	        	String sql = "SELECT * FROM usuario WHERE nomUsuario = '" + nomUsuario + "' AND contrasenya = '"+ password +"'";
 	        	st = conn.createStatement();
 	            ResultSet rs = realizarQuery(sql);           
 	            if(rs.next()) { 
-	            	u = new Usuario(rs.getString("nombre"), rs.getString("apellido"), rs.getString("nomUsuario"), rs.getInt("numTelefono"), rs.getString("correoElectronico"), rs.getString("contrasena"));
+	            	u = new Usuario(rs.getString("nombre"), rs.getString("apellido"), rs.getString("nomUsuario"), rs.getInt("numTelefono"), rs.getString("correoElectronico"), rs.getString("contrasenya"));
 	            }
 	            rs.close();
 	            st.close();
 	            conn.close();
 	         }
 	         catch (Exception e)  {
-	 			gestor.getLogger().log(Level.SEVERE, "Error en verificarCredenciales(Email, password): " + e);
+	 			gestor.getLogger().log(Level.SEVERE, "Error en verificarCredenciales(Usuario, password): " + e);
 	         } 
 		 return u;
 	}
 	
 	// Metodo que busca un usuario en la BD por su email
-	public boolean buscaUsuario(String email) {
+	public boolean buscaUsuario(String nomUsuario) {
 		boolean existe = false;
 		try{
 			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	        String sql = "SELECT * FROM usuario WHERE email = '" + email +"'";
+	        String sql = "SELECT * FROM usuario WHERE  = '" + nomUsuario +"'";
         	st = conn.createStatement();
             ResultSet rs = realizarQuery(sql);           
             if (rs.next()) existe = true;
@@ -104,7 +104,7 @@ public class GestorBD {
             conn.close();
          }
 	     catch (Exception e)  {
-	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscaUsuario(Email): " + e);
+	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscaUsuario(Usuario): " + e);
 	     } 
 		 return existe;
 	}
@@ -115,7 +115,7 @@ public class GestorBD {
 			return false;
 	    boolean guardado = false;
 	    String sql =
-	      "INSERT INTO usuario(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasena) "
+	      "INSERT INTO usuario(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya) "
 	      + "VALUES(?, ?, ?, ?, ?)";
 		try {
 			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
@@ -139,18 +139,18 @@ public class GestorBD {
 	}
 	
 	//Metodo que elimina un usuario pasado su email
-	public boolean borrarUsuario(String email){
-		String sql = "DELETE FROM usuario WHERE correoElectronico=?";
+	public boolean borrarUsuario(String nomUsuario){
+		String sql = "DELETE FROM usuario WHERE nomUsuario=?";
 		try{
 			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
 		  	PreparedStatement ps = conn.prepareStatement(sql);
-	       	ps.setString(1, email); 
+	       	ps.setString(1, nomUsuario); 
 	       	ps.executeUpdate();
 	       	ps.close();
 	       	conn.close();
 	       	return true;
 	   	} catch (SQLException ex) {
-	   		gestor.getLogger().log(Level.SEVERE, "Error en metodo borrarProducto: " + ex);
+	   		gestor.getLogger().log(Level.SEVERE, "Error en metodo borrarUsuario: " + ex);
 	       	return false;
 	   	}
 	}
@@ -159,7 +159,7 @@ public class GestorBD {
 	public List<Usuario> listarUsuarios() {
 		List<Usuario> usuarios = new ArrayList<>();
 		String sql = "select nombre, apellidos, nomUsuario, numTelefono, correoElectronico, "
-				+ "contrasena from usuario;";
+				+ "contrasenya from usuario;";
 	    try {
 	    	conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
 	    	st = conn.createStatement();
@@ -170,14 +170,14 @@ public class GestorBD {
             	String nomUsuario = capitalize(rs.getString("nomUsuario"));
             	int numTelefono = rs.getInt("numTelefono");
             	String correoElectronico = rs.getString("correoElectronico");
-            	String contrasena = capitalize(rs.getString("contrasena"));
+            	String contrasenya = capitalize(rs.getString("contrasenya"));
             	Usuario u = new Usuario();
 		        u.setNombre(nombre);
 		        u.setApellidos(apellidos);
 		        u.setNomUsuario(nomUsuario);
 		        u.setNumTelefono(numTelefono);
 		        u.setCorreoElectronico(correoElectronico);
-		        u.setContrasenya(contrasena);
+		        u.setContrasenya(contrasenya);
 		        usuarios.add(u);
 	      }
 

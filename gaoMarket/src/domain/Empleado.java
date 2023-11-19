@@ -44,9 +44,8 @@ public class Empleado extends Persona {
 	}
 
 	@Override
-	public boolean estaRegistrado() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean esEmpleado() {
+		return true;
 	}
 
 }
