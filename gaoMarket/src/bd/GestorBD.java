@@ -111,7 +111,7 @@ public class GestorBD {
 	
 	//Metodo para introducir un nuevo usuario en la base de datos
 	public boolean guardarUsuario(Usuario u) {
-		if(buscaUsuario(u.getCorreoElectronico()))
+		if(buscaUsuario(u.getNomUsuario()))
 			return false;
 	    boolean guardado = false;
 	    String sql =
