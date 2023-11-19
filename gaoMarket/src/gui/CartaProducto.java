@@ -98,7 +98,7 @@ public class CartaProducto extends JPanel implements MouseListener{
 	
 	//Prueba main
 	public static void main(String[] args) {
-		Producto p = new Producto("Producto1", "pan.jpg", 15.7, 2);
+		Producto p = new Producto(1, "Producto1", "pan.jpg", 15.7, 2);
 		CartaProducto cartaP1 = new CartaProducto();
 		cartaP1.Dibujar(p);
 		

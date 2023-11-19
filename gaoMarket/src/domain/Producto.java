@@ -8,8 +8,6 @@ public class Producto implements Serializable, Comparable<Producto>{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	private static int contadorId = 0;
 	
 	protected int id;
 	protected String nombre;
@@ -18,10 +16,9 @@ public class Producto implements Serializable, Comparable<Producto>{
 	protected int cantidad;
 	
 	
-	public Producto(String nombre, String imagen, Double precio, int cantidad) {
+	public Producto(int id, String nombre, String imagen, Double precio, int cantidad) {
 		super();
-		this.id = Producto.contadorId;
-		Producto.contadorId++;
+		this.id = id;
 		this.nombre = nombre;
 		this.imagen = imagen;
 		this.precio = precio;
@@ -30,21 +27,13 @@ public class Producto implements Serializable, Comparable<Producto>{
 	
 	public Producto() {
 		super();
-		this.id = Producto.contadorId;
-		Producto.contadorId++;
+		this.id = id;
 		this.nombre = "";
 		this.imagen = "";
 		this.precio = 0.0;
 		this.cantidad = 0;
 	}
 
-	public static int getContadorId() {
-		return contadorId;
-	}
-
-	public static void setContadorId(int contadorId) {
-		Producto.contadorId = contadorId;
-	}
 
 	public int getId() {
 		return id;

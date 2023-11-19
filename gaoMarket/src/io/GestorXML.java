@@ -57,12 +57,13 @@ public class GestorXML {
 				for (int i = 0; i<lstElemntosProductos.size(); i++) {
 					Element eProducto = lstElemntosProductos.get(i);
 					Producto p;
+					int id = Integer.parseInt(eProducto.getChildText("id"));
 					String nombre = eProducto.getAttributeValue("nombre");
 					String imagen = eProducto.getChildText("imagen");
 					double precio = Double.parseDouble(eProducto.getChildText("precio"));
 					int cantidad = Integer.parseInt(eProducto.getChildText("cantidad"));
 					
-					p = new Producto(nombre, imagen, precio, cantidad);
+					p = new Producto(id, nombre, imagen, precio, cantidad);
 					
 					lstProductos.add(p);
 				}

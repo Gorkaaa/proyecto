@@ -13,7 +13,7 @@ public class HigieneYBellezaTest {
 	
 	@Before
 	public void setup() {
-		hb = new HigieneYBelleza("Desodorante", "descripcion", "pan.jpg", 1.8, 2, TipoHigieneYBelleza.CUIDADO_CORPORAL);
+		hb = new HigieneYBelleza(1, "Desodorante", "descripcion", "pan.jpg", 1.8, 2, TipoHigieneYBelleza.CUIDADO_CORPORAL);
 	}
 	
 	@Test

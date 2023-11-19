@@ -9,9 +9,9 @@ public class Limpieza extends Producto {
 	
 	protected TipoLimpieza tipoLimpieza;
 
-	public Limpieza(String nombre, String descripcion, String imagen, Double precio, int cantidad,
+	public Limpieza(int id, String nombre, String descripcion, String imagen, Double precio, int cantidad,
 			TipoLimpieza tipoLimpieza) {
-		super(nombre, imagen, precio, cantidad);
+		super(id, nombre, imagen, precio, cantidad);
 		this.tipoLimpieza = tipoLimpieza;
 	}
 

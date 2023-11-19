@@ -13,7 +13,7 @@ public class AlimentoTest {
 	
 	@Before
 	public void setup() {
-		a = new Alimento("Pan", "descripcion", "pan.jpg", 15.7, 2, TipoAlimento.VEGETALES);
+		a = new Alimento(1, "Pan", "descripcion", "pan.jpg", 15.7, 2, TipoAlimento.VEGETALES);
 	}
 	
 	@Test

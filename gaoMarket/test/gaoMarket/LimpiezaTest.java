@@ -13,7 +13,7 @@ public class LimpiezaTest {
 	
 	@Before
 	public void setup() {
-		l = new Limpieza("Escoba", "descripcion", "pan.jpg", 1.8, 2, TipoLimpieza.UTENSILIOS);
+		l = new Limpieza(1, "Escoba", "descripcion", "pan.jpg", 1.8, 2, TipoLimpieza.UTENSILIOS);
 	}
 	
 	@Test

@@ -12,7 +12,7 @@ public class ProductoTest {
 	
 	@Before
 	public void setup() {
-		p = new Producto("Pan", "pan.jpg", 15.7, 2);
+		p = new Producto(1, "Pan", "pan.jpg", 15.7, 2);
 	}
 	
 	@Test

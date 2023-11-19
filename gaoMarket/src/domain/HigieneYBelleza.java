@@ -9,9 +9,9 @@ public class HigieneYBelleza extends Producto {
 
 	protected TipoHigieneYBelleza tipoHigieneYBelleza;
 	
-	public HigieneYBelleza(String nombre, String descripcion, String imagen, Double precio, int cantidad,
+	public HigieneYBelleza(int id, String nombre, String descripcion, String imagen, Double precio, int cantidad,
 			TipoHigieneYBelleza tipoHigieneYBelleza) {
-		super(nombre, imagen, precio, cantidad);
+		super(id, nombre, imagen, precio, cantidad);
 		this.tipoHigieneYBelleza = tipoHigieneYBelleza;
 	}
 
