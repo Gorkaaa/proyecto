@@ -279,7 +279,6 @@ public class VentanaPrincipal extends JFrame {
             }
 
             backgroundPanel.add(rowPanel);
-            System.out.println("Creado productos");
         }
     }
 	
