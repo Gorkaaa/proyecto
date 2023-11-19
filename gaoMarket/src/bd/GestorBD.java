@@ -334,4 +334,21 @@ public class GestorBD {
   	    }
 		return lstHigieneYBelleza;
 	}
+	
+	//Metodo que al realizar una compra, reste la cantidad al stock de un producto
+	public void realizarCompra(String nombre, String producto, int cantidad) {
+		String sql = "UPDATE ? SET cantidad = ? WHERE nombre = ?";
+	    try {
+	    	conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
+	      PreparedStatement ps = conn.prepareStatement(sql);
+	      ps.setString(1, nombre);
+	      ps.setString(2, producto);
+	      ps.setInt(3, cantidad);
+	      ps.executeUpdate();
+	      ps.close();
+	      conn.close();
+	    } catch (SQLException e) {
+	      e.printStackTrace();
+	    }
+	}
 }
