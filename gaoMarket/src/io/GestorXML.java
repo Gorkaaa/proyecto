@@ -30,8 +30,7 @@ public class GestorXML {
 		try {
 			doc = builder.build(nomFich);
 		} catch (JDOMException e) {
-            //logger.log(Level.SEVERE, "Documento XML no exist");
-			System.out.println("Documento XML no existe");
+			gestor.getLogger().log(Level.SEVERE, "Documento XML no exist");
 		} catch (IOException e) {
 			gestor.getLogger().log(Level.SEVERE, "Documento XML no exist");
 		}
@@ -119,5 +118,14 @@ public class GestorXML {
 				return eCarrito;
 		}
 		return null;
+	}
+	
+	//Metodo vaciarCarrito
+	public void vaciarCarrito(String usuario) {
+		Element eCarrito = buscarCarritoUsuario(usuario);
+		if(eCarrito == null)
+			return;
+		//Se debe de eliminar la rama entera
+		
 	}
 }

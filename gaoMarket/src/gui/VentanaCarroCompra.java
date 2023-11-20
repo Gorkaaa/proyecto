@@ -26,6 +26,8 @@ public class VentanaCarroCompra extends JFrame{
 	protected DefaultListModel<Producto> modeloCarrito;
 	protected JList<Producto> lstCarrito;
 	protected JButton btnEliminar;
+	protected JButton btnComprar;
+	protected JButton btnVaciar;
     
 	public VentanaCarroCompra(GestorMarket gestor) {
 		this.gestor = gestor;
@@ -36,10 +38,14 @@ public class VentanaCarroCompra extends JFrame{
 		modeloCarrito = new DefaultListModel<>();
 		lstCarrito = new JList<>(modeloCarrito);
 		btnEliminar = new JButton("Eliminar del carrito");
+		btnComprar = new JButton("Comprar");
+		btnVaciar = new JButton("Vaciar carrito");
 		
 		JScrollPane carritoScrollPane = new JScrollPane(lstCarrito);
 		JPanel panelInferior = new JPanel();
+		panelInferior.add(btnVaciar);
 		panelInferior.add(btnEliminar);
+		panelInferior.add(btnComprar);
 		
 		cp.add(carritoScrollPane, BorderLayout.CENTER);
 		cp.add(panelInferior, BorderLayout.SOUTH);
