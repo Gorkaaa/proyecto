@@ -23,7 +23,7 @@ public class GestorXML {
 	private GestorMarket gestor;
 	
 	//Constructor
-	public GestorXML(String nomFich, GestorMarket gestor) {
+	public GestorXML(String nomFich) {
 		this.nomFichXML = nomFich;
 			
 		SAXBuilder builder = new SAXBuilder();

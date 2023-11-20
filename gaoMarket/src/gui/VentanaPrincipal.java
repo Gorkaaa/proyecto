@@ -214,6 +214,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		productos = createProductos();
 		productosEnCesta = new ArrayList<>();
+		gestor.getGestorXML();
 
 		
 		JPanel backgroundPanel = new JPanel(new GridLayout(8, 4, 10, 10));
@@ -334,4 +335,5 @@ public class VentanaPrincipal extends JFrame {
 
         return productos;
     }
+    
 }

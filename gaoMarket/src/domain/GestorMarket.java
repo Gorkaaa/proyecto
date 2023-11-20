@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import io.GestorXML;
+
 public class GestorMarket {
 	protected List<Persona> personas;
 	protected List<Producto> productos;
@@ -16,6 +18,7 @@ public class GestorMarket {
 	protected Map<TipoHigieneYBelleza, Set<Producto>> mapaHigieneYBelleza;
 	protected Map<TipoLimpieza, Set<Producto>> mapaLimpieza;
 	protected Logger logger;
+	protected GestorXML gestorXML;
 
 	public GestorMarket(List<Persona> personas, List<Producto> productos, Map<String, List<Persona>> mapaPersonas,
 			Map<TipoAlimento, Set<Producto>> mapaAlimentos,
@@ -50,6 +53,7 @@ public class GestorMarket {
 		for (TipoLimpieza limpieza : TipoLimpieza.values()) {
 			mapaLimpieza.put(limpieza, new TreeSet<Producto>());
 		}
+		this.gestorXML = new GestorXML("");
 	}
 
 	public List<Persona> getPersonas() {
@@ -110,5 +114,10 @@ public class GestorMarket {
 	public void setLogger( Logger logger ) {
 		this.logger = logger;
 	}
-
+	public GestorXML getGestorXML() {
+		return gestorXML;
+	}
+	public void setGestorXML(GestorXML gestorXML) {
+		this.gestorXML = gestorXML;
+	}
 }
