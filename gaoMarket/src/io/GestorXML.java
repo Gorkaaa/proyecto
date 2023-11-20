@@ -23,15 +23,14 @@ public class GestorXML {
 	private GestorMarket gestor;
 	
 	//Constructor
-	public GestorXML(String nomFich, GestorMarket gestor) {
+	public GestorXML(String nomFich) {
 		this.nomFichXML = nomFich;
 			
 		SAXBuilder builder = new SAXBuilder();
 		try {
 			doc = builder.build(nomFich);
 		} catch (JDOMException e) {
-            //logger.log(Level.SEVERE, "Documento XML no exist");
-			System.out.println("Documento XML no existe");
+			gestor.getLogger().log(Level.SEVERE, "Documento XML no exist");
 		} catch (IOException e) {
 			gestor.getLogger().log(Level.SEVERE, "Documento XML no exist");
 		}
@@ -119,5 +118,14 @@ public class GestorXML {
 				return eCarrito;
 		}
 		return null;
+	}
+	
+	//Metodo vaciarCarrito
+	public void vaciarCarrito(String usuario) {
+		Element eCarrito = buscarCarritoUsuario(usuario);
+		if(eCarrito == null)
+			return;
+		//Se debe de eliminar la rama entera
+		
 	}
 }

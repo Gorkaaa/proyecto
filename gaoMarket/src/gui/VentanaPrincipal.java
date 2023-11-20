@@ -189,18 +189,6 @@ public class VentanaPrincipal extends JFrame {
 		
 		barraBusqueda = new JTextField(20);
 		
-		//Prueba de como añadir un panel "carta" de cada producto
-		/*
-		Producto p = new Producto("Producto1", "descipcion 1........................",
-				"Acer_Wallpaper_01_3840x2400.jpg", 15.7, 2, null);
-		CartaProducto cartaP1 = new CartaProducto();
-		cartaP1.Dibujar(p);
-		
-		CartaProducto cp1 = new CartaProducto();
-		JPanel cartaProducto = cp1.Dibujar(p);
-		this.add(cartaProducto);
-		*/
-		
 		iconoGAO = new ImageIcon("resources/imagenes/GAOmarket.png");
 		iconoGAO = new ImageIcon(iconoGAO.getImage().getScaledInstance(404, 114, Image.SCALE_SMOOTH));
 		
@@ -226,6 +214,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		productos = createProductos();
 		productosEnCesta = new ArrayList<>();
+		gestor.getGestorXML();
 
 		
 		JPanel backgroundPanel = new JPanel(new GridLayout(8, 4, 10, 10));
@@ -346,4 +335,5 @@ public class VentanaPrincipal extends JFrame {
 
         return productos;
     }
+    
 }
