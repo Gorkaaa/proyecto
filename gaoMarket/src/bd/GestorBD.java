@@ -22,6 +22,7 @@ import domain.Usuario;
 public class GestorBD {
 	private GestorMarket gestor;
 	private Connection conn;
+	private PreparedStatement ps;
 	private Statement st;
 	
 	public GestorBD(GestorMarket gestor){
@@ -35,21 +36,6 @@ public class GestorBD {
 			gestor.getLogger().log(Level.SEVERE, "No se ha podido cargar el driver de la base de datos");
 		}
 	}
-	
-	/*public void conexionBD() {
-		try {
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-			st = conn.createStatement();
-			
-			// Consultas, busquedas, etc
-			
-			
-			st.close();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}*/
 	
 	public ResultSet realizarQuery(String sql) {
 		ResultSet rs = null;
@@ -74,14 +60,16 @@ public class GestorBD {
 		Usuario u = null;
 		 try{                  		         
 				conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	        	String sql = "SELECT * FROM usuario WHERE nomUsuario = '" + nomUsuario + "' AND contrasenya = '"+ password +"'";
-	        	st = conn.createStatement();
-	            ResultSet rs = realizarQuery(sql);           
+	        	String sql = "SELECT * FROM usuario WHERE nomUsuario = ? AND contrasenya = ?";
+	        	ps = conn.prepareStatement(sql);
+	        	ps.setString(1, nomUsuario);
+	        	ps.setString(2, password);
+	            ResultSet rs = ps.executeQuery();           
 	            if(rs.next()) { 
 	            	u = new Usuario(rs.getString("nombre"), rs.getString("apellido"), rs.getString("nomUsuario"), rs.getInt("numTelefono"), rs.getString("correoElectronico"), rs.getString("contrasenya"));
 	            }
 	            rs.close();
-	            st.close();
+	            ps.close();
 	            conn.close();
 	         }
 	         catch (Exception e)  {
@@ -95,12 +83,13 @@ public class GestorBD {
 		boolean existe = false;
 		try{
 			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	        String sql = "SELECT * FROM usuario WHERE  = '" + nomUsuario +"'";
-        	st = conn.createStatement();
-            ResultSet rs = realizarQuery(sql);           
+	        String sql = "SELECT * FROM usuario WHERE  = ?";
+	        ps = conn.prepareStatement(sql);
+	        ps.setString(1, nomUsuario);
+            ResultSet rs = ps.executeQuery();        
             if (rs.next()) existe = true;
             rs.close();
-            st.close();
+            ps.close();
             conn.close();
          }
 	     catch (Exception e)  {
