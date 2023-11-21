@@ -14,6 +14,7 @@ import domain.Alimento;
 import domain.GestorMarket;
 import domain.HigieneYBelleza;
 import domain.Limpieza;
+import domain.Producto;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
 import domain.TipoLimpieza;
@@ -55,7 +56,7 @@ public class GestorBD {
 	
 	//// Consultas de Usuarios
 	
-	// Metodo que busca un usuario en la BD por su email y contraseña
+	// Metodo que busca un usuario en la BD por su nomUsuario y contraseña
 	public Usuario verificarCredenciales(String nomUsuario, String password) { 
 		Usuario u = null;
 		 try{                  		         
@@ -78,12 +79,12 @@ public class GestorBD {
 		 return u;
 	}
 	
-	// Metodo que busca un usuario en la BD por su email
+	// Metodo que busca un usuario en la BD por su nomUsuario
 	public boolean buscaUsuario(String nomUsuario) {
 		boolean existe = false;
 		try{
 			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	        String sql = "SELECT * FROM usuario WHERE  = ?";
+	        String sql = "SELECT * FROM usuario WHERE nomUsuario = ?";
 	        ps = conn.prepareStatement(sql);
 	        ps.setString(1, nomUsuario);
             ResultSet rs = ps.executeQuery();        
@@ -127,9 +128,9 @@ public class GestorBD {
 	    return guardado;
 	}
 	
-	//Metodo que elimina un usuario pasado su email
+	//Metodo que elimina un usuario pasado su nomUsuario
 	public boolean borrarUsuario(String nomUsuario){
-		String sql = "DELETE FROM usuario WHERE nomUsuario=?";
+		String sql = "DELETE FROM usuario WHERE nomUsuario = ?";
 		try{
 			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
 		  	PreparedStatement ps = conn.prepareStatement(sql);
@@ -218,7 +219,7 @@ public class GestorBD {
                 case "DULCES":
                 	a.setTipoAlimento(TipoAlimento.DULCES);
                 	break;
-              }
+            	}
             	alimentos.add(a);
             }
             
@@ -260,7 +261,7 @@ public class GestorBD {
                 case "PRODUCTOS_LIMPIEZA":
                 	l.setTipoLimpieza(TipoLimpieza.PRODUCTOS_LIMPIEZA);
                 	break;
-              }
+            	}
             	lstLimpieza.add(l);
             }
             
@@ -311,7 +312,7 @@ public class GestorBD {
                 case "PARAFARMACIA_SOLARES":
                 	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.PARAFARMACIA_SOLARES);
                 	break;
-              }
+            	}
             	lstHigieneYBelleza.add(hb);
             }
             
@@ -322,6 +323,144 @@ public class GestorBD {
   	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarHigieneYBelleza: " + e);
   	    }
 		return lstHigieneYBelleza;
+	}
+	
+	// Metodo que busca un alimento en la BD
+	public Alimento buscarAlimento(String nomb) {
+		try{
+			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
+	        String sql = "SELECT * FROM alimentos WHERE nombre = ?";
+	        ps = conn.prepareStatement(sql);
+	        ps.setString(1, nomb);
+            ResultSet rs = ps.executeQuery();        
+            while (rs.next()) {
+            	String nombre = capitalize(rs.getString("nombre"));
+            	String descripcion = capitalize(rs.getString("descripcion"));
+            	String imagen = rs.getString("imagen");
+            	Double precio = rs.getDouble("precio");
+            	int cantidad = rs.getInt("cantidad");
+            	String tipoAlimento = rs.getString("tipoAlimento");
+            	Alimento a = new Alimento();
+            	a.setNombre(nombre);
+            	//a.setDescripcion(descripcion);
+            	a.setImagen(imagen);
+            	a.setPrecio(precio);
+            	a.setCantidad(cantidad);
+            	switch (tipoAlimento) { 
+                case "CARNICOS":
+                	a.setTipoAlimento(TipoAlimento.CARNICOS);
+                	break;
+                case "VEGETALES":
+                	a.setTipoAlimento(TipoAlimento.VEGETALES);
+                	break;
+                case "BEBIDAS":
+                	a.setTipoAlimento(TipoAlimento.BEBIDAS);
+                	break;
+                case "CONGELADOS":
+                	a.setTipoAlimento(TipoAlimento.CONGELADOS);
+                	break;
+                case "DULCES":
+                	a.setTipoAlimento(TipoAlimento.DULCES);
+                	break;
+              }
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+         }
+	     catch (Exception e)  {
+	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarAlimento(nombre): " + e);
+	     } 
+		 return null;
+	}
+	
+	// Metodo que busca un producto de limpieza en la BD
+	public Alimento buscarLimpieza(String nomb) {
+		try{
+			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
+	        String sql = "SELECT * FROM limpieza WHERE nombre = ?";
+	        ps = conn.prepareStatement(sql);
+	        ps.setString(1, nomb);
+            ResultSet rs = ps.executeQuery();        
+            while (rs.next()) {
+            	String nombre = capitalize(rs.getString("nombre"));
+            	String descripcion = capitalize(rs.getString("descripcion"));
+            	String imagen = rs.getString("imagen");
+            	Double precio = rs.getDouble("precio");
+            	int cantidad = rs.getInt("cantidad");
+            	String tipoLimpieza = rs.getString("tipoLimpieza");
+            	Limpieza l = new Limpieza();
+            	l.setNombre(nombre);
+            	//l.setDescripcion(descripcion);
+            	l.setImagen(imagen);
+            	l.setPrecio(precio);
+            	l.setCantidad(cantidad);
+            	switch (tipoLimpieza) { 
+                case "UTENSILIOS":
+                	l.setTipoLimpieza(TipoLimpieza.UTENSILIOS);
+                	break;
+                case "PRODUCTOS_LIMPIEZA":
+                	l.setTipoLimpieza(TipoLimpieza.PRODUCTOS_LIMPIEZA);
+                	break;
+            	}
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+         }
+	     catch (Exception e)  {
+	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarLimpieza(nombre): " + e);
+	     } 
+		 return null;
+	}
+	
+	// Metodo que busca un producto de HigieneYBelleza en la BD
+	public Alimento buscarHigieneYBelleza(String nomb) {
+		try{
+			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
+	        String sql = "SELECT * FROM HigieneYBelleza WHERE nombre = ?";
+	        ps = conn.prepareStatement(sql);
+	        ps.setString(1, nomb);
+            ResultSet rs = ps.executeQuery();        
+            while (rs.next()) {
+            	String nombre = capitalize(rs.getString("nombre"));
+            	String descripcion = capitalize(rs.getString("descripcion"));
+            	String imagen = rs.getString("imagen");
+            	Double precio = rs.getDouble("precio");
+            	int cantidad = rs.getInt("cantidad");
+            	String tipoAlimento = rs.getString("tipoAlimento");
+            	HigieneYBelleza hb = new HigieneYBelleza();
+            	hb.setNombre(nombre);
+            	//hb.setDescripcion(descripcion);
+            	hb.setImagen(imagen);
+            	hb.setPrecio(precio);
+            	hb.setCantidad(cantidad);
+            	switch (tipoAlimento) { 
+                case "AFEITADO_DEPILACION":
+                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.AFEITADO_DEPILACION);
+                	break;
+                case "HIGIENE_BUCAL":
+                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.HIGIENE_BUCAL);
+                	break;
+                case "HIGIENE_INTIMA":
+                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.HIGIENE_INTIMA);
+                	break;
+                case "CUIDADO_CORPORAL":
+                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.CUIDADO_CORPORAL);
+                	break;
+                case "PARAFARMACIA_SOLARES":
+                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.PARAFARMACIA_SOLARES);
+                	break;
+            	}
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+         }
+	     catch (Exception e)  {
+	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarHigieneYBelleza(nombre): " + e);
+	     } 
+		 return null;
 	}
 	
 	//Metodo que al realizar una compra, reste la cantidad al stock de un producto

@@ -43,6 +43,8 @@ import domain.Producto;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
 import domain.TipoLimpieza;
+import domain.TipoProducto;
+import domain.Usuario;
 
 public class VentanaPrincipal extends JFrame {	
 	/**
@@ -71,12 +73,6 @@ public class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal(GestorMarket gestor) {
 		this.gestor = gestor;
 		Container cp = this.getContentPane();
-		
-		try (FileInputStream fis = new FileInputStream("src/io/logger.properties")) {
-	        LogManager.getLogManager().readConfiguration(fis);
-	    } catch (IOException e) {
-	        logger.log(Level.SEVERE, "No se pudo leer el fichero de configuración del logger");
-	    }
 		
 		JMenuBar menuBar = new JMenuBar();
 		
@@ -214,8 +210,6 @@ public class VentanaPrincipal extends JFrame {
 		
 		productos = createProductos();
 		productosEnCesta = new ArrayList<>();
-		gestor.getGestorXML();
-
 		
 		JPanel backgroundPanel = new JPanel(new GridLayout(8, 4, 10, 10));
 		backgroundPanel.setBackground(Color.GREEN);
@@ -302,8 +296,10 @@ public class VentanaPrincipal extends JFrame {
         JButton addButton = new JButton("Añadir a la cesta");
         addButton.addActionListener(e -> {
             int cantidad = (int) spinner.getValue();
-            productosEnCesta.add(new Producto(producto.getId(),producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad));
+            productosEnCesta.add(new Producto(producto.getId(),producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto()));
             spinner.setValue(1);
+            Usuario u = new Usuario("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya");
+    		gestor.getGestorXML().anadirProducto(producto, cantidad, u.getNomUsuario());
             JOptionPane.showMessageDialog(null, "Producto añadido a la cesta");
         });
 
@@ -322,16 +318,16 @@ public class VentanaPrincipal extends JFrame {
         List<Producto> productos = new ArrayList<>();
 
         // Agregar productos a la lista
-        productos.add(new Producto(1, "Producto 1", "imagen1.png", 19.99, 1));
-        productos.add(new Producto(2, "Producto 2", "imagen2.png", 24.99, 4));
-        productos.add(new Producto(3, "Producto 3", "imagen3.png", 21.52, 2));
-        productos.add(new Producto(4, "Producto 4", "imagen4.png", 9.24, 2));
-        productos.add(new Producto(5, "Producto 5", "imagen5.png", 4.20, 6));
-        productos.add(new Producto(6, "Producto 6", "imagen6.png", 7.72, 0));
-        productos.add(new Producto(7, "Producto 7", "imagen7.png", 8.35, 1));
-        productos.add(new Producto(8, "Producto 8", "imagen8.png", 1.39, 1));
-        productos.add(new Producto(9, "Producto 9", "imagen9.png", 6.01, 0));
-        productos.add(new Producto(10, "Producto 10", "imagen10.png", 14.34, 7));
+        productos.add(new Producto(1, "Producto 1", "imagen1.png", 19.99, 1, TipoProducto.ALIMENTO));
+        productos.add(new Producto(2, "Producto 2", "imagen2.png", 24.99, 4, TipoProducto.ALIMENTO));
+        productos.add(new Producto(3, "Producto 3", "imagen3.png", 21.52, 2, TipoProducto.ALIMENTO));
+        productos.add(new Producto(4, "Producto 4", "imagen4.png", 9.24, 2, TipoProducto.ALIMENTO));
+        productos.add(new Producto(5, "Producto 5", "imagen5.png", 4.20, 6, TipoProducto.ALIMENTO));
+        productos.add(new Producto(6, "Producto 6", "imagen6.png", 7.72, 0, TipoProducto.ALIMENTO));
+        productos.add(new Producto(7, "Producto 7", "imagen7.png", 8.35, 1, TipoProducto.ALIMENTO));
+        productos.add(new Producto(8, "Producto 8", "imagen8.png", 1.39, 1, TipoProducto.ALIMENTO));
+        productos.add(new Producto(9, "Producto 9", "imagen9.png", 6.01, 0, TipoProducto.ALIMENTO));
+        productos.add(new Producto(10, "Producto 10", "imagen10.png", 14.34, 7, TipoProducto.ALIMENTO));
 
         return productos;
     }

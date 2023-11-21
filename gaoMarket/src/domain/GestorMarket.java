@@ -1,11 +1,15 @@
 package domain;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import io.GestorXML;
@@ -53,7 +57,12 @@ public class GestorMarket {
 		for (TipoLimpieza limpieza : TipoLimpieza.values()) {
 			mapaLimpieza.put(limpieza, new TreeSet<Producto>());
 		}
-		this.gestorXML = new GestorXML("");
+		try (FileInputStream fis = new FileInputStream("src/io/logger.properties")) {
+	        LogManager.getLogManager().readConfiguration(fis);
+	    } catch (IOException e) {
+	        logger.log(Level.SEVERE, "No se pudo leer el fichero de configuración del logger");
+	    }
+		this.gestorXML = new GestorXML();
 	}
 
 	public List<Persona> getPersonas() {

@@ -18,19 +18,17 @@ import domain.Producto;
 
 public class GestorXML {
 	
-	private String nomFichXML;
+	public static final String NOM_FICH_XML = "src/io/carrito.xml";
 	private Document doc;
 	private GestorMarket gestor;
 	
 	//Constructor
-	public GestorXML(String nomFich) {
-		this.nomFichXML = nomFich;
-			
+	public GestorXML() {
 		SAXBuilder builder = new SAXBuilder();
 		try {
-			doc = builder.build(nomFich);
+			doc = builder.build(NOM_FICH_XML);
 		} catch (JDOMException e) {
-			gestor.getLogger().log(Level.SEVERE, "Documento XML no exist");
+			gestor.getLogger().log(Level.SEVERE, "Documento XML corrupto");
 		} catch (IOException e) {
 			gestor.getLogger().log(Level.SEVERE, "Documento XML no exist");
 		}
@@ -40,9 +38,9 @@ public class GestorXML {
 	private void grabar() {
 		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 		try {
-			outputter.output(doc, new FileWriter(nomFichXML));
+			outputter.output(doc, new FileWriter(NOM_FICH_XML));
 		} catch (IOException e) {
-			gestor.getLogger().log(Level.SEVERE, "Fichero " + nomFichXML + " no exist");;
+			gestor.getLogger().log(Level.SEVERE, "Fichero " + NOM_FICH_XML + " no exist");;
 		}
 	}
 	
@@ -55,16 +53,14 @@ public class GestorXML {
 				List<Element> lstElemntosProductos = eCarrito.getChildren();
 				for (int i = 0; i<lstElemntosProductos.size(); i++) {
 					Element eProducto = lstElemntosProductos.get(i);
-					Producto p;
-					int id = Integer.parseInt(eProducto.getChildText("id"));
 					String nombre = eProducto.getAttributeValue("nombre");
-					String imagen = eProducto.getChildText("imagen");
-					double precio = Double.parseDouble(eProducto.getChildText("precio"));
+					String tipo = eProducto.getChildText("tipo");
 					int cantidad = Integer.parseInt(eProducto.getChildText("cantidad"));
 					
-					p = new Producto(id, nombre, imagen, precio, cantidad);
 					
-					lstProductos.add(p);
+					//p = new Producto(id, nombre, imagen, precio, cantidad);
+					
+					//lstProductos.add(p);
 				}
 			}
 			
@@ -81,11 +77,11 @@ public class GestorXML {
 		}
 		Element eProducto = new Element("producto");
 		eProducto.setAttribute("nombre", p.getNombre());
-		Element eImagen = new Element("imagen");
-		Element ePrecio = new Element("precio");
+		Element eTipo = new Element("tipo");
+		eTipo.addContent(p.getTipoProducto().toString());
 		Element eCantidad = new Element("cantidad");
-		eProducto.addContent(eImagen);
-		eProducto.addContent(ePrecio);
+		eCantidad.addContent("" + cantidad);
+		eProducto.addContent(eTipo);
 		eProducto.addContent(eCantidad);
 		
 		eCarrito.addContent(eProducto);
