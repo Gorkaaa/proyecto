@@ -14,20 +14,19 @@ public class Producto implements Serializable, Comparable<Producto>{
 	protected String imagen;
 	protected Double precio;
 	protected int cantidad;
+	protected TipoProducto tipoProducto;
 	
 	
-	public Producto(int id, String nombre, String imagen, Double precio, int cantidad) {
-		super();
+	public Producto(int id, String nombre, String imagen, Double precio, int cantidad, TipoProducto tipoProducto) {
 		this.id = id;
 		this.nombre = nombre;
 		this.imagen = imagen;
 		this.precio = precio;
 		this.cantidad = cantidad;
+		this.tipoProducto = tipoProducto;
 	}
 	
 	public Producto() {
-		super();
-		this.id = id;
 		this.nombre = "";
 		this.imagen = "";
 		this.precio = 0.0;
@@ -70,8 +69,15 @@ public class Producto implements Serializable, Comparable<Producto>{
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
-
 	
+	public TipoProducto getTipoProducto() {
+		return tipoProducto;
+	}
+
+	public void setTipoProducto(TipoProducto tipoProducto) {
+		this.tipoProducto = tipoProducto;
+	}
+
 	@Override
 	public String toString() {
 		return "Producto [nombre=" + nombre + ", imagen=" + imagen

@@ -6,13 +6,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import domain.Producto;
+import domain.TipoProducto;
 
 public class ProductoTest {
 	private Producto p;
 	
 	@Before
 	public void setup() {
-		p = new Producto(1, "Pan", "pan.jpg", 15.7, 2);
+		p = new Producto(1, "Pan", "pan.jpg", 15.7, 2, TipoProducto.ALIMENTO);
 	}
 	
 	@Test
@@ -57,6 +58,17 @@ public class ProductoTest {
 	public void testSetCantidad() {
 		p.setCantidad(1);
 		assertEquals(1, p.getCantidad());
+	}
+	
+	@Test
+	public void testGetTipoProducto() {
+		assertEquals(TipoProducto.ALIMENTO, p.getTipoProducto());
+	}
+	
+	@Test
+	public void testSetTipoProducto() {
+		p.setTipoProducto(TipoProducto.LIMPIEZA);;
+		assertEquals(TipoProducto.LIMPIEZA, p.getTipoProducto());
 	}
 	
 	@Test

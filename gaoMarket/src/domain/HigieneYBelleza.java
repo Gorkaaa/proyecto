@@ -11,13 +11,14 @@ public class HigieneYBelleza extends Producto {
 	
 	public HigieneYBelleza(int id, String nombre, String descripcion, String imagen, Double precio, int cantidad,
 			TipoHigieneYBelleza tipoHigieneYBelleza) {
-		super(id, nombre, imagen, precio, cantidad);
+		super(id, nombre, imagen, precio, cantidad, TipoProducto.HIGIENE_Y_BELLEZA);
 		this.tipoHigieneYBelleza = tipoHigieneYBelleza;
 	}
 
 	public HigieneYBelleza() {
 		super();
 		this.tipoHigieneYBelleza = TipoHigieneYBelleza.AFEITADO_DEPILACION;
+		this.tipoProducto = TipoProducto.HIGIENE_Y_BELLEZA;
 	}
 
 	public TipoHigieneYBelleza getTipoHigieneYBelleza() {

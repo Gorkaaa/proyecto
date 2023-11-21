@@ -11,13 +11,14 @@ public class Limpieza extends Producto {
 
 	public Limpieza(int id, String nombre, String descripcion, String imagen, Double precio, int cantidad,
 			TipoLimpieza tipoLimpieza) {
-		super(id, nombre, imagen, precio, cantidad);
+		super(id, nombre, imagen, precio, cantidad, TipoProducto.LIMPIEZA);
 		this.tipoLimpieza = tipoLimpieza;
 	}
 
 	public Limpieza() {
 		super();
 		this.tipoLimpieza = TipoLimpieza.UTENSILIOS;
+		this.tipoProducto = TipoProducto.LIMPIEZA;
 	}
 	
 

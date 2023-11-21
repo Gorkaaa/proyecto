@@ -12,13 +12,14 @@ public class Alimento extends Producto{
 	
 	public Alimento(int id, String nombre, String descripcion, String imagen, Double precio, int cantidad,
 			TipoAlimento tipoAlimento) {
-		super(id, nombre, imagen, precio, cantidad);
+		super(id, nombre, imagen, precio, cantidad, TipoProducto.ALIMENTO);
 		this.tipoAlimento = tipoAlimento;
 	}
 
 	public Alimento() {
 		super();
 		this.tipoAlimento = TipoAlimento.CARNICOS;
+		this.tipoProducto = TipoProducto.ALIMENTO;
 	}
 
 	public TipoAlimento getTipoAlimento() {
