@@ -281,7 +281,7 @@ public class VentanaPrincipal extends JFrame {
         textPanel.setLayout(new BorderLayout());
         textPanel.setBorder(new LineBorder(Color.BLACK));
 
-        JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 0, 10, 1)); // Configurar el JSpinner con valores entre 1 y 10
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1)); // Configurar el JSpinner con valores entre 1 y 10
 
         JLabel textLabel = new JLabel(producto.getNombre());
         JLabel priceLabel = new JLabel("Precio: " + producto.getPrecio() + "€");

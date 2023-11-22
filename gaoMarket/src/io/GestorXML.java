@@ -71,10 +71,6 @@ public class GestorXML {
 	//Metodo anadirProducto
 	public void anadirProducto(Producto p, int cantidad, String usuario) {
 		Element eCarrito = buscarCarritoUsuario(usuario);
-		if(eCarrito == null) {
-			eCarrito = new Element("carrito");
-			eCarrito.setAttribute("usuario", usuario);
-		}
 		Element eProducto = new Element("producto");
 		eProducto.setAttribute("nombre", p.getNombre());
 		Element eTipo = new Element("tipo");
@@ -84,10 +80,15 @@ public class GestorXML {
 		eProducto.addContent(eTipo);
 		eProducto.addContent(eCantidad);
 		
+		if(eCarrito == null) {
+			eCarrito = new Element("carrito");
+			eCarrito.setAttribute("usuario", usuario);
+			Element eCarritos = doc.getRootElement();
+			eCarritos.addContent(eCarrito);
+		}
 		eCarrito.addContent(eProducto);
 		
-		Element eCarritos = doc.getRootElement();
-		eCarritos.addContent(eCarrito);
+		
 		grabar();
 	}
 	

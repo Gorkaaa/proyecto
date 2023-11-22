@@ -1,3 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <carritos>
+  <carrito usuario="usu1">
+    <producto nombre="Producto 1">
+      <tipo>ALIMENTO</tipo>
+      <cantidad>1</cantidad>
+    </producto>
+    <producto nombre="Producto 2">
+      <tipo>ALIMENTO</tipo>
+      <cantidad>1</cantidad>
+    </producto>
+    <producto nombre="Producto 3">
+      <tipo>ALIMENTO</tipo>
+      <cantidad>2</cantidad>
+    </producto>
+  </carrito>
 </carritos>
