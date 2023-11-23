@@ -8,14 +8,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -30,7 +24,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -81,46 +74,22 @@ public class VentanaPrincipal extends JFrame {
 		JMenu jProductos = new JMenu("Productos");
 
 		JMenu jAlimentos = new JMenu("Alimentos");
+		for (TipoAlimento tipo : TipoAlimento.values()) {
+			JMenuItem menuTipo = new JMenuItem(tipo.toString());
+			jAlimentos.add(menuTipo);
+		}
+		
 		JMenu jHigieneYBelleza = new JMenu("Higiene y Belleza");
+		for (TipoHigieneYBelleza tipo : TipoHigieneYBelleza.values()) {
+			JMenuItem menuTipo = new JMenuItem(tipo.toString());
+			jHigieneYBelleza.add(menuTipo);
+		}
+		
 		JMenu jLimpieza = new JMenu("Limpieza");
-
-		JPopupMenu popupMenu = new JPopupMenu();
-
-		jAlimentos.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent e) {
-		        popupMenu.removeAll();
-		        for (TipoAlimento tipo : TipoAlimento.values()) {
-		            JMenuItem menuItem = new JMenuItem(tipo.toString());
-		            popupMenu.add(menuItem);
-		        }
-		        popupMenu.show(jAlimentos, jAlimentos.getWidth(), 0);
-		    }
-		});
-
-		jHigieneYBelleza.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent e) {
-		        popupMenu.removeAll();
-		        for (TipoHigieneYBelleza tipo : TipoHigieneYBelleza.values()) {
-		            JMenuItem menuItem = new JMenuItem(tipo.toString());
-		            popupMenu.add(menuItem);
-		        }
-		        popupMenu.show(jHigieneYBelleza, jHigieneYBelleza.getWidth(), 0);
-		    }
-		});
-
-		jLimpieza.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent e) {
-		        popupMenu.removeAll();
-		        for (TipoLimpieza tipo : TipoLimpieza.values()) {
-		            JMenuItem menuItem = new JMenuItem(tipo.toString());
-		            popupMenu.add(menuItem);
-		        }
-		        popupMenu.show(jLimpieza, jLimpieza.getWidth(), 0);
-		    }
-		});
+		for (TipoLimpieza tipo : TipoLimpieza.values()) {
+			JMenuItem menuTipo = new JMenuItem(tipo.toString());
+			jLimpieza.add(menuTipo);
+		}
 
 		jProductos.add(jAlimentos);
 		jProductos.add(jHigieneYBelleza);
