@@ -14,7 +14,6 @@ import domain.Alimento;
 import domain.GestorMarket;
 import domain.HigieneYBelleza;
 import domain.Limpieza;
-import domain.Producto;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
 import domain.TipoLimpieza;
@@ -26,16 +25,14 @@ public class GestorBD {
 	private PreparedStatement ps;
 	private Statement st;
 	
-	public GestorBD(GestorMarket gestor){
-		
-	}
-	public GestorBD() {
+	public GestorBD(GestorMarket gestor) {
 		// Carga del Driver de SQLite
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
 			gestor.getLogger().log(Level.SEVERE, "No se ha podido cargar el driver de la base de datos");
 		}
+		this.gestor = gestor;
 	}
 	
 	public ResultSet realizarQuery(String sql) {
@@ -327,6 +324,7 @@ public class GestorBD {
 	
 	// Metodo que busca un alimento en la BD
 	public Alimento buscarAlimento(String nomb) {
+		Alimento a = null;
 		try{
 			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
 	        String sql = "SELECT * FROM alimentos WHERE nombre = ?";
@@ -340,7 +338,7 @@ public class GestorBD {
             	Double precio = rs.getDouble("precio");
             	int cantidad = rs.getInt("cantidad");
             	String tipoAlimento = rs.getString("tipoAlimento");
-            	Alimento a = new Alimento();
+            	a = new Alimento();
             	a.setNombre(nombre);
             	//a.setDescripcion(descripcion);
             	a.setImagen(imagen);
@@ -371,11 +369,12 @@ public class GestorBD {
 	     catch (Exception e)  {
 	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarAlimento(nombre): " + e);
 	     } 
-		 return null;
+		 return a;
 	}
 	
 	// Metodo que busca un producto de limpieza en la BD
-	public Alimento buscarLimpieza(String nomb) {
+	public Limpieza buscarLimpieza(String nomb) {
+		Limpieza l = null;
 		try{
 			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
 	        String sql = "SELECT * FROM limpieza WHERE nombre = ?";
@@ -389,7 +388,7 @@ public class GestorBD {
             	Double precio = rs.getDouble("precio");
             	int cantidad = rs.getInt("cantidad");
             	String tipoLimpieza = rs.getString("tipoLimpieza");
-            	Limpieza l = new Limpieza();
+            	l = new Limpieza();
             	l.setNombre(nombre);
             	//l.setDescripcion(descripcion);
             	l.setImagen(imagen);
@@ -411,11 +410,12 @@ public class GestorBD {
 	     catch (Exception e)  {
 	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarLimpieza(nombre): " + e);
 	     } 
-		 return null;
+		 return l;
 	}
 	
 	// Metodo que busca un producto de HigieneYBelleza en la BD
-	public Alimento buscarHigieneYBelleza(String nomb) {
+	public HigieneYBelleza buscarHigieneYBelleza(String nomb) {
+		HigieneYBelleza hb = null;
 		try{
 			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
 	        String sql = "SELECT * FROM HigieneYBelleza WHERE nombre = ?";
@@ -429,7 +429,7 @@ public class GestorBD {
             	Double precio = rs.getDouble("precio");
             	int cantidad = rs.getInt("cantidad");
             	String tipoAlimento = rs.getString("tipoAlimento");
-            	HigieneYBelleza hb = new HigieneYBelleza();
+            	hb = new HigieneYBelleza();
             	hb.setNombre(nombre);
             	//hb.setDescripcion(descripcion);
             	hb.setImagen(imagen);
@@ -460,7 +460,7 @@ public class GestorBD {
 	     catch (Exception e)  {
 	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarHigieneYBelleza(nombre): " + e);
 	     } 
-		 return null;
+		 return hb;
 	}
 	
 	//Metodo que al realizar una compra, reste la cantidad al stock de un producto

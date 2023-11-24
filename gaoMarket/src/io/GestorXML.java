@@ -3,7 +3,9 @@ package io;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import org.jdom2.Document;
@@ -13,8 +15,12 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import domain.Alimento;
 import domain.GestorMarket;
+import domain.HigieneYBelleza;
+import domain.Limpieza;
 import domain.Producto;
+import domain.TipoAlimento;
 
 public class GestorXML {
 	
@@ -23,7 +29,8 @@ public class GestorXML {
 	private GestorMarket gestor;
 	
 	//Constructor
-	public GestorXML() {
+	public GestorXML(GestorMarket gestor) {
+		this.gestor = gestor;
 		SAXBuilder builder = new SAXBuilder();
 		try {
 			doc = builder.build(NOM_FICH_XML);
@@ -45,8 +52,12 @@ public class GestorXML {
 	}
 	
 	//Metodo dameProductos
-	public List<Producto> dameProductos(String usuario) {
-		List<Producto> lstProductos = new  ArrayList<>();
+	public Map[] dameProductos(String usuario) {
+		Map[] listaProductos = new HashMap[2];
+		Map<Alimento, Integer> mapaAlimento = new  HashMap<>();
+		Map<Limpieza, Integer> mapaLimpieza = new  HashMap<>();
+		Map<HigieneYBelleza, Integer> mapaHigieneYBelleza = new  HashMap<>();
+		
 		Element eCarritos = doc.getRootElement();
 		for(Element eCarrito: eCarritos.getChildren()) {
 			if(eCarrito.getAttributeValue("usuario").equals(usuario)) {
@@ -56,16 +67,29 @@ public class GestorXML {
 					String nombre = eProducto.getAttributeValue("nombre");
 					String tipo = eProducto.getChildText("tipo");
 					int cantidad = Integer.parseInt(eProducto.getChildText("cantidad"));
-					
-					
-					//p = new Producto(id, nombre, imagen, precio, cantidad);
-					
-					//lstProductos.add(p);
+					switch (tipo) { 
+	                case "ALIMENTO":
+	                	Alimento a = gestor.getGestorBD().buscarAlimento(nombre);
+	                	mapaAlimento.put(a, cantidad);
+	                	break;
+	                case "LIMPIEZA":
+	                	Limpieza l = gestor.getGestorBD().buscarLimpieza(nombre);
+	                	mapaLimpieza.put(l, cantidad);
+	                	break;
+	                case "HIGIENE_Y_BELLEZA":
+	                	HigieneYBelleza hb = gestor.getGestorBD().buscarHigieneYBelleza(nombre);
+	                	mapaHigieneYBelleza.put(hb, cantidad);
+	                	break;
+	            	}
 				}
 			}
 			
 		}
-		return lstProductos;
+		
+		listaProductos[0] = mapaAlimento;
+		listaProductos[1] = mapaLimpieza;
+		listaProductos[2] = mapaHigieneYBelleza;
+		return listaProductos;
 	}
 
 	//Metodo anadirProducto
@@ -87,7 +111,6 @@ public class GestorXML {
 			eCarritos.addContent(eCarrito);
 		}
 		eCarrito.addContent(eProducto);
-		
 		
 		grabar();
 	}

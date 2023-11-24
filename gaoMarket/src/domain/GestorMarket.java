@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import bd.GestorBD;
 import io.GestorXML;
 
 public class GestorMarket {
@@ -23,6 +24,7 @@ public class GestorMarket {
 	protected Map<TipoLimpieza, Set<Producto>> mapaLimpieza;
 	protected Logger logger;
 	protected GestorXML gestorXML;
+	protected GestorBD gestorBD;
 
 	public GestorMarket(List<Persona> personas, List<Producto> productos, Map<String, List<Persona>> mapaPersonas,
 			Map<TipoAlimento, Set<Producto>> mapaAlimentos,
@@ -62,7 +64,8 @@ public class GestorMarket {
 	    } catch (IOException e) {
 	        logger.log(Level.SEVERE, "No se pudo leer el fichero de configuración del logger");
 	    }
-		this.gestorXML = new GestorXML();
+		this.gestorXML = new GestorXML(this);
+		this.gestorBD = new GestorBD(this);
 	}
 
 	public List<Persona> getPersonas() {
@@ -128,5 +131,12 @@ public class GestorMarket {
 	}
 	public void setGestorXML(GestorXML gestorXML) {
 		this.gestorXML = gestorXML;
+	}
+	
+	public GestorBD getGestorBD() {
+		return gestorBD;
+	}
+	public void setGestorBD(GestorBD gestorBD) {
+		this.gestorBD = gestorBD;
 	}
 }
