@@ -8,7 +8,7 @@ public class Usuario extends Persona {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final GestorBD GESTOR_BD = new GestorBD();
+	//private static final GestorBD GESTOR_BD = new GestorBD();
 	
 	public Usuario(String nombre, String apellidos, String nomUsuario, int numTelefono, String correoElectronico,
 			String contrasenya) {
@@ -28,8 +28,8 @@ public class Usuario extends Persona {
 
 	@Override
 	public boolean verificarUsuario(String correo, String contraseña) {
-		if(GESTOR_BD.verificarCredenciales(correo, contraseña) == null)
-			return false;
+		/*if(GESTOR_BD.verificarCredenciales(correo, contraseña) == null)
+			return false;*/
 		return true;
 	}
 

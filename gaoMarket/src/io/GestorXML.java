@@ -95,7 +95,13 @@ public class GestorXML {
 	//Metodo anadirProducto
 	public void anadirProducto(Producto p, int cantidad, String usuario) {
 		Element eCarrito = buscarCarritoUsuario(usuario);
-		Element eProducto = new Element("producto");
+		Element eProducto = buscarProductoCarritoUsuario(usuario, p.getNombre());
+		if(eProducto != null) {
+			actualizarCantidadProducto(eProducto, cantidad);
+			grabar();
+			return;
+		}
+		eProducto = new Element("producto");
 		eProducto.setAttribute("nombre", p.getNombre());
 		Element eTipo = new Element("tipo");
 		eTipo.addContent(p.getTipoProducto().toString());
@@ -125,7 +131,8 @@ public class GestorXML {
 		for (int i = 0; i<lstElemntosProductos.size(); i++) {
 			Element eProducto = lstElemntosProductos.get(i);
 			if(eProducto.getAttributeValue("nombre").equals(nomProducto)) {
-				//Se debe de eliminar el elemento
+				eCarrito.removeContent(eProducto);
+				grabar();
 			}
 		}
 	}
@@ -140,12 +147,38 @@ public class GestorXML {
 		return null;
 	}
 	
+	//Metodo buscarProductoCarritoUsuario
+	private Element buscarProductoCarritoUsuario(String usuario, String producto) {
+		Element eCarritos = doc.getRootElement();
+		for(Element eCarrito: eCarritos.getChildren()) {
+			if(eCarrito.getAttributeValue("usuario").equals(usuario)) {
+				Element eProducto;
+				List<Element> lstElemntosProductos = eCarrito.getChildren();
+				for (int i = 0; i<lstElemntosProductos.size(); i++) {
+					eProducto = lstElemntosProductos.get(i);
+					if(eProducto.getAttributeValue("nombre").equals(producto))
+						return eProducto;
+				}
+			}
+		}
+		return null;
+	}
+	
+	//Metodo actualizarCantidadProducto
+	private Element actualizarCantidadProducto(Element e, int cantidad) {
+		Element eCantidad = e.getChild("cantidad");
+		int cant = cantidad + Integer.parseInt(eCantidad.getText());
+		eCantidad.setText(cant+"");
+		return e;
+	}
+	
 	//Metodo vaciarCarrito
 	public void vaciarCarrito(String usuario) {
 		Element eCarrito = buscarCarritoUsuario(usuario);
 		if(eCarrito == null)
 			return;
-		//Se debe de eliminar la rama entera
-		
+		Element eCarritos = eCarrito.getParentElement();
+		eCarritos.removeContent(eCarrito);
+		grabar();
 	}
 }
