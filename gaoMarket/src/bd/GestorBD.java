@@ -22,20 +22,33 @@ import domain.Usuario;
 public class GestorBD {
 	private GestorMarket gestor;
 	private Connection conn;
-	private PreparedStatement ps;
-	private Statement st;
+	public static final String DB_PATH = "resources/db/GAOmarket.db";
 	
 	public GestorBD(GestorMarket gestor) {
-		// Carga del Driver de SQLite
-		try {
-			Class.forName("org.sqlite.JDBC");
-		} catch (ClassNotFoundException e) {
-			gestor.getLogger().log(Level.SEVERE, "No se ha podido cargar el driver de la base de datos");
-		}
+		connect();
 		this.gestor = gestor;
 	}
 	
-	public ResultSet realizarQuery(String sql) {
+	public void connect(){
+		try {
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
+		} catch (ClassNotFoundException e) {
+			gestor.getLogger().log(Level.SEVERE, "No se ha podido cargar el driver de la base de datos");
+		} catch (SQLException e) {
+			gestor.getLogger().log(Level.SEVERE, "Error conectando a la BD", e);
+		}
+	}
+	
+	public void disconnect(){
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			gestor.getLogger().log(Level.SEVERE, "Error cerrando la conexión con la BD", e);
+		}
+	}
+	
+	public ResultSet realizarQuery(String sql, Statement st) {
 		ResultSet rs = null;
 		try {
 			rs = st.executeQuery(sql);
@@ -56,39 +69,36 @@ public class GestorBD {
 	// Metodo que busca un usuario en la BD por su nomUsuario y contraseña
 	public Usuario verificarCredenciales(String nomUsuario, String password) { 
 		Usuario u = null;
-		 try{                  		         
-				conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	        	String sql = "SELECT * FROM usuario WHERE nomUsuario = ? AND contrasenya = ?";
-	        	ps = conn.prepareStatement(sql);
-	        	ps.setString(1, nomUsuario);
-	        	ps.setString(2, password);
-	            ResultSet rs = ps.executeQuery();           
-	            if(rs.next()) { 
-	            	u = new Usuario(rs.getString("nombre"), rs.getString("apellido"), rs.getString("nomUsuario"), rs.getInt("numTelefono"), rs.getString("correoElectronico"), rs.getString("contrasenya"));
-	            }
-	            rs.close();
-	            ps.close();
-	            conn.close();
-	         }
-	         catch (Exception e)  {
-	 			gestor.getLogger().log(Level.SEVERE, "Error en verificarCredenciales(Usuario, password): " + e);
-	         } 
+    	String sql = "SELECT * FROM usuario WHERE nomUsuario = ? AND contrasenya = ?";
+
+		 try (PreparedStatement ps = conn.prepareStatement(sql)){
+	        ps.setString(1, nomUsuario);
+	        ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()) { 
+            	u = new Usuario(rs.getString("nombre"), rs.getString("apellido"), rs.getString("nomUsuario"), rs.getInt("numTelefono"), rs.getString("correoElectronico"), rs.getString("contrasenya"));
+            }
+            rs.close();
+            ps.close();
+         }
+         catch (Exception e)  {
+ 			gestor.getLogger().log(Level.SEVERE, "Error en verificarCredenciales(Usuario, password): " + e);
+         } 
 		 return u;
 	}
 	
 	// Metodo que busca un usuario en la BD por su nomUsuario
 	public boolean buscaUsuario(String nomUsuario) {
 		boolean existe = false;
-		try{
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	        String sql = "SELECT * FROM usuario WHERE nomUsuario = ?";
-	        ps = conn.prepareStatement(sql);
+        String sql = "SELECT * FROM usuario WHERE nomUsuario = ?";
+
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
 	        ps.setString(1, nomUsuario);
             ResultSet rs = ps.executeQuery();        
             if (rs.next()) existe = true;
             rs.close();
             ps.close();
-            conn.close();
          }
 	     catch (Exception e)  {
 	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscaUsuario(Usuario): " + e);
@@ -104,9 +114,8 @@ public class GestorBD {
 	    String sql =
 	      "INSERT INTO usuario(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya) "
 	      + "VALUES(?, ?, ?, ?, ?)";
-		try {
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-		  	PreparedStatement ps = conn.prepareStatement(sql);
+	    
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
 			ps.setString(1, capitalize(u.getNombre()));
 			ps.setString(2, u.getApellidos());
 			ps.setString(3, u.getNomUsuario());
@@ -117,7 +126,6 @@ public class GestorBD {
 			guardado = true;
 			
 			ps.close();
-			conn.close();
 		} catch (SQLException ex) {
 			gestor.getLogger().log(Level.SEVERE, "Error en metodo guardarCliente: " + ex);
 		}
@@ -128,13 +136,10 @@ public class GestorBD {
 	//Metodo que elimina un usuario pasado su nomUsuario
 	public boolean borrarUsuario(String nomUsuario){
 		String sql = "DELETE FROM usuario WHERE nomUsuario = ?";
-		try{
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-		  	PreparedStatement ps = conn.prepareStatement(sql);
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
 	       	ps.setString(1, nomUsuario); 
 	       	ps.executeUpdate();
 	       	ps.close();
-	       	conn.close();
 	       	return true;
 	   	} catch (SQLException ex) {
 	   		gestor.getLogger().log(Level.SEVERE, "Error en metodo borrarUsuario: " + ex);
@@ -147,10 +152,8 @@ public class GestorBD {
 		List<Usuario> usuarios = new ArrayList<>();
 		String sql = "select nombre, apellidos, nomUsuario, numTelefono, correoElectronico, "
 				+ "contrasenya from usuario;";
-	    try {
-	    	conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	    	st = conn.createStatement();
-            ResultSet rs = realizarQuery(sql);
+	    try (Statement st = conn.createStatement()){
+            ResultSet rs = realizarQuery(sql, st);
             while (rs.next()) {
             	String nombre = capitalize(rs.getString("nombre"));
             	String apellidos = capitalize(rs.getString("apellidos"));
@@ -167,10 +170,8 @@ public class GestorBD {
 		        u.setContrasenya(contrasenya);
 		        usuarios.add(u);
 	      }
-
 	      rs.close();
 	      st.close();
-	      conn.close();
 	    } catch (SQLException e) {
 	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarUsuarios: " + e);
 	    }
@@ -183,10 +184,8 @@ public class GestorBD {
 		List<Alimento> alimentos = new ArrayList<>();
 		String sql = "SELECT nombre, descripcion, imagen, precio, cantidad, tipoAlimento "
 				+ "FROM alimentos";
-		try {
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	    	st = conn.createStatement();
-            ResultSet rs = realizarQuery(sql);
+		try (Statement st = conn.createStatement()){
+            ResultSet rs = realizarQuery(sql, st);
             while (rs.next()) {
             	String nombre = capitalize(rs.getString("nombre"));
             	String descripcion = capitalize(rs.getString("descripcion"));
@@ -222,7 +221,6 @@ public class GestorBD {
             
           rs.close();
   	      st.close();
-  	      conn.close();
   	    } catch (SQLException e) {
   	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarAlimentos: " + e);
   	    }
@@ -234,10 +232,8 @@ public class GestorBD {
 		List<Limpieza> lstLimpieza = new ArrayList<>();
 		String sql = "SELECT nombre, descripcion, imagen, precio, cantidad, tipoLimpieza "
 				+ "FROM limpieza";
-		try {
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	    	st = conn.createStatement();
-            ResultSet rs = realizarQuery(sql);
+		try (Statement st = conn.createStatement()){
+            ResultSet rs = realizarQuery(sql, st);
             while (rs.next()) {
             	String nombre = capitalize(rs.getString("nombre"));
             	String descripcion = capitalize(rs.getString("descripcion"));
@@ -264,7 +260,6 @@ public class GestorBD {
             
           rs.close();
   	      st.close();
-  	      conn.close();
   	    } catch (SQLException e) {
   	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarLimpieza: " + e);
   	    }
@@ -276,10 +271,8 @@ public class GestorBD {
 		List<HigieneYBelleza> lstHigieneYBelleza = new ArrayList<>();
 		String sql = "SELECT nombre, descripcion, imagen, precio, cantidad, tipoHigieneYBelleza "
 				+ "FROM HigieneYBelleza";
-		try {
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	    	st = conn.createStatement();
-            ResultSet rs = realizarQuery(sql);
+		try (Statement st = conn.createStatement()){
+            ResultSet rs = realizarQuery(sql, st);
             while (rs.next()) {
             	String nombre = capitalize(rs.getString("nombre"));
             	String descripcion = capitalize(rs.getString("descripcion"));
@@ -315,7 +308,6 @@ public class GestorBD {
             
           rs.close();
   	      st.close();
-  	      conn.close();
   	    } catch (SQLException e) {
   	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarHigieneYBelleza: " + e);
   	    }
@@ -325,10 +317,9 @@ public class GestorBD {
 	// Metodo que busca un alimento en la BD
 	public Alimento buscarAlimento(String nomb) {
 		Alimento a = null;
-		try{
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	        String sql = "SELECT * FROM alimentos WHERE nombre = ?";
-	        ps = conn.prepareStatement(sql);
+        String sql = "SELECT * FROM alimentos WHERE nombre = ?";
+
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
 	        ps.setString(1, nomb);
             ResultSet rs = ps.executeQuery();        
             while (rs.next()) {
@@ -364,7 +355,6 @@ public class GestorBD {
             }
             rs.close();
             ps.close();
-            conn.close();
          }
 	     catch (Exception e)  {
 	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarAlimento(nombre): " + e);
@@ -375,10 +365,9 @@ public class GestorBD {
 	// Metodo que busca un producto de limpieza en la BD
 	public Limpieza buscarLimpieza(String nomb) {
 		Limpieza l = null;
-		try{
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	        String sql = "SELECT * FROM limpieza WHERE nombre = ?";
-	        ps = conn.prepareStatement(sql);
+        String sql = "SELECT * FROM limpieza WHERE nombre = ?";
+
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
 	        ps.setString(1, nomb);
             ResultSet rs = ps.executeQuery();        
             while (rs.next()) {
@@ -405,7 +394,6 @@ public class GestorBD {
             }
             rs.close();
             ps.close();
-            conn.close();
          }
 	     catch (Exception e)  {
 	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarLimpieza(nombre): " + e);
@@ -416,10 +404,8 @@ public class GestorBD {
 	// Metodo que busca un producto de HigieneYBelleza en la BD
 	public HigieneYBelleza buscarHigieneYBelleza(String nomb) {
 		HigieneYBelleza hb = null;
-		try{
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	        String sql = "SELECT * FROM HigieneYBelleza WHERE nombre = ?";
-	        ps = conn.prepareStatement(sql);
+		String sql = "SELECT * FROM HigieneYBelleza WHERE nombre = ?";
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
 	        ps.setString(1, nomb);
             ResultSet rs = ps.executeQuery();        
             while (rs.next()) {
@@ -455,7 +441,6 @@ public class GestorBD {
             }
             rs.close();
             ps.close();
-            conn.close();
          }
 	     catch (Exception e)  {
 	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarHigieneYBelleza(nombre): " + e);
@@ -466,15 +451,12 @@ public class GestorBD {
 	//Metodo que al realizar una compra, reste la cantidad al stock de un producto
 	public void realizarCompra(String nombre, String producto, int cantidad) {
 		String sql = "UPDATE ? SET cantidad = ? WHERE nombre = ?";
-	    try {
-	    	conn = DriverManager.getConnection("jdbc:sqlite:resources/db/GAOmarket.db");
-	      PreparedStatement ps = conn.prepareStatement(sql);
+	    try (PreparedStatement ps = conn.prepareStatement(sql)){
 	      ps.setString(1, nombre);
 	      ps.setString(2, producto);
 	      ps.setInt(3, cantidad);
 	      ps.executeUpdate();
 	      ps.close();
-	      conn.close();
 	    } catch (SQLException e) {
 	      e.printStackTrace();
 	    }
