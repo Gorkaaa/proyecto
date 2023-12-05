@@ -41,7 +41,6 @@ public class GestorMarket {
 
 
 	public GestorMarket() {
-		super();
 		this.personas = new ArrayList<>();
 		this.productos = new ArrayList<>();
 		this.mapaPersonas = new HashMap<>();
