@@ -52,11 +52,8 @@ public class GestorXML {
 	}
 	
 	//Metodo dameProductos
-	public Map[] dameProductos(String usuario) {
-		Map[] listaProductos = new HashMap[2];
-		Map<Alimento, Integer> mapaAlimento = new  HashMap<>();
-		Map<Limpieza, Integer> mapaLimpieza = new  HashMap<>();
-		Map<HigieneYBelleza, Integer> mapaHigieneYBelleza = new  HashMap<>();
+	public Map<Producto, Integer> dameProductos(String usuario) {
+		Map<Producto, Integer> mapaProductos = new  HashMap<>();
 		
 		Element eCarritos = doc.getRootElement();
 		for(Element eCarrito: eCarritos.getChildren()) {
@@ -70,26 +67,22 @@ public class GestorXML {
 					switch (tipo) { 
 	                case "ALIMENTO":
 	                	Alimento a = gestor.getGestorBD().buscarAlimento(nombre);
-	                	mapaAlimento.put(a, cantidad);
+	                	mapaProductos.put(a, cantidad);
 	                	break;
 	                case "LIMPIEZA":
 	                	Limpieza l = gestor.getGestorBD().buscarLimpieza(nombre);
-	                	mapaLimpieza.put(l, cantidad);
+	                	mapaProductos.put(l, cantidad);
 	                	break;
 	                case "HIGIENE_Y_BELLEZA":
 	                	HigieneYBelleza hb = gestor.getGestorBD().buscarHigieneYBelleza(nombre);
-	                	mapaHigieneYBelleza.put(hb, cantidad);
+	                	mapaProductos.put(hb, cantidad);
 	                	break;
 	            	}
 				}
 			}
 			
 		}
-		
-		listaProductos[0] = mapaAlimento;
-		listaProductos[1] = mapaLimpieza;
-		listaProductos[2] = mapaHigieneYBelleza;
-		return listaProductos;
+		return mapaProductos;
 	}
 
 	//Metodo anadirProducto

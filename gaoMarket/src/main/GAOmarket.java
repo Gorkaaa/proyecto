@@ -1,5 +1,8 @@
 package main;
 
+import java.util.logging.Level;
+
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import domain.GestorMarket;
@@ -12,11 +15,24 @@ public class GAOmarket {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				gestor = new GestorMarket();
-				 VentanaPrincipal ventana = new VentanaPrincipal(gestor);
-				 ventana.setVisible(true);
+				VentanaPrincipal ventana = new VentanaPrincipal(gestor);
+				Thread hilo = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						
+						 
+						try {
+							Thread.sleep(5000);
+						} catch (InterruptedException e) {
+							gestor.getLogger().log(Level.INFO, "Error al iniciar Ventana: " + e);
+						}
+						 JOptionPane.getRootFrame().dispose();
+						
+					}
+				});
+				hilo.start();
+				ventana.setVisible(true);
 			}
 		});
 	}
-
 }

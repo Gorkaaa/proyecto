@@ -7,7 +7,11 @@
     </producto>
     <producto nombre="Producto 2">
       <tipo>ALIMENTO</tipo>
-      <cantidad>5</cantidad>
+      <cantidad>6</cantidad>
+    </producto>
+    <producto nombre="Producto 3">
+      <tipo>ALIMENTO</tipo>
+      <cantidad>3</cantidad>
     </producto>
   </carrito>
 </carritos>
