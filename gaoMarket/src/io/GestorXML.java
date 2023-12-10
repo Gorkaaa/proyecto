@@ -54,7 +54,6 @@ public class GestorXML {
 	//Metodo dameProductos
 	public Map<Producto, Integer> dameProductos(String usuario) {
 		Map<Producto, Integer> mapaProductos = new  HashMap<>();
-		
 		Element eCarritos = doc.getRootElement();
 		for(Element eCarrito: eCarritos.getChildren()) {
 			if(eCarrito.getAttributeValue("usuario").equals(usuario)) {

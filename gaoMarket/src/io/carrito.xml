@@ -3,15 +3,15 @@
   <carrito usuario="usu1">
     <producto nombre="Producto 1">
       <tipo>ALIMENTO</tipo>
-      <cantidad>3</cantidad>
+      <cantidad>4</cantidad>
     </producto>
     <producto nombre="Producto 2">
       <tipo>ALIMENTO</tipo>
-      <cantidad>6</cantidad>
+      <cantidad>8</cantidad>
     </producto>
     <producto nombre="Producto 3">
       <tipo>ALIMENTO</tipo>
-      <cantidad>3</cantidad>
+      <cantidad>7</cantidad>
     </producto>
   </carrito>
 </carritos>
