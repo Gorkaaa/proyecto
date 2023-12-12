@@ -27,7 +27,6 @@ public class GAOmarket {
 						} catch (InterruptedException e) {
 							gestor.getLogger().log(Level.INFO, "Error al iniciar Ventana: " + e);
 						}
-						 JOptionPane.getRootFrame().dispose();
 						
 					}
 				});
