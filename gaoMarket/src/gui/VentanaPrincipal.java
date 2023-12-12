@@ -202,6 +202,8 @@ public class VentanaPrincipal extends JFrame {
 		logger.info("Programa finalizado");
 	}
 	
+	// 	#IAG gorkaBidaurratzagaPérez_2023-11-05_18-30.txt  El uso de la IAG se ha utilizado para la creación de los metodos createRowPanels y createRowPanel
+	// 		y se han realizado cambios a ambos metodos para garantizar su funcionalidad, mejor aspecto y buen rendimiento del programa.
 	private void createRowPanels(JPanel backgroundPanel) {
         int colCount = 4;
         int colWidth = 180;
@@ -235,6 +237,8 @@ public class VentanaPrincipal extends JFrame {
     }
 	
 
+	// 	#IAG gorkaBidaurratzagaPérez_2023-11-05_18-30.txt  El uso de la IAG se ha utilizado para la creación de los metodos createRowPanels y createRowPanel
+	// 		y se han realizado cambios a ambos metodos para garantizar su funcionalidad, mejor aspecto y buen rendimiento del programa.
     private JPanel createRowPanel(Producto producto, int rowHeight, int colWidth) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());            
