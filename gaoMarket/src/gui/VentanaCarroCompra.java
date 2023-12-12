@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -37,10 +38,9 @@ public class VentanaCarroCompra extends JFrame{
 	protected JButton btnEliminar;
 	protected JButton btnComprar;
 	protected JButton btnVaciar;
-	protected JPanel panelIzq;
-	protected JPanel panelMedio;
-	protected JPanel panelArriba;
+	protected JPanel panelCentral;
 	protected JPanel panelAbajo;
+	protected JLabel lblPrecioTotal;
     
 	public VentanaCarroCompra(GestorMarket gestor) {
 		this.gestor = gestor;
@@ -53,8 +53,7 @@ public class VentanaCarroCompra extends JFrame{
 		productos.add(new Producto(5, "Producto 5", "imagen5.png", 4.20, 6, TipoProducto.ALIMENTO));
 		productos.add(new Producto(6, "Producto 6", "imagen6.png", 7.72, 1, TipoProducto.ALIMENTO));
 		productos.add(new Producto(7, "Producto 7", "imagen7.png", 8.35, 1, TipoProducto.ALIMENTO));
-		
-		
+
 		modeloCarrito = new ModeloCarroCompra(productos);
 		tabla = new JTable(modeloCarrito);
 		tabla.setDefaultRenderer(Object.class, new RendererCarroCompra());
@@ -65,8 +64,7 @@ public class VentanaCarroCompra extends JFrame{
 		btnComprar = new JButton("Comprar");
 		btnVaciar = new JButton("Vaciar carrito");
 		
-		panelMedio = new JPanel();
-		panelArriba = new JPanel();
+		panelCentral = new JPanel(new BorderLayout());
 		panelAbajo = new JPanel();
 		
 		btnVaciar.addActionListener(new ActionListener() {
@@ -95,11 +93,16 @@ public class VentanaCarroCompra extends JFrame{
 			}
 		});
 		
+		lblPrecioTotal = new JLabel("Total: " + String.format("%.2f €", sumarPrecioTotalCarroRecursivo(productos, productos.size() - 1)));
+		panelCentral.add(tablaScroll, "Center");
+		panelCentral.add(lblPrecioTotal, "South");
+		
 		panelAbajo.add(btnVaciar);
 		panelAbajo.add(btnEliminar);
 		panelAbajo.add(btnComprar);
 		
-		cp.add(tablaScroll);
+		//cp.add(tablaScroll);
+		cp.add(panelCentral);
 		cp.add(panelAbajo, BorderLayout.SOUTH);
 		
 		ImageIcon iconoPrincipal = new ImageIcon("resources/iconos/iconoGAO.png");
@@ -122,5 +125,14 @@ public class VentanaCarroCompra extends JFrame{
 			tabla.getColumnModel().getColumn(i).setCellRenderer(compraRenderer);
 		}	
 	}
-
+	
+	public static Double sumarPrecioTotalCarroRecursivo(List<Producto> productos, int cont) {
+		if(cont < 0) return 0.0;
+		return sumarPrecioTotalCarroRecursivo(productos, cont - 1) + sumarPrecioProductoRecursivo(productos.get(cont).getPrecio(), productos.get(cont).getCantidad());
+	}
+	
+	public static Double sumarPrecioProductoRecursivo(Double precio, int cantidad) {
+		if(cantidad < 2) return precio;
+		return sumarPrecioProductoRecursivo(precio, --cantidad) + precio;
+	}
 }

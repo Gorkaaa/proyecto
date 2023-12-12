@@ -2,7 +2,6 @@ package io;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,6 @@ import domain.GestorMarket;
 import domain.HigieneYBelleza;
 import domain.Limpieza;
 import domain.Producto;
-import domain.TipoAlimento;
 
 public class GestorXML {
 	
