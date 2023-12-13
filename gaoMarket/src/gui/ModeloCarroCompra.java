@@ -19,7 +19,6 @@ public class ModeloCarroCompra extends DefaultTableModel{
 	protected List<Producto> productos;
 	protected final List<String> cabeceras = Arrays.asList("Producto", "Nombre", "Precio", "Cantidad", "Total");
 			
-	
 	public ModeloCarroCompra(List<Producto> productos) {
 		this.productos = productos;
 	}
@@ -63,8 +62,13 @@ public class ModeloCarroCompra extends DefaultTableModel{
 			case 1: return p.getNombre();
 			case 2: return Double.valueOf(p.getPrecio());
 			case 3: return Integer.valueOf(p.getCantidad());
-			case 4: return Double.valueOf((Double) (p.getPrecio()*p.getCantidad()));
+			case 4: return sumarPrecioProductoRecursivo(p.getPrecio(), p.getCantidad());
 			default: return null;
 		}
+	}
+	
+	public static Double sumarPrecioProductoRecursivo(Double precio, int cantidad) {
+		if(cantidad < 2) return precio;
+		return sumarPrecioProductoRecursivo(precio, --cantidad) + precio;
 	}
 }
