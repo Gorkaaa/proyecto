@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -193,13 +195,20 @@ public class VentanaPrincipal extends JFrame {
 		ImageIcon iconoPrincipal = new ImageIcon("resources/iconos/iconoGAO.png");
 		iconoPrincipal = new ImageIcon(iconoPrincipal.getImage().getScaledInstance(207, 207, Image.SCALE_SMOOTH));
 			
+		this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+               logger.info("Programa finalizado");
+            }
+        });
+		
 		this.setIconImage(iconoPrincipal.getImage());
 		
 		this.setTitle("GAO Market");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cambiar a DISPOSE_ON_CLOSE por si el usuario se equivoca, que no cierre todo el programa.
 		this.setBounds(150, 40, 1200, 730);
 		this.setVisible(false);
-		logger.info("Programa finalizado");
+		logger.info("Progrma iniciado");
 	}
 	
 	// 	#IAG gorkaBidaurratzagaPérez_2023-11-05_18-30.txt  El uso de la IAG se ha utilizado para la creación de los metodos createRowPanels y createRowPanel
