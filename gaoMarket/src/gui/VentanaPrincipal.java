@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -16,6 +17,7 @@ import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -162,20 +164,17 @@ public class VentanaPrincipal extends JFrame {
 		JLabel imagenGAO = new JLabel();
 		imagenGAO.setIcon(iconoGAO);
 			
-		JLayeredPane panelArriba = new JLayeredPane();
-		panelArriba.setPreferredSize(new Dimension(1200, 130));
+		JPanel panelArriba = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 10));		
+		JPanel panelIconos = new JPanel(new BorderLayout());
+		JPanel panelSubIconos = new JPanel(new FlowLayout());
 
-		panelArriba.add(barraBusqueda);
-		panelArriba.add(botonGestionUsuario);
-		panelArriba.add(botonUsuario);
-		panelArriba.add(botonCesta);
 		panelArriba.add(imagenGAO);
-
-		barraBusqueda.setBounds(550, 75, 280, 35);
-		botonGestionUsuario.setBounds(1060, 6, 45, 45);
-		botonUsuario.setBounds(1120, 6, 45, 45);
-		botonCesta.setBounds(1050, 60, 125, 60);
-		imagenGAO.setBounds(20, 10, 404, 114);
+		panelArriba.add(barraBusqueda);
+		panelArriba.add(panelIconos);
+		panelSubIconos.add(botonGestionUsuario);
+		panelSubIconos.add(botonUsuario);
+		panelIconos.add(panelSubIconos, "North");
+		panelIconos.add(botonCesta, "Center");
 		
 		cp.add(panelArriba, BorderLayout.NORTH);
 		
