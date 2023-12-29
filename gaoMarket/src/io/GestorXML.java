@@ -14,11 +14,12 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import domain.Alimento;
 import domain.GestorMarket;
-import domain.HigieneYBelleza;
-import domain.Limpieza;
 import domain.Producto;
+import domain.TipoAlimento;
+import domain.TipoHigieneYBelleza;
+import domain.TipoLimpieza;
+import domain.TipoProducto;
 
 public class GestorXML {
 	
@@ -51,33 +52,41 @@ public class GestorXML {
 	
 	//Metodo dameProductos
 	public Map<Producto, Integer> dameProductos(String usuario) {
-		Map<Producto, Integer> mapaProductos = new  HashMap<>();
+		Map<Producto, Integer> mapaProductos = new HashMap<>();
 		Element eCarritos = doc.getRootElement();
-		for(Element eCarrito: eCarritos.getChildren()) {
-			if(eCarrito.getAttributeValue("usuario").equals(usuario)) {
+
+		for (Element eCarrito : eCarritos.getChildren()) {
+			if (eCarrito.getAttributeValue("usuario").equals(usuario)) {
 				List<Element> lstElemntosProductos = eCarrito.getChildren();
-				for (int i = 0; i<lstElemntosProductos.size(); i++) {
-					Element eProducto = lstElemntosProductos.get(i);
+	
+				for (Element eProducto : lstElemntosProductos) {
 					String nombre = eProducto.getAttributeValue("nombre");
-					String tipo = eProducto.getChildText("tipo");
+					TipoProducto tipoProducto = TipoProducto.valueOf(eProducto.getChildText("tipo"));
 					int cantidad = Integer.parseInt(eProducto.getChildText("cantidad"));
-					switch (tipo) { 
-	                case "ALIMENTO":
-	                	Alimento a = gestor.getGestorBD().buscarAlimento(nombre);
-	                	mapaProductos.put(a, cantidad);
-	                	break;
-	                case "LIMPIEZA":
-	                	Limpieza l = gestor.getGestorBD().buscarLimpieza(nombre);
-	                	mapaProductos.put(l, cantidad);
-	                	break;
-	                case "HIGIENE_Y_BELLEZA":
-	                	HigieneYBelleza hb = gestor.getGestorBD().buscarHigieneYBelleza(nombre);
-	                	mapaProductos.put(hb, cantidad);
-	                	break;
-	            	}
+
+					Enum<?> tipoProductoTipo = null;
+
+					switch (tipoProducto) {
+						case ALIMENTO:
+							tipoProductoTipo = TipoAlimento.valueOf(eProducto.getChildText("tipoProductoTipo"));
+							break;
+						case HIGIENE_Y_BELLEZA:
+							tipoProductoTipo = TipoHigieneYBelleza.valueOf(eProducto.getChildText("tipoProductoTipo"));
+							break;
+						case LIMPIEZA:
+							tipoProductoTipo = TipoLimpieza.valueOf(eProducto.getChildText("tipoProductoTipo"));
+							break;
+					}
+
+					Producto producto = new Producto();
+					producto.setNombre(nombre);
+					producto.setTipoProducto(tipoProducto);
+					producto.setTipoProductoTipo(tipoProductoTipo);
+					producto.setCantidad(cantidad);
+
+					mapaProductos.put(producto, cantidad);
 				}
 			}
-			
 		}
 		return mapaProductos;
 	}
