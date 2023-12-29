@@ -9,21 +9,33 @@ public class Producto implements Serializable, Comparable<Producto>{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	public enum Estado {
+		NORMAL,
+		AGOTADO,
+		POCAS_UNIDADES,
+	}
+	
 	protected int id;
 	protected String nombre;
 	protected String imagen;
 	protected Double precio;
 	protected int cantidad;
 	protected TipoProducto tipoProducto;
+	protected Enum<?> tipoProductoTipo;
+	protected Estado estado;
+	protected int descuento;
 	
 	
-	public Producto(int id, String nombre, String imagen, Double precio, int cantidad, TipoProducto tipoProducto) {
+	public Producto(int id, String nombre, String imagen, Double precio, int cantidad, TipoProducto tipoProducto, Enum<?> tipoProductoTipo, Estado estado, int descuento) {
 		this.id = id;
 		this.nombre = nombre;
 		this.imagen = imagen;
 		this.precio = precio;
 		this.cantidad = cantidad;
 		this.tipoProducto = tipoProducto;
+		this.tipoProductoTipo = tipoProductoTipo;
+		this.estado = estado;
+		this.descuento = descuento;
 	}
 	
 	public Producto() {
@@ -31,6 +43,10 @@ public class Producto implements Serializable, Comparable<Producto>{
 		this.imagen = "";
 		this.precio = 0.0;
 		this.cantidad = 0;
+		this.tipoProducto = TipoProducto.ALIMENTO;
+		this.tipoProductoTipo = TipoAlimento.BEBIDAS;
+		this.estado = Estado.AGOTADO;
+		this.descuento = 0;
 	}
 
 
@@ -59,7 +75,9 @@ public class Producto implements Serializable, Comparable<Producto>{
 	}
 
 	public void setPrecio(Double precio) {
-		this.precio = precio;
+		if (this.precio >= 0) {
+			this.precio = precio * (1 - this.getDescuento()/100);
+		}
 	}
 
 	public int getCantidad() {
@@ -77,11 +95,58 @@ public class Producto implements Serializable, Comparable<Producto>{
 	public void setTipoProducto(TipoProducto tipoProducto) {
 		this.tipoProducto = tipoProducto;
 	}
+	
+	public Enum<?> getTipoProductoTipo() {
+		return tipoProductoTipo;
+	}
+
+
+	public void setTipoProductoTipo(Enum<?> tipoProductoTipo) {
+		if (this.tipoProducto == TipoProducto.ALIMENTO) {
+			this.tipoProductoTipo = (TipoAlimento) tipoProductoTipo;
+		} else if (this.tipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
+			this.tipoProductoTipo = (TipoHigieneYBelleza) tipoProductoTipo;
+		} else if (this.tipoProducto == TipoProducto.LIMPIEZA) {
+			this.tipoProductoTipo = (TipoLimpieza) tipoProductoTipo;
+		} else {
+			throw new IllegalArgumentException("Tipo de producto no reconocido.");
+	    }
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		if(this.cantidad == 0) {
+			this.estado = Estado.AGOTADO;
+		}
+		else if (this.cantidad <= 10) {
+			this.estado = Estado.POCAS_UNIDADES;
+		}
+	}
+
+
+	public int getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(int descuento) {
+		if (descuento >= 0 && descuento <= 100) {
+			this.descuento = descuento;
+		}
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 
 	@Override
 	public String toString() {
-		return "Producto [nombre=" + nombre + ", imagen=" + imagen
-				+ ", precio=" + precio + ", cantidad=" + cantidad + "]";
+		return "Producto [id=" + id + ", nombre=" + nombre + ", imagen=" + imagen + ", precio=" + precio + ", cantidad="
+				+ cantidad + ", tipoProducto=" + tipoProducto + ", tipoProductoTipo=" + tipoProductoTipo + ", estado="
+				+ estado + ", descuento=" + descuento + "]";
 	}
 
 	@Override
