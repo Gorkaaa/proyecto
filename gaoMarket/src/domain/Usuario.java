@@ -1,6 +1,5 @@
 package domain;
 
-import bd.GestorBD;
 
 public class Usuario extends Persona {
 
