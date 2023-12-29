@@ -186,6 +186,30 @@ public class GestorBD {
 	    }
 	    return usuarios;
 	}
+	
+	
+	public boolean anyadirProducto(Producto p) {
+		boolean anyadir = true;
+		try {
+			Statement st = conn.createStatement();
+			String sql = String.format("SELECT * FROM Producto WHERE codigo = '%s'" , p.getId());
+			ResultSet rs = st.executeQuery(sql);
+			if(rs.next()) {
+				sql = String.format("INSERT INTO Producto (id, nombre, imagen, precio, cantidad, tipoProducto, tipoProductoTipo, estado, descuento) VALUES('%d', '%s', '%s', '%.2f', '%d', '%s', '%s', '%s', '%d')", p.getId(), p.getNombre(), p.getImagen(), p.getPrecio(), p.getCantidad(), p.getTipoProducto(), p.getTipoProductoTipo(), p.getEstado(), p.getDescuento());
+				st.executeUpdate(sql);
+				
+			}else {
+				anyadir = false;
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			anyadir = false;
+		}
+		return anyadir;
+	}
+	
 	////Consultas de Productos
 	
 	//Metodo que devuelve todos los productos
