@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import domain.Alimento;
 import domain.GestorMarket;
-import domain.HigieneYBelleza;
-import domain.Limpieza;
+import domain.Producto;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
 import domain.TipoLimpieza;
+import domain.TipoProducto;
 import domain.Usuario;
+import domain.Producto.Estado;
 
 public class GestorBD {
 	private GestorMarket gestor;
@@ -33,6 +33,15 @@ public class GestorBD {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
+			
+			Statement statement = conn.createStatement();
+			String sent = "CREATE TABLE IF NOT EXISTS Producto (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre varchar(100), imagen varchar(100), precio double, cantidad int, tipoProducto varchar(100), tipoProductoTipo varchar(100), estado varchar(100), descuento int);";
+			statement.executeUpdate( sent );
+			sent = "CREATE TABLE IF NOT EXISTS Usuario (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100));";
+			statement.executeUpdate( sent );
+			sent = "CREATE TABLE IF NOT EXISTS Empleado (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100), dni varchar(9));";
+			statement.executeUpdate( sent );
+			
 		} catch (ClassNotFoundException e) {
 			gestor.getLogger().log(Level.SEVERE, "No se ha podido cargar el driver de la base de datos");
 		} catch (SQLException e) {
@@ -179,179 +188,230 @@ public class GestorBD {
 	}
 	////Consultas de Productos
 	
-	//Metodo que devuelve todos los alimentos
-	public List<Alimento> listarAlimentos() {
-		List<Alimento> alimentos = new ArrayList<>();
-		String sql = "SELECT nombre, descripcion, imagen, precio, cantidad, tipoAlimento "
-				+ "FROM alimentos";
+	//Metodo que devuelve todos los productos
+	public List<Producto> listarProductos() {
+		List<Producto> productos = new ArrayList<>();
+		String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, tipoProductoTipo, estado, descuento "
+				+ "FROM Productos";
 		try (Statement st = conn.createStatement()){
-            ResultSet rs = realizarQuery(sql, st);
-            while (rs.next()) {
-            	String nombre = capitalize(rs.getString("nombre"));
-            	String descripcion = capitalize(rs.getString("descripcion"));
-            	String imagen = rs.getString("imagen");
-            	Double precio = rs.getDouble("precio");
-            	int cantidad = rs.getInt("cantidad");
-            	String tipoAlimento = rs.getString("tipoAlimento");
-            	Alimento a = new Alimento();
-            	a.setNombre(nombre);
-            	//a.setDescripcion(descripcion);
-            	a.setImagen(imagen);
-            	a.setPrecio(precio);
-            	a.setCantidad(cantidad);
-            	switch (tipoAlimento) { 
-                case "CARNICOS":
-                	a.setTipoAlimento(TipoAlimento.CARNICOS);
-                	break;
-                case "VEGETALES":
-                	a.setTipoAlimento(TipoAlimento.VEGETALES);
-                	break;
-                case "BEBIDAS":
-                	a.setTipoAlimento(TipoAlimento.BEBIDAS);
-                	break;
-                case "CONGELADOS":
-                	a.setTipoAlimento(TipoAlimento.CONGELADOS);
-                	break;
-                case "DULCES":
-                	a.setTipoAlimento(TipoAlimento.DULCES);
-                	break;
-            	}
-            	alimentos.add(a);
-            }
-            
-          rs.close();
-  	      st.close();
-  	    } catch (SQLException e) {
-  	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarAlimentos: " + e);
-  	    }
-		return alimentos;
+			ResultSet rs = realizarQuery(sql, st);
+			while (rs.next()) {
+				String nombre = capitalize(rs.getString("nombre"));
+				String imagen = rs.getString("imagen");
+				Double precio = rs.getDouble("precio");
+				int cantidad = rs.getInt("cantidad");
+				String tipoProducto = rs.getString("tipoProducto");
+				String tipoProductoTipo = rs.getString("tipoProductoTipo");
+				String estadoStr = rs.getString("estado");
+				Estado estado = Estado.valueOf(estadoStr);
+				int descuento = rs.getInt("descuento");
+				
+				Producto p = new Producto();
+				p.setNombre(nombre);
+				p.setImagen(imagen);
+				p.setPrecio(precio);
+				p.setCantidad(cantidad);
+
+				TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProducto);
+				p.setTipoProducto(enumTipoProducto);
+
+				if (enumTipoProducto == TipoProducto.ALIMENTO) {
+					TipoAlimento enumTipoA = TipoAlimento.valueOf(tipoProductoTipo);
+					p.setTipoProductoTipo(enumTipoA);
+				}
+	            
+				if (enumTipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
+					TipoHigieneYBelleza enumTipoHYB = TipoHigieneYBelleza.valueOf(tipoProductoTipo);
+					p.setTipoProductoTipo(enumTipoHYB);
+				}
+	            
+				if (enumTipoProducto == TipoProducto.LIMPIEZA) {
+					TipoLimpieza enumTipoL = TipoLimpieza.valueOf(tipoProductoTipo);
+					p.setTipoProductoTipo(enumTipoL);
+				}
+
+				p.setEstado(estado);
+				p.setDescuento(descuento);
+
+				productos.add(p);
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			gestor.getLogger().log(Level.SEVERE, "Error en metodo listarProductos: " + e);
+		}
+		return productos;
 	}
 	
-	//Metodo que devuelve todos los productos de limpieza
-	public List<Limpieza> listarLimpieza() {
-		List<Limpieza> lstLimpieza = new ArrayList<>();
-		String sql = "SELECT nombre, descripcion, imagen, precio, cantidad, tipoLimpieza "
-				+ "FROM limpieza";
+	// Metodo que devuelve todos los productos de Alimento
+	public List<Producto> listarAlimentos() {
+		List<Producto> productos = new ArrayList<>();
+		String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, tipoProductoTipo, estado, descuento "
+				+ "FROM Productos";
 		try (Statement st = conn.createStatement()){
-            ResultSet rs = realizarQuery(sql, st);
-            while (rs.next()) {
-            	String nombre = capitalize(rs.getString("nombre"));
-            	String descripcion = capitalize(rs.getString("descripcion"));
-            	String imagen = rs.getString("imagen");
-            	Double precio = rs.getDouble("precio");
-            	int cantidad = rs.getInt("cantidad");
-            	String tipoLimpieza = rs.getString("tipoLimpieza");
-            	Limpieza l = new Limpieza();
-            	l.setNombre(nombre);
-            	//l.setDescripcion(descripcion);
-            	l.setImagen(imagen);
-            	l.setPrecio(precio);
-            	l.setCantidad(cantidad);
-            	switch (tipoLimpieza) { 
-                case "UTENSILIOS":
-                	l.setTipoLimpieza(TipoLimpieza.UTENSILIOS);
-                	break;
-                case "PRODUCTOS_LIMPIEZA":
-                	l.setTipoLimpieza(TipoLimpieza.PRODUCTOS_LIMPIEZA);
-                	break;
-            	}
-            	lstLimpieza.add(l);
-            }
-            
-          rs.close();
-  	      st.close();
-  	    } catch (SQLException e) {
-  	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarLimpieza: " + e);
-  	    }
-		return lstLimpieza;
+			ResultSet rs = realizarQuery(sql, st);
+			while (rs.next()) {
+				String nombre = capitalize(rs.getString("nombre"));
+				String imagen = rs.getString("imagen");
+				Double precio = rs.getDouble("precio");
+				int cantidad = rs.getInt("cantidad");
+				String tipoProducto = rs.getString("ALIMENTO");
+				String tipoProductoTipo = rs.getString("tipoProductoTipo");
+				String estadoStr = rs.getString("estado");
+				Estado estado = Estado.valueOf(estadoStr);
+				int descuento = rs.getInt("descuento");
+				
+				Producto p = new Producto();
+				if(p.getTipoProducto() == TipoProducto.ALIMENTO) {
+					p.setNombre(nombre);
+					p.setImagen(imagen);
+					p.setPrecio(precio);
+					p.setCantidad(cantidad);
+
+					TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProducto);
+					p.setTipoProducto(enumTipoProducto);
+
+					TipoAlimento enumTipoA = TipoAlimento.valueOf(tipoProductoTipo);
+					p.setTipoProductoTipo(enumTipoA);
+
+					p.setEstado(estado);
+					p.setDescuento(descuento);
+
+					productos.add(p);
+				}
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			gestor.getLogger().log(Level.SEVERE, "Error en metodo listarAlimentos: " + e);
+		}
+		return productos;
 	}
 	
-	//Metodo que devuelve todos los productos Higiene y belleza
-	public List<HigieneYBelleza> listarHigieneYBelleza() {
-		List<HigieneYBelleza> lstHigieneYBelleza = new ArrayList<>();
-		String sql = "SELECT nombre, descripcion, imagen, precio, cantidad, tipoHigieneYBelleza "
-				+ "FROM HigieneYBelleza";
+//	//Metodo que devuelve todos los productos de Higiene y Belleza
+	public List<Producto> listarHigieneYBelleza() {
+		List<Producto> productos = new ArrayList<>();
+		String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, tipoProductoTipo, estado, descuento "
+				+ "FROM Productos";
 		try (Statement st = conn.createStatement()){
-            ResultSet rs = realizarQuery(sql, st);
-            while (rs.next()) {
-            	String nombre = capitalize(rs.getString("nombre"));
-            	String descripcion = capitalize(rs.getString("descripcion"));
-            	String imagen = rs.getString("imagen");
-            	Double precio = rs.getDouble("precio");
-            	int cantidad = rs.getInt("cantidad");
-            	String tipoAlimento = rs.getString("tipoAlimento");
-            	HigieneYBelleza hb = new HigieneYBelleza();
-            	hb.setNombre(nombre);
-            	//hb.setDescripcion(descripcion);
-            	hb.setImagen(imagen);
-            	hb.setPrecio(precio);
-            	hb.setCantidad(cantidad);
-            	switch (tipoAlimento) { 
-                case "AFEITADO_DEPILACION":
-                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.AFEITADO_DEPILACION);
-                	break;
-                case "HIGIENE_BUCAL":
-                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.HIGIENE_BUCAL);
-                	break;
-                case "HIGIENE_INTIMA":
-                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.HIGIENE_INTIMA);
-                	break;
-                case "CUIDADO_CORPORAL":
-                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.CUIDADO_CORPORAL);
-                	break;
-                case "PARAFARMACIA_SOLARES":
-                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.PARAFARMACIA_SOLARES);
-                	break;
-            	}
-            	lstHigieneYBelleza.add(hb);
-            }
-            
-          rs.close();
-  	      st.close();
-  	    } catch (SQLException e) {
-  	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarHigieneYBelleza: " + e);
-  	    }
-		return lstHigieneYBelleza;
+			ResultSet rs = realizarQuery(sql, st);
+			while (rs.next()) {
+				String nombre = capitalize(rs.getString("nombre"));
+				String imagen = rs.getString("imagen");
+				Double precio = rs.getDouble("precio");
+				int cantidad = rs.getInt("cantidad");
+				String tipoProducto = rs.getString("tipoProducto");
+				String tipoProductoTipo = rs.getString("tipoProductoTipo");
+				String estadoStr = rs.getString("estado");
+				Estado estado = Estado.valueOf(estadoStr);
+				int descuento = rs.getInt("descuento");
+				
+				Producto p = new Producto();
+				if(p.getTipoProducto() == TipoProducto.HIGIENE_Y_BELLEZA) {
+					p.setNombre(nombre);
+					p.setImagen(imagen);
+					p.setPrecio(precio);
+					p.setCantidad(cantidad);
+
+					TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProducto);
+					p.setTipoProducto(enumTipoProducto);
+
+					TipoHigieneYBelleza enumTipoH = TipoHigieneYBelleza.valueOf(tipoProductoTipo);
+					p.setTipoProductoTipo(enumTipoH);
+
+					p.setEstado(estado);
+					p.setDescuento(descuento);
+
+					productos.add(p);
+				}
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			gestor.getLogger().log(Level.SEVERE, "Error en metodo listarHigieneYBelleza: " + e);
+		}
+		return productos;
+	}
+	
+//	
+//	//Metodo que devuelve todos los productos de Limpieza
+	public List<Producto> listarLimpieza() {
+		List<Producto> productos = new ArrayList<>();
+		String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, tipoProductoTipo, estado, descuento "
+				+ "FROM Productos";
+		try (Statement st = conn.createStatement()){
+			ResultSet rs = realizarQuery(sql, st);
+			while (rs.next()) {
+				String nombre = capitalize(rs.getString("nombre"));
+				String imagen = rs.getString("imagen");
+				Double precio = rs.getDouble("precio");
+				int cantidad = rs.getInt("cantidad");
+				String tipoProducto = rs.getString("tipoProducto");
+				String tipoProductoTipo = rs.getString("tipoProductoTipo");
+				String estadoStr = rs.getString("estado");
+				Estado estado = Estado.valueOf(estadoStr);
+				int descuento = rs.getInt("descuento");
+				
+				Producto p = new Producto();
+				if(p.getTipoProducto() == TipoProducto.LIMPIEZA) {
+					p.setNombre(nombre);
+					p.setImagen(imagen);
+					p.setPrecio(precio);
+					p.setCantidad(cantidad);
+
+					TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProducto);
+					p.setTipoProducto(enumTipoProducto);
+
+					TipoLimpieza enumTipoL = TipoLimpieza.valueOf(tipoProductoTipo);
+					p.setTipoProductoTipo(enumTipoL);
+
+					p.setEstado(estado);
+					p.setDescuento(descuento);
+
+					productos.add(p);
+				}
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			gestor.getLogger().log(Level.SEVERE, "Error en metodo listarLimpieza: " + e);
+		}
+		return productos;
 	}
 	
 	// Metodo que busca un alimento en la BD
-	public Alimento buscarAlimento(String nomb) {
-		Alimento a = null;
-        String sql = "SELECT * FROM alimentos WHERE nombre = ?";
+	public Producto buscarAlimento(String nomb) {
+		Producto p = new Producto();
+        String sql = "SELECT * FROM productos WHERE nombre = ?";
 
 		try (PreparedStatement ps = conn.prepareStatement(sql)){
 	        ps.setString(1, nomb);
             ResultSet rs = ps.executeQuery();        
             while (rs.next()) {
             	String nombre = capitalize(rs.getString("nombre"));
-            	String descripcion = capitalize(rs.getString("descripcion"));
-            	String imagen = rs.getString("imagen");
-            	Double precio = rs.getDouble("precio");
-            	int cantidad = rs.getInt("cantidad");
-            	String tipoAlimento = rs.getString("tipoAlimento");
-            	a = new Alimento();
-            	a.setNombre(nombre);
-            	//a.setDescripcion(descripcion);
-            	a.setImagen(imagen);
-            	a.setPrecio(precio);
-            	a.setCantidad(cantidad);
-            	switch (tipoAlimento) { 
-                case "CARNICOS":
-                	a.setTipoAlimento(TipoAlimento.CARNICOS);
-                	break;
-                case "VEGETALES":
-                	a.setTipoAlimento(TipoAlimento.VEGETALES);
-                	break;
-                case "BEBIDAS":
-                	a.setTipoAlimento(TipoAlimento.BEBIDAS);
-                	break;
-                case "CONGELADOS":
-                	a.setTipoAlimento(TipoAlimento.CONGELADOS);
-                	break;
-                case "DULCES":
-                	a.setTipoAlimento(TipoAlimento.DULCES);
-                	break;
-              }
+				String imagen = rs.getString("imagen");
+				Double precio = rs.getDouble("precio");
+				int cantidad = rs.getInt("cantidad");
+				String tipoProducto = rs.getString("tipoProducto");
+				String tipoProductoTipo = rs.getString("tipoProductoTipo");
+				String estadoStr = rs.getString("estado");
+				Estado estado = Estado.valueOf(estadoStr);
+				int descuento = rs.getInt("descuento");
+				if(p.getTipoProducto() == TipoProducto.ALIMENTO) {
+					p.setNombre(nombre);
+					p.setImagen(imagen);
+					p.setPrecio(precio);
+					p.setCantidad(cantidad);
+
+					TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProducto);
+					p.setTipoProducto(enumTipoProducto);
+
+					TipoAlimento enumTipoA = TipoAlimento.valueOf(tipoProductoTipo);
+					p.setTipoProductoTipo(enumTipoA);
+
+					p.setEstado(estado);
+					p.setDescuento(descuento);
+				}
             }
             rs.close();
             ps.close();
@@ -359,85 +419,42 @@ public class GestorBD {
 	     catch (Exception e)  {
 	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarAlimento(nombre): " + e);
 	     } 
-		 return a;
+		 return p;
 	}
 	
-	// Metodo que busca un producto de limpieza en la BD
-	public Limpieza buscarLimpieza(String nomb) {
-		Limpieza l = null;
-        String sql = "SELECT * FROM limpieza WHERE nombre = ?";
+//	// Metodo que busca un producto de Higiene y Belleza en la BD
+	public Producto buscarHigieneYBelleza(String nomb) {
+		Producto p = new Producto();
+        String sql = "SELECT * FROM productos WHERE nombre = ?";
 
 		try (PreparedStatement ps = conn.prepareStatement(sql)){
 	        ps.setString(1, nomb);
             ResultSet rs = ps.executeQuery();        
             while (rs.next()) {
             	String nombre = capitalize(rs.getString("nombre"));
-            	String descripcion = capitalize(rs.getString("descripcion"));
-            	String imagen = rs.getString("imagen");
-            	Double precio = rs.getDouble("precio");
-            	int cantidad = rs.getInt("cantidad");
-            	String tipoLimpieza = rs.getString("tipoLimpieza");
-            	l = new Limpieza();
-            	l.setNombre(nombre);
-            	//l.setDescripcion(descripcion);
-            	l.setImagen(imagen);
-            	l.setPrecio(precio);
-            	l.setCantidad(cantidad);
-            	switch (tipoLimpieza) { 
-                case "UTENSILIOS":
-                	l.setTipoLimpieza(TipoLimpieza.UTENSILIOS);
-                	break;
-                case "PRODUCTOS_LIMPIEZA":
-                	l.setTipoLimpieza(TipoLimpieza.PRODUCTOS_LIMPIEZA);
-                	break;
-            	}
-            }
-            rs.close();
-            ps.close();
-         }
-	     catch (Exception e)  {
-	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarLimpieza(nombre): " + e);
-	     } 
-		 return l;
-	}
-	
-	// Metodo que busca un producto de HigieneYBelleza en la BD
-	public HigieneYBelleza buscarHigieneYBelleza(String nomb) {
-		HigieneYBelleza hb = null;
-		String sql = "SELECT * FROM HigieneYBelleza WHERE nombre = ?";
-		try (PreparedStatement ps = conn.prepareStatement(sql)){
-	        ps.setString(1, nomb);
-            ResultSet rs = ps.executeQuery();        
-            while (rs.next()) {
-            	String nombre = capitalize(rs.getString("nombre"));
-            	String descripcion = capitalize(rs.getString("descripcion"));
-            	String imagen = rs.getString("imagen");
-            	Double precio = rs.getDouble("precio");
-            	int cantidad = rs.getInt("cantidad");
-            	String tipoAlimento = rs.getString("tipoAlimento");
-            	hb = new HigieneYBelleza();
-            	hb.setNombre(nombre);
-            	//hb.setDescripcion(descripcion);
-            	hb.setImagen(imagen);
-            	hb.setPrecio(precio);
-            	hb.setCantidad(cantidad);
-            	switch (tipoAlimento) { 
-                case "AFEITADO_DEPILACION":
-                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.AFEITADO_DEPILACION);
-                	break;
-                case "HIGIENE_BUCAL":
-                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.HIGIENE_BUCAL);
-                	break;
-                case "HIGIENE_INTIMA":
-                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.HIGIENE_INTIMA);
-                	break;
-                case "CUIDADO_CORPORAL":
-                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.CUIDADO_CORPORAL);
-                	break;
-                case "PARAFARMACIA_SOLARES":
-                	hb.setTipoHigieneYBelleza(TipoHigieneYBelleza.PARAFARMACIA_SOLARES);
-                	break;
-            	}
+				String imagen = rs.getString("imagen");
+				Double precio = rs.getDouble("precio");
+				int cantidad = rs.getInt("cantidad");
+				String tipoProducto = rs.getString("tipoProducto");
+				String tipoProductoTipo = rs.getString("tipoProductoTipo");
+				String estadoStr = rs.getString("estado");
+				Estado estado = Estado.valueOf(estadoStr);
+				int descuento = rs.getInt("descuento");
+				if(p.getTipoProducto() == TipoProducto.HIGIENE_Y_BELLEZA) {
+					p.setNombre(nombre);
+					p.setImagen(imagen);
+					p.setPrecio(precio);
+					p.setCantidad(cantidad);
+
+					TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProducto);
+					p.setTipoProducto(enumTipoProducto);
+
+					TipoHigieneYBelleza enumTipoH = TipoHigieneYBelleza.valueOf(tipoProductoTipo);
+					p.setTipoProductoTipo(enumTipoH);
+
+					p.setEstado(estado);
+					p.setDescuento(descuento);
+				}
             }
             rs.close();
             ps.close();
@@ -445,7 +462,50 @@ public class GestorBD {
 	     catch (Exception e)  {
 	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarHigieneYBelleza(nombre): " + e);
 	     } 
-		 return hb;
+		 return p;
+	}
+	
+//	// Metodo que busca un producto de Limpieza en la BD
+	public Producto buscarLimpieza(String nomb) {
+		Producto p = new Producto();
+        String sql = "SELECT * FROM productos WHERE nombre = ?";
+
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
+	        ps.setString(1, nomb);
+            ResultSet rs = ps.executeQuery();        
+            while (rs.next()) {
+            	String nombre = capitalize(rs.getString("nombre"));
+				String imagen = rs.getString("imagen");
+				Double precio = rs.getDouble("precio");
+				int cantidad = rs.getInt("cantidad");
+				String tipoProducto = rs.getString("tipoProducto");
+				String tipoProductoTipo = rs.getString("tipoProductoTipo");
+				String estadoStr = rs.getString("estado");
+				Estado estado = Estado.valueOf(estadoStr);
+				int descuento = rs.getInt("descuento");
+				if(p.getTipoProducto() == TipoProducto.LIMPIEZA) {
+					p.setNombre(nombre);
+					p.setImagen(imagen);
+					p.setPrecio(precio);
+					p.setCantidad(cantidad);
+
+					TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProducto);
+					p.setTipoProducto(enumTipoProducto);
+
+					TipoLimpieza enumTipoL = TipoLimpieza.valueOf(tipoProductoTipo);
+					p.setTipoProductoTipo(enumTipoL);
+
+					p.setEstado(estado);
+					p.setDescuento(descuento);
+				}
+            }
+            rs.close();
+            ps.close();
+         }
+	     catch (Exception e)  {
+	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarLimpieza(nombre): " + e);
+	     } 
+		 return p;
 	}
 	
 	//Metodo que al realizar una compra, reste la cantidad al stock de un producto
