@@ -15,6 +15,9 @@ public class TipoAlimentoTest {
 		assertEquals("BEBIDAS", TipoAlimento.BEBIDAS.name());
 		assertEquals("CONGELADOS", TipoAlimento.CONGELADOS.name());
 		assertEquals("DULCES", TipoAlimento.DULCES.name());
+		assertEquals("PAN", TipoAlimento.PAN.name());
+		assertEquals("CEREALES", TipoAlimento.CEREALES.name());
+		assertEquals("PASTA", TipoAlimento.PASTA.name());
 	}
 	
 	@Test
@@ -24,9 +27,14 @@ public class TipoAlimentoTest {
 		assertEquals(TipoAlimento.BEBIDAS, TipoAlimento.BEBIDAS);
 		assertEquals(TipoAlimento.CONGELADOS, TipoAlimento.CONGELADOS);
 		assertEquals(TipoAlimento.DULCES, TipoAlimento.DULCES);
+		assertEquals(TipoAlimento.PAN, TipoAlimento.PAN);
+		assertEquals(TipoAlimento.CEREALES, TipoAlimento.CEREALES);
+		assertEquals(TipoAlimento.PASTA, TipoAlimento.PASTA);
 		assertNotEquals(TipoAlimento.CARNICOS, TipoAlimento.VEGETALES);
 		assertNotEquals(TipoAlimento.BEBIDAS, TipoAlimento.CONGELADOS);
 		assertNotEquals(TipoAlimento.DULCES, TipoAlimento.CARNICOS);
+		assertNotEquals(TipoAlimento.PAN, TipoAlimento.PASTA);
+		assertNotEquals(TipoAlimento.CEREALES, TipoAlimento.PAN);
     }
 
     @Test
@@ -36,5 +44,9 @@ public class TipoAlimentoTest {
         assertEquals(TipoAlimento.BEBIDAS, TipoAlimento.valueOf("BEBIDAS"));
         assertEquals(TipoAlimento.CONGELADOS, TipoAlimento.valueOf("CONGELADOS"));
         assertEquals(TipoAlimento.DULCES, TipoAlimento.valueOf("DULCES"));
+        assertEquals(TipoAlimento.PASTA, TipoAlimento.valueOf("PASTA"));
+        assertEquals(TipoAlimento.CEREALES, TipoAlimento.valueOf("CEREALES"));
+        assertEquals(TipoAlimento.PAN, TipoAlimento.valueOf("PAN"));
+        
     }
 }

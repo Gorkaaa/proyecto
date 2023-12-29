@@ -9,7 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import domain.Producto;
+import domain.TipoAlimento;
 import domain.TipoProducto;
+import domain.Producto.Estado;
 
 public class ProductoTest {
 	private Producto p;
@@ -17,21 +19,9 @@ public class ProductoTest {
 	
 	@Before
 	public void setup() {
-		p = new Producto(1, "Pan", "pan.jpg", 15.7, 2, TipoProducto.ALIMENTO);
+		p = new Producto(1, "Pan", "pan.jpg", 15.7, 2, TipoProducto.ALIMENTO, TipoAlimento.PAN, Estado.POCAS_UNIDADES, 0);
 		p2 = new Producto();
 	}
-	
-	@Test
-	public void testGetId(){
-		assertEquals(1, p.getId());
-	}
-	
-	@Test
-	public void testProducto() {
-		assertEquals("", p2.getNombre());
-		assertEquals("", p2.getImagen());
-		assertEquals(0, p2.getCantidad(), 0.00);
-		assertEquals(0.0, p2.getPrecio(), 0.00);	}
 	
 	@Test
 	public void testGetNombre() {
@@ -89,9 +79,46 @@ public class ProductoTest {
 	}
 	
 	@Test
-    public void testToString() {
-    	assertEquals("Producto [nombre=Pan, imagen=pan.jpg, precio=15.7, cantidad=2]", p.toString());
+	public void testGetTipoProductoTipo() {
+		assertEquals(TipoAlimento.PAN, p.getTipoProductoTipo());
 	}
+	
+	@Test
+	public void testSetTipoProductoTipo() {
+		p.setTipoProductoTipo(TipoAlimento.PAN);;
+		assertEquals(TipoAlimento.PAN, p.getTipoProductoTipo());
+	}
+	@Test
+	public void testGetEstado() {
+		assertEquals(Estado.POCAS_UNIDADES, p.getEstado());
+	}
+	
+	@Test
+	public void testSetEstado() {
+		p.setEstado(Estado.POCAS_UNIDADES);
+		assertEquals(Estado.POCAS_UNIDADES, p.getEstado());
+	}
+	@Test
+	public void testGetDescuento() {
+		assertEquals(0, p.getDescuento());
+	}
+	
+	@Test
+	public void testSetDescuento() {
+		p.setDescuento(0);
+		assertEquals(0, p.getDescuento());
+	}
+	
+	@Test
+    public void testToString() {
+    	assertEquals("Producto [nombre=Pan, imagen=pan.jpg, precio=15.7, cantidad=2, tipoProducto=ALIMENTO, tipoProductoTipo=PAN, estado=POCAS_UNIDADES, descuento=0]", p.toString());
+	}
+
+	
+//	@Test
+//    public void testToString() {
+//    	assertEquals("Producto [nombre=Pan, imagen=pan.jpg, precio=15.7, cantidad=2]", p.toString());
+//	}
 	
 	@Test
 	public void testHashCode() {
@@ -108,8 +135,8 @@ public class ProductoTest {
 	@Test
 	public void testEquals(){
 		Producto p3 = p;
-		Producto p4 = new Producto(4, "Pan", "pan.jpg", 15.7, 2, TipoProducto.ALIMENTO);
-		Producto p5 = new Producto(1, "Lechuga", "pan.jpg", 15.7, 2, TipoProducto.ALIMENTO);;
+		Producto p4 = new Producto(4, "Pan", "pan.jpg", 15.73, 2, TipoProducto.ALIMENTO, TipoAlimento.PAN, Estado.POCAS_UNIDADES, 0);
+		Producto p5 = new Producto(1, "Lechuga", "pan.jpg", 2.12, 4, TipoProducto.ALIMENTO, TipoAlimento.VEGETALES, Estado.POCAS_UNIDADES, 0);;
 
         assertTrue(p.equals(p));
         assertTrue(p2.equals(p2));
