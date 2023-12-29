@@ -111,14 +111,8 @@ public class ProductoTest {
 	
 	@Test
     public void testToString() {
-    	assertEquals("Producto [nombre=Pan, imagen=pan.jpg, precio=15.7, cantidad=2, tipoProducto=ALIMENTO, tipoProductoTipo=PAN, estado=POCAS_UNIDADES, descuento=0]", p.toString());
+    	assertEquals("Producto [id=1, nombre=Pan, imagen=pan.jpg, precio=15.7, cantidad=2, tipoProducto=ALIMENTO, tipoProductoTipo=PAN, estado=POCAS_UNIDADES, descuento=0]", p.toString());
 	}
-
-	
-//	@Test
-//    public void testToString() {
-//    	assertEquals("Producto [nombre=Pan, imagen=pan.jpg, precio=15.7, cantidad=2]", p.toString());
-//	}
 	
 	@Test
 	public void testHashCode() {
