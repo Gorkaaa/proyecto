@@ -40,6 +40,7 @@ import domain.TipoHigieneYBelleza;
 import domain.TipoLimpieza;
 import domain.TipoProducto;
 import domain.Usuario;
+import domain.Producto.Estado;
 
 public class VentanaPrincipal extends JFrame {	
 	/**
@@ -245,70 +246,70 @@ public class VentanaPrincipal extends JFrame {
 
 	// 	#IAG gorkaBidaurratzagaPérez_2023-11-05_18-30.txt  El uso de la IAG se ha utilizado para la creación de los metodos createRowPanels y createRowPanel
 	// 		y se han realizado cambios a ambos metodos para garantizar su funcionalidad, mejor aspecto y buen rendimiento del programa.
-    private JPanel createRowPanel(Producto producto, int rowHeight, int colWidth) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());            
-        
+	
+	private JPanel createRowPanel(Producto producto, int rowHeight, int colWidth) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());            
+		
 		ImageIcon productoIcono = new ImageIcon("resources/productos/" + producto.getImagen());
 		productoIcono = new ImageIcon(productoIcono.getImage().getScaledInstance(colWidth, rowHeight, Image.SCALE_SMOOTH));
 		
 		JLabel imageLabel = new JLabel(productoIcono);
 		panel.add(imageLabel, BorderLayout.NORTH);
 		
+		
+		JPanel textPanel = new JPanel();
+		textPanel.setLayout(new BorderLayout());
+		textPanel.setBorder(new LineBorder(Color.BLACK));
+		
+		JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1)); // Configurar el JSpinner con valores entre 1 y 10
+		
+		JLabel textLabel = new JLabel(producto.getNombre());
+		JLabel priceLabel = new JLabel("Precio: " + producto.getPrecio() + "€");
+		
+		JPanel priceTextPanel = new JPanel(new BorderLayout());
+		priceTextPanel.add(textLabel, BorderLayout.WEST);
+		priceTextPanel.add(priceLabel, BorderLayout.EAST);
+		priceTextPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
+		
+		textPanel.add(priceTextPanel, BorderLayout.CENTER);
+		
+		JButton addButton = new JButton("Añadir a la cesta");
+		addButton.addActionListener(e -> {
+			int cantidad = (int) spinner.getValue();
+			productosEnCesta.add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getTipoProductoTipo(), producto.getEstado(), producto.getDescuento()));
+			spinner.setValue(1);
+			Usuario u = new Usuario("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya");
+			gestor.getGestorXML().anadirProducto(producto, cantidad, u.getNomUsuario());
+			JOptionPane.showMessageDialog(null, "Producto añadido a la cesta");
+		});
 
-        JPanel textPanel = new JPanel();
-        textPanel.setLayout(new BorderLayout());
-        textPanel.setBorder(new LineBorder(Color.BLACK));
+		JPanel spinnerAndButtonPanel = new JPanel(new BorderLayout());
+		spinnerAndButtonPanel.add(spinner, BorderLayout.CENTER);
+		spinnerAndButtonPanel.add(addButton, BorderLayout.SOUTH);
 
-        JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1)); // Configurar el JSpinner con valores entre 1 y 10
+		textPanel.add(spinnerAndButtonPanel, BorderLayout.SOUTH);
 
-        JLabel textLabel = new JLabel(producto.getNombre());
-        JLabel priceLabel = new JLabel("Precio: " + producto.getPrecio() + "€");
+		panel.add(textPanel, BorderLayout.CENTER);
 
-        JPanel priceTextPanel = new JPanel(new BorderLayout());
-        priceTextPanel.add(textLabel, BorderLayout.WEST);
-        priceTextPanel.add(priceLabel, BorderLayout.EAST);
-        priceTextPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
-
-        textPanel.add(priceTextPanel, BorderLayout.CENTER);
-
-        JButton addButton = new JButton("Añadir a la cesta");
-        addButton.addActionListener(e -> {
-            int cantidad = (int) spinner.getValue();
-            productosEnCesta.add(new Producto(producto.getId(),producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto()));
-            spinner.setValue(1);
-            Usuario u = new Usuario("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya");
-    		gestor.getGestorXML().anadirProducto(producto, cantidad, u.getNomUsuario());
-            JOptionPane.showMessageDialog(null, "Producto añadido a la cesta");
-        });
-
-        JPanel spinnerAndButtonPanel = new JPanel(new BorderLayout());
-        spinnerAndButtonPanel.add(spinner, BorderLayout.CENTER);
-        spinnerAndButtonPanel.add(addButton, BorderLayout.SOUTH);
-
-        textPanel.add(spinnerAndButtonPanel, BorderLayout.SOUTH);
-
-        panel.add(textPanel, BorderLayout.CENTER);
-
-        return panel;
-    }
+		return panel;
+	}
     
-    private List<Producto> createProductos() {
-        List<Producto> productos = new ArrayList<>();
+	private List<Producto> createProductos() {
+		List<Producto> productos = new ArrayList<>();
 
-        // Agregar productos a la lista
-        productos.add(new Producto(1, "Producto 1", "imagen1.png", 19.99, 1, TipoProducto.ALIMENTO));
-        productos.add(new Producto(2, "Producto 2", "imagen2.png", 24.99, 4, TipoProducto.ALIMENTO));
-        productos.add(new Producto(3, "Producto 3", "imagen3.png", 21.52, 2, TipoProducto.ALIMENTO));
-        productos.add(new Producto(4, "Producto 4", "imagen4.png", 9.24, 2, TipoProducto.ALIMENTO));
-        productos.add(new Producto(5, "Producto 5", "imagen5.png", 4.20, 6, TipoProducto.ALIMENTO));
-        productos.add(new Producto(6, "Producto 6", "imagen6.png", 7.72, 0, TipoProducto.ALIMENTO));
-        productos.add(new Producto(7, "Producto 7", "imagen7.png", 8.35, 1, TipoProducto.ALIMENTO));
-        productos.add(new Producto(8, "Producto 8", "imagen8.png", 1.39, 1, TipoProducto.ALIMENTO));
-        productos.add(new Producto(9, "Producto 9", "imagen9.png", 6.01, 0, TipoProducto.ALIMENTO));
-        productos.add(new Producto(10, "Producto 10", "imagen10.png", 14.34, 7, TipoProducto.ALIMENTO));
-
-        return productos;
-    }
-    
+		// Agregar productos a la lista
+		productos.add(new Producto(1, "Producto 1", "imagen1.png", 19.99, 1, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.POCAS_UNIDADES, 0));
+		productos.add(new Producto(2, "Producto 2", "imagen2.png", 24.99, 48, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.NORMAL, 10));
+		productos.add(new Producto(3, "Producto 3", "imagen3.png", 21.52, 21, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.NORMAL, 30));
+		productos.add(new Producto(4, "Producto 4", "imagen4.png", 9.24, 23, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.NORMAL, 15));
+		productos.add(new Producto(5, "Producto 5", "imagen5.png", 4.20, 6, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.POCAS_UNIDADES, 5));
+		productos.add(new Producto(6, "Producto 6", "imagen6.png", 7.72, 0, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.AGOTADO, 0));
+		productos.add(new Producto(7, "Producto 7", "imagen7.png", 8.35, 1, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.POCAS_UNIDADES, 5));
+		productos.add(new Producto(8, "Producto 8", "imagen8.png", 1.39, 64, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.NORMAL, 10));
+		productos.add(new Producto(9, "Producto 9", "imagen9.png", 6.01, 0, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.AGOTADO, 30));
+		productos.add(new Producto(10, "Producto 10", "imagen10.png", 14.34, 72, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.NORMAL, 10));
+		
+		return productos;
+	}
 }
