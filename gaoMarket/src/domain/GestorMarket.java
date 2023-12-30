@@ -30,13 +30,13 @@ public class GestorMarket {
 			Map<TipoAlimento, Set<Producto>> mapaAlimentos,
 			Map<TipoHigieneYBelleza, Set<Producto>> mapaHigieneYBelleza,
 			Map<TipoLimpieza, Set<Producto>> mapaLimpieza) {
-		super();
 		this.personas = personas;
 		this.productos = productos;
 		this.mapaPersonas = mapaPersonas;
 		this.mapaAlimentos = mapaAlimentos;
 		this.mapaHigieneYBelleza = mapaHigieneYBelleza;
 		this.mapaLimpieza = mapaLimpieza;
+		this.gestorBD = new GestorBD();
 	}
 
 
@@ -64,7 +64,7 @@ public class GestorMarket {
 	        logger.log(Level.SEVERE, "No se pudo leer el fichero de configuración del logger");
 	    }
 		this.gestorXML = new GestorXML(this);
-		this.gestorBD = new GestorBD(this);
+		this.gestorBD = new GestorBD();
 	}
 
 	public List<Persona> getPersonas() {

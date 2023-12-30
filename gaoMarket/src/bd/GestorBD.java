@@ -9,8 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import domain.GestorMarket;
 import domain.Producto;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
@@ -20,13 +20,12 @@ import domain.Usuario;
 import domain.Producto.Estado;
 
 public class GestorBD {
-	private GestorMarket gestor;
 	private Connection conn;
 	public static final String DB_PATH = "resources/db/GAOmarket.db";
+	private static Logger logger = Logger.getLogger(GestorBD.class.getName());
 	
-	public GestorBD(GestorMarket gestor) {
+	public GestorBD() {
 		connect();
-		this.gestor = gestor;
 	}
 	
 	public void connect(){
@@ -43,9 +42,9 @@ public class GestorBD {
 			statement.executeUpdate( sent );
 			
 		} catch (ClassNotFoundException e) {
-			gestor.getLogger().log(Level.SEVERE, "No se ha podido cargar el driver de la base de datos");
+			logger.log(Level.SEVERE, "No se ha podido cargar el driver de la base de datos");
 		} catch (SQLException e) {
-			gestor.getLogger().log(Level.SEVERE, "Error conectando a la BD", e);
+			logger.log(Level.SEVERE, "Error conectando a la BD", e);
 		}
 	}
 	
@@ -53,7 +52,7 @@ public class GestorBD {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			gestor.getLogger().log(Level.SEVERE, "Error cerrando la conexión con la BD", e);
+			logger.log(Level.SEVERE, "Error cerrando la conexión con la BD", e);
 		}
 	}
 	
@@ -62,7 +61,7 @@ public class GestorBD {
 		try {
 			rs = st.executeQuery(sql);
 		} catch (SQLException e) {
-			gestor.getLogger().log(Level.SEVERE, "No se ha podido realizar la consulta " + sql);
+			logger.log(Level.SEVERE, "No se ha podido realizar la consulta " + sql);
 		}
 		return rs;
 	}
@@ -92,7 +91,7 @@ public class GestorBD {
             ps.close();
          }
          catch (Exception e)  {
- 			gestor.getLogger().log(Level.SEVERE, "Error en verificarCredenciales(Usuario, password): " + e);
+        	 logger.log(Level.SEVERE, "Error en verificarCredenciales(Usuario, password): " + e);
          } 
 		 return u;
 	}
@@ -110,7 +109,7 @@ public class GestorBD {
             ps.close();
          }
 	     catch (Exception e)  {
-	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscaUsuario(Usuario): " + e);
+	    	 logger.log(Level.SEVERE, "Error en buscaUsuario(Usuario): " + e);
 	     } 
 		 return existe;
 	}
@@ -136,7 +135,7 @@ public class GestorBD {
 			
 			ps.close();
 		} catch (SQLException ex) {
-			gestor.getLogger().log(Level.SEVERE, "Error en metodo guardarCliente: " + ex);
+			logger.log(Level.SEVERE, "Error en metodo guardarCliente: " + ex);
 		}
 	
 	    return guardado;
@@ -151,7 +150,7 @@ public class GestorBD {
 	       	ps.close();
 	       	return true;
 	   	} catch (SQLException ex) {
-	   		gestor.getLogger().log(Level.SEVERE, "Error en metodo borrarUsuario: " + ex);
+	   		logger.log(Level.SEVERE, "Error en metodo borrarUsuario: " + ex);
 	       	return false;
 	   	}
 	}
@@ -182,11 +181,12 @@ public class GestorBD {
 	      rs.close();
 	      st.close();
 	    } catch (SQLException e) {
-	    	gestor.getLogger().log(Level.SEVERE, "Error en metodo listarUsuarios: " + e);
+	    	logger.log(Level.SEVERE, "Error en metodo listarUsuarios: " + e);
 	    }
 	    return usuarios;
 	}
 	
+	////Consultas de Productos
 	
 	public boolean anyadirProducto(Producto p) {
 		boolean anyadir = true;
@@ -203,14 +203,12 @@ public class GestorBD {
 			}
 			rs.close();
 			st.close();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			logger.log(Level.SEVERE, "Error en metodo anyadirProducto: " + e);
 			anyadir = false;
 		}
 		return anyadir;
 	}
-	
-	////Consultas de Productos
 	
 	//Metodo que devuelve todos los productos
 	public List<Producto> listarProductos() {
@@ -262,7 +260,7 @@ public class GestorBD {
 			rs.close();
 			st.close();
 		} catch (SQLException e) {
-			gestor.getLogger().log(Level.SEVERE, "Error en metodo listarProductos: " + e);
+			logger.log(Level.SEVERE, "Error en metodo listarProductos: " + e);
 		}
 		return productos;
 	}
@@ -307,7 +305,7 @@ public class GestorBD {
 			rs.close();
 			st.close();
 		} catch (SQLException e) {
-			gestor.getLogger().log(Level.SEVERE, "Error en metodo listarAlimentos: " + e);
+			logger.log(Level.SEVERE, "Error en metodo listarAlimentos: " + e);
 		}
 		return productos;
 	}
@@ -352,7 +350,7 @@ public class GestorBD {
 			rs.close();
 			st.close();
 		} catch (SQLException e) {
-			gestor.getLogger().log(Level.SEVERE, "Error en metodo listarHigieneYBelleza: " + e);
+			logger.log(Level.SEVERE, "Error en metodo listarHigieneYBelleza: " + e);
 		}
 		return productos;
 	}
@@ -398,7 +396,7 @@ public class GestorBD {
 			rs.close();
 			st.close();
 		} catch (SQLException e) {
-			gestor.getLogger().log(Level.SEVERE, "Error en metodo listarLimpieza: " + e);
+			logger.log(Level.SEVERE, "Error en metodo listarLimpieza: " + e);
 		}
 		return productos;
 	}
@@ -441,7 +439,7 @@ public class GestorBD {
             ps.close();
          }
 	     catch (Exception e)  {
-	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarAlimento(nombre): " + e);
+	    	 logger.log(Level.SEVERE, "Error en buscarAlimento(nombre): " + e);
 	     } 
 		 return p;
 	}
@@ -484,7 +482,7 @@ public class GestorBD {
             ps.close();
          }
 	     catch (Exception e)  {
-	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarHigieneYBelleza(nombre): " + e);
+	    	 logger.log(Level.SEVERE, "Error en buscarHigieneYBelleza(nombre): " + e);
 	     } 
 		 return p;
 	}
@@ -527,7 +525,7 @@ public class GestorBD {
             ps.close();
          }
 	     catch (Exception e)  {
-	    	 gestor.getLogger().log(Level.SEVERE, "Error en buscarLimpieza(nombre): " + e);
+	    	 logger.log(Level.SEVERE, "Error en buscarLimpieza(nombre): " + e);
 	     } 
 		 return p;
 	}
