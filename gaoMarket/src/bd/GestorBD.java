@@ -121,11 +121,11 @@ public class GestorBD {
 	    boolean guardado = false;
 	    String sql =
 	      "INSERT INTO usuario(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya) "
-	      + "VALUES(?, ?, ?, ?, ?)";
+	      + "VALUES(?, ?, ?, ?, ?, ?)";
 	    
 		try (PreparedStatement ps = conn.prepareStatement(sql)){
 			ps.setString(1, capitalize(u.getNombre()));
-			ps.setString(2, u.getApellidos());
+			ps.setString(2, capitalize(u.getApellidos()));
 			ps.setString(3, u.getNomUsuario());
 			ps.setInt(4, u.getNumTelefono());
 			ps.setString(5, u.getCorreoElectronico());

@@ -67,6 +67,7 @@ public class VentanaRegistro extends JFrame {
                 	registrar();
                 }catch (RegistroException ex){
                 	logger.log(Level.INFO, ex.mostrar());
+                	JOptionPane.showMessageDialog(null, ex.mostrar());
                 }
                
                 // Limpia los campos después del registro
@@ -147,8 +148,10 @@ public class VentanaRegistro extends JFrame {
         if(nombre.isBlank() || apellido.isBlank() || usuario.isBlank() || correo.isBlank() || cont.isBlank())
         	throw new RegistroException("1");
         if(gestor.getGestorBD().guardarUsuario(new Usuario(nombre, apellido, usuario, 
-        		telefono,correo, cont)))
+        		telefono,correo, cont))) {
         	 JOptionPane.showMessageDialog(null, "Registrado con éxito: " + usuario);
+        	 dispose();
+        }
         else
         	JOptionPane.showMessageDialog(null, "No se ha podido registrar el usuario: " + usuario);
     }
