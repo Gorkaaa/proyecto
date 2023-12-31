@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,12 +39,8 @@ public class VentanaAdministracionUsuarios extends JFrame{
 	public VentanaAdministracionUsuarios(GestorMarket gestor) {
 		this.setLayout(new BorderLayout());
 				
-		//Prueba
-		usuarios = new ArrayList<>();
-		usuarios.add(new Usuario("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya"));
-		usuarios.add(new Usuario("Nombre2", "Apellido2", "usu2", 666666666, "correo@gmail.com", "contrasenya"));
-		usuarios.add(new Usuario("Nombre3", "Apellido3", "usu3", 666666666, "correo@gmail.com", "contrasenya"));
-		usuarios.add(new Usuario("Nombre4", "Apellido4", "usu4", 666666666, "correo@gmail.com", "contrasenya"));
+		//Carga los usuarios de la base de datos
+		usuarios = gestor.getGestorBD().listarUsuarios();
 		
 		class ModeloTabla extends AbstractTableModel {
 			
@@ -196,6 +191,7 @@ public class VentanaAdministracionUsuarios extends JFrame{
 				if (usuarioSeleccionado != -1) {
 					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar el usuario?", "Confirmación de eliminación", JOptionPane.YES_NO_OPTION);
 					if (confirmacion == JOptionPane.YES_OPTION) {
+						gestor.getGestorBD().borrarUsuario(usuarios.get(usuarioSeleccionado).getNomUsuario());
 						usuarios.remove(usuarioSeleccionado);
 						tablaUsuarios.repaint();
 					}

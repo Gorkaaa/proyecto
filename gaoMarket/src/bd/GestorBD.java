@@ -165,18 +165,11 @@ public class GestorBD {
             while (rs.next()) {
             	String nombre = capitalize(rs.getString("nombre"));
             	String apellidos = capitalize(rs.getString("apellidos"));
-            	String nomUsuario = capitalize(rs.getString("nomUsuario"));
+            	String nomUsuario = rs.getString("nomUsuario");
             	int numTelefono = rs.getInt("numTelefono");
             	String correoElectronico = rs.getString("correoElectronico");
-            	String contrasenya = capitalize(rs.getString("contrasenya"));
-            	Usuario u = new Usuario();
-		        u.setNombre(nombre);
-		        u.setApellidos(apellidos);
-		        u.setNomUsuario(nomUsuario);
-		        u.setNumTelefono(numTelefono);
-		        u.setCorreoElectronico(correoElectronico);
-		        u.setContrasenya(contrasenya);
-		        usuarios.add(u);
+            	String contrasenya = rs.getString("contrasenya");
+		        usuarios.add(new Usuario(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya));
 	      }
 	      rs.close();
 	      st.close();
