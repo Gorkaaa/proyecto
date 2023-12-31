@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import domain.Empleado;
 import domain.Producto;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
@@ -177,6 +178,93 @@ public class GestorBD {
 	    	logger.log(Level.SEVERE, "Error en metodo listarUsuarios: " + e);
 	    }
 	    return usuarios;
+	}
+	
+	////Consultas de Empleados
+	
+	// Metodo que busca un empleado en la BD por su nomUsuario
+	public boolean buscaEmpleado(String nomUsuario) {
+		boolean existe = false;
+       String sql = "SELECT * FROM empleado WHERE nomUsuario = ?";
+
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
+	        ps.setString(1, nomUsuario);
+           ResultSet rs = ps.executeQuery();        
+           if (rs.next()) existe = true;
+           rs.close();
+           ps.close();
+        }
+	     catch (Exception e)  {
+	    	 logger.log(Level.SEVERE, "Error en buscaEmpleado(Empleado): " + e);
+	     } 
+		 return existe;
+	}
+	
+	//Metodo para introducir un nuevo empleado en la base de datos
+	public boolean guardarEmpleado(Empleado e) {
+		if(buscaEmpleado(e.getNomUsuario()))
+			return false;
+	    boolean guardado = false;
+	    String sql =
+	      "INSERT INTO empleado(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya, dni) "
+	      + "VALUES(?, ?, ?, ?, ?, ?, ?)";
+	    
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
+			ps.setString(1, capitalize(e.getNombre()));
+			ps.setString(2, capitalize(e.getApellidos()));
+			ps.setString(3, e.getNomUsuario());
+			ps.setInt(4, e.getNumTelefono());
+			ps.setString(5, e.getCorreoElectronico());
+			ps.setString(6, e.getContrasenya());
+			ps.setString(7, e.getDni());
+			ps.executeUpdate();
+			guardado = true;
+			
+			ps.close();
+		} catch (SQLException ex) {
+			logger.log(Level.SEVERE, "Error en metodo guardarEmpleado: " + ex);
+		}
+	
+	    return guardado;
+	}
+	
+	//Metodo que elimina un empelado pasado su nomUsuario
+	public boolean borrarEmpelado(String nomUsuario){
+		String sql = "DELETE FROM empelado WHERE nomUsuario = ?";
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
+	       	ps.setString(1, nomUsuario); 
+	       	ps.executeUpdate();
+	       	ps.close();
+	       	return true;
+	   	} catch (SQLException ex) {
+	   		logger.log(Level.SEVERE, "Error en metodo borrarEmpelado: " + ex);
+	       	return false;
+	   	}
+	}
+	
+	// Metodo que devuelve todos los empleados
+	public List<Empleado> listarEmpleados() {
+		List<Empleado> empleado = new ArrayList<>();
+		String sql = "select nombre, apellidos, nomUsuario, numTelefono, correoElectronico, "
+				+ "contrasenya from usuario;";
+	    try (Statement st = conn.createStatement()){
+           ResultSet rs = realizarQuery(sql, st);
+           while (rs.next()) {
+           	String nombre = capitalize(rs.getString("nombre"));
+           	String apellidos = capitalize(rs.getString("apellidos"));
+           	String nomUsuario = rs.getString("nomUsuario");
+           	int numTelefono = rs.getInt("numTelefono");
+           	String correoElectronico = rs.getString("correoElectronico");
+           	String contrasenya = rs.getString("contrasenya");
+           	String dni = rs.getString("dni");
+           	empleado.add(new Empleado(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya, dni));
+	      }
+	      rs.close();
+	      st.close();
+	    } catch (SQLException e) {
+	    	logger.log(Level.SEVERE, "Error en metodo listarEmpleados: " + e);
+	    }
+	    return empleado;
 	}
 	
 	////Consultas de Productos
