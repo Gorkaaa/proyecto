@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,13 +38,9 @@ public class VentanaAdministracionEmpleados extends JFrame{
 	
 	public VentanaAdministracionEmpleados(GestorMarket gestor) {
 		this.setLayout(new BorderLayout());
-				
-		//Prueba
-		empleados = new ArrayList<>();
-		empleados.add(new Empleado("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
-		empleados.add(new Empleado("Nombre2", "Apellido2", "usu2", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
-		empleados.add(new Empleado("Nombre3", "Apellido3", "usu3", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
-		empleados.add(new Empleado("Nombre4", "Apellido4", "usu4", 666666666, "correo@gmail.com", "contrasenya", "00000000A"));
+		
+		//Carga los empleados de la base de datos
+		empleados = gestor.getGestorBD().listarEmpleados();
 		
 		class ModeloTabla extends AbstractTableModel {
 			
@@ -191,7 +186,7 @@ public class VentanaAdministracionEmpleados extends JFrame{
 			}
 		});
 		
-		JButton botonBorrar = new JButton("Eliminar Usuario");
+		JButton botonBorrar = new JButton("Eliminar Empleado");
 		botonBorrar.addActionListener(new ActionListener() {
 			
 			@Override
@@ -200,6 +195,7 @@ public class VentanaAdministracionEmpleados extends JFrame{
 				if (empleadoSeleccionado != -1) {
 					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar el empleado?", "Confirmación de eliminación", JOptionPane.YES_NO_OPTION);
 					if (confirmacion == JOptionPane.YES_OPTION) {
+						gestor.getGestorBD().borrarEmpleado(empleados.get(empleadoSeleccionado).getNomUsuario());
 						empleados.remove(empleadoSeleccionado);
 						tablaEmpleados.repaint();
 					}
