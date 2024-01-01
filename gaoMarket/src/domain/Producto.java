@@ -75,9 +75,10 @@ public class Producto implements Serializable, Comparable<Producto>{
 	}
 
 	public void setPrecio(Double precio) {
-		if (this.precio >= 0) {
-			this.precio = precio * (1 - this.getDescuento()/100);
-		}
+//		if (this.precio >= 0) {
+//			this.precio = precio * (1 - this.getDescuento()/100);
+//		}
+		this.precio = precio;
 	}
 
 	public int getCantidad() {
