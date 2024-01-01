@@ -1,5 +1,8 @@
 package bd;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,10 +27,30 @@ import domain.Producto.Estado;
 public class GestorBD {
 	private Connection conn;
 	public static final String DB_PATH = "resources/db/GAOmarket.db";
+	public static final String DB_PROPERTIES_PATH = "resources/db/configuracion.properties";
+	
 	private static Logger logger = Logger.getLogger(GestorBD.class.getName());
 	
 	public GestorBD() {
 		connect();
+	}
+	
+	private void configuracionBD() {
+		Properties properties = new Properties();
+		try  {
+			FileInputStream input = new FileInputStream(DB_PROPERTIES_PATH);
+			properties.load(input);
+
+			String nombreBD = properties.getProperty("nombreBD");
+			String nombre = properties.getProperty("nombre");
+			String fecha = properties.getProperty("fecha");
+		
+		} catch (FileNotFoundException e) {
+			logger.log(Level.WARNING, "No se ha podido encontrar el fichero de Base de Datos");
+		} catch (IOException e) {
+			logger.log(Level.WARNING, "Error cargando las propiedades de la base de Datos");
+		}
+		
 	}
 	
 	public void connect(){
@@ -43,9 +67,9 @@ public class GestorBD {
 			statement.executeUpdate( sent );
 			
 		} catch (ClassNotFoundException e) {
-			logger.log(Level.SEVERE, "No se ha podido cargar el driver de la base de datos");
+			logger.log(Level.WARNING, "No se ha podido cargar el driver de la base de datos");
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "Error conectando a la BD", e);
+			logger.log(Level.WARNING, "Error conectando a la BD", e);
 		}
 	}
 	
@@ -53,7 +77,7 @@ public class GestorBD {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "Error cerrando la conexión con la BD", e);
+			logger.log(Level.WARNING, "Error cerrando la conexión con la BD", e);
 		}
 	}
 	
@@ -62,7 +86,7 @@ public class GestorBD {
 		try {
 			rs = st.executeQuery(sql);
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "No se ha podido realizar la consulta " + sql);
+			logger.log(Level.WARNING, "No se ha podido realizar la consulta " + sql);
 		}
 		return rs;
 	}
