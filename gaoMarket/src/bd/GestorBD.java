@@ -32,6 +32,7 @@ public class GestorBD {
 	private static Logger logger = Logger.getLogger(GestorBD.class.getName());
 	
 	public GestorBD() {
+		configuracionBD();
 		connect();
 	}
 	
