@@ -228,16 +228,16 @@ public class GestorBD {
 	    return guardado;
 	}
 	
-	//Metodo que elimina un empelado pasado su nomUsuario
-	public boolean borrarEmpelado(String nomUsuario){
-		String sql = "DELETE FROM empelado WHERE nomUsuario = ?";
+	//Metodo que elimina un empleado pasado su nomUsuario
+	public boolean borrarEmpleado(String nomUsuario){
+		String sql = "DELETE FROM empleado WHERE nomUsuario = ?";
 		try (PreparedStatement ps = conn.prepareStatement(sql)){
 	       	ps.setString(1, nomUsuario); 
 	       	ps.executeUpdate();
 	       	ps.close();
 	       	return true;
 	   	} catch (SQLException ex) {
-	   		logger.log(Level.SEVERE, "Error en metodo borrarEmpelado: " + ex);
+	   		logger.log(Level.SEVERE, "Error en metodo borrarEmpleado: " + ex);
 	       	return false;
 	   	}
 	}
@@ -246,18 +246,18 @@ public class GestorBD {
 	public List<Empleado> listarEmpleados() {
 		List<Empleado> empleado = new ArrayList<>();
 		String sql = "select nombre, apellidos, nomUsuario, numTelefono, correoElectronico, "
-				+ "contrasenya from usuario;";
+				+ "contrasenya, dni from empleado;";
 	    try (Statement st = conn.createStatement()){
            ResultSet rs = realizarQuery(sql, st);
            while (rs.next()) {
-           	String nombre = capitalize(rs.getString("nombre"));
-           	String apellidos = capitalize(rs.getString("apellidos"));
-           	String nomUsuario = rs.getString("nomUsuario");
-           	int numTelefono = rs.getInt("numTelefono");
-           	String correoElectronico = rs.getString("correoElectronico");
-           	String contrasenya = rs.getString("contrasenya");
-           	String dni = rs.getString("dni");
-           	empleado.add(new Empleado(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya, dni));
+        	   String nombre = capitalize(rs.getString("nombre"));
+        	   String apellidos = capitalize(rs.getString("apellidos"));
+        	   String nomUsuario = rs.getString("nomUsuario");
+        	   int numTelefono = rs.getInt("numTelefono");
+        	   String correoElectronico = rs.getString("correoElectronico");
+        	   String contrasenya = rs.getString("contrasenya");
+        	   String dni = rs.getString("dni");
+        	   empleado.add(new Empleado(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya, dni));
 	      }
 	      rs.close();
 	      st.close();

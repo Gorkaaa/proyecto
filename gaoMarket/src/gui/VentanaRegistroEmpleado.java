@@ -1,11 +1,16 @@
 package gui;
 
+import domain.Empleado;
 import domain.GestorMarket;
+import io.RegistroException;
 
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,6 +25,7 @@ public class VentanaRegistroEmpleado extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(VentanaRegistroEmpleado.class.getName());
 	
 	protected JTextField cajaNombre;
 	protected JTextField cajaApellidos;
@@ -55,13 +61,21 @@ public class VentanaRegistroEmpleado extends JFrame {
         botonRegistrarse.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	String usuario = cajaUsuario.getText();
-                char[] contrasenya = cajaContrasena.getPassword();
-                JOptionPane.showMessageDialog(null, "Registrado con éxito: " + usuario);
-                
+            	try {
+                	registrar();
+                }catch (RegistroException ex){
+                	logger.log(Level.INFO, ex.mostrar());
+                	JOptionPane.showMessageDialog(null, ex.mostrar());
+                }
+               
                 // Limpia los campos después del registro
+                cajaNombre.setText("");
+                cajaApellidos.setText("");
+                cajaTelefono.setText("");
                 cajaUsuario.setText("");
+                cajaCorreo.setText("");
                 cajaContrasena.setText("");
+                cajaDni.setText("");
             }
         });
         
@@ -91,5 +105,42 @@ public class VentanaRegistroEmpleado extends JFrame {
         this.setSize(500, 200);
         this.setVisible(false);
         
+    }
+    
+    public void registrar() throws RegistroException{
+    	String nombre = cajaNombre.getText();
+    	String apellido = cajaApellidos.getText();
+    	String usuario = cajaUsuario.getText();
+    	String correo = cajaCorreo.getText();
+    	char[] contrasenya = cajaContrasena.getPassword();
+    	String dni = cajaDni.getText();
+    	String cont = "";
+        for(int i = 0; i < contrasenya.length; i++) {
+        	cont += contrasenya[i];
+        }
+        if(!validarCorreo(correo))
+        	throw new RegistroException("3");
+        int telefono = 0;
+        try {
+            telefono = Integer.parseInt(cajaTelefono.getText());
+        }
+        catch (NumberFormatException ex){
+        	throw new RegistroException("2");
+        }
+        if(nombre.isBlank() || apellido.isBlank() || usuario.isBlank() || correo.isBlank() || cont.isBlank() || dni.isBlank())
+        	throw new RegistroException("1");
+        if(gestor.getGestorBD().guardarEmpleado(new Empleado(nombre, apellido, usuario, 
+        		telefono,correo, cont, dni))) {
+        	 JOptionPane.showMessageDialog(null, "Registrado con éxito: " + usuario);
+        	 dispose();
+        }
+        else
+        	JOptionPane.showMessageDialog(null, "No se ha podido registrar el empleado: " + usuario);
+    }
+    
+    public static boolean validarCorreo(String correo) {
+        return Pattern.compile("^(.+)@(.+)$")
+          .matcher(correo)
+          .matches();
     }
 }
