@@ -79,14 +79,14 @@ public class ProductoTest {
 	}
 	
 	@Test
-	public void testGetTipoProductoTipo() {
-		assertEquals(TipoAlimento.PAN, p.getTipoProductoTipo());
+	public void testGetCategoria() {
+		assertEquals(TipoAlimento.PAN, p.getCategoria());
 	}
 	
 	@Test
-	public void testSetTipoProductoTipo() {
-		p.setTipoProductoTipo(TipoAlimento.PAN);;
-		assertEquals(TipoAlimento.PAN, p.getTipoProductoTipo());
+	public void testSetCategoria() {
+		p.setCategoria(TipoAlimento.PAN);;
+		assertEquals(TipoAlimento.PAN, p.getCategoria());
 	}
 	@Test
 	public void testGetEstado() {
@@ -111,7 +111,7 @@ public class ProductoTest {
 	
 	@Test
     public void testToString() {
-    	assertEquals("Producto [id=1, nombre=Pan, imagen=pan.jpg, precio=15.7, cantidad=2, tipoProducto=ALIMENTO, tipoProductoTipo=PAN, estado=POCAS_UNIDADES, descuento=0]", p.toString());
+    	assertEquals("Producto [id=1, nombre=Pan, imagen=pan.jpg, precio=15.7, cantidad=2, tipoProducto=ALIMENTO, categoria=PAN, estado=POCAS_UNIDADES, descuento=0]", p.toString());
 	}
 	
 	@Test

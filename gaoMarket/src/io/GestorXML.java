@@ -16,10 +16,6 @@ import org.jdom2.output.XMLOutputter;
 
 import domain.GestorMarket;
 import domain.Producto;
-import domain.TipoAlimento;
-import domain.TipoHigieneYBelleza;
-import domain.TipoLimpieza;
-import domain.TipoProducto;
 
 public class GestorXML {
 	
@@ -61,30 +57,8 @@ public class GestorXML {
 	
 				for (Element eProducto : lstElemntosProductos) {
 					String nombre = eProducto.getAttributeValue("nombre");
-					TipoProducto tipoProducto = TipoProducto.valueOf(eProducto.getChildText("tipo"));
 					int cantidad = Integer.parseInt(eProducto.getChildText("cantidad"));
-
-					Enum<?> tipoProductoTipo = null;
-
-					switch (tipoProducto) {
-						case ALIMENTO:
-							tipoProductoTipo = TipoAlimento.valueOf(eProducto.getChildText("tipoProductoTipo"));
-							break;
-						case HIGIENE_Y_BELLEZA:
-							tipoProductoTipo = TipoHigieneYBelleza.valueOf(eProducto.getChildText("tipoProductoTipo"));
-							break;
-						case LIMPIEZA:
-							tipoProductoTipo = TipoLimpieza.valueOf(eProducto.getChildText("tipoProductoTipo"));
-							break;
-					}
-
-					Producto producto = new Producto();
-					producto.setNombre(nombre);
-					producto.setTipoProducto(tipoProducto);
-					producto.setTipoProductoTipo(tipoProductoTipo);
-					producto.setCantidad(cantidad);
-
-					mapaProductos.put(producto, cantidad);
+					mapaProductos.put(gestor.getGestorBD().buscarProducto(nombre), cantidad);
 				}
 			}
 		}
@@ -148,16 +122,14 @@ public class GestorXML {
 	
 	//Metodo buscarProductoCarritoUsuario
 	private Element buscarProductoCarritoUsuario(String usuario, String producto) {
-		Element eCarritos = doc.getRootElement();
-		for(Element eCarrito: eCarritos.getChildren()) {
-			if(eCarrito.getAttributeValue("usuario").equals(usuario)) {
-				Element eProducto;
-				List<Element> lstElemntosProductos = eCarrito.getChildren();
-				for (int i = 0; i<lstElemntosProductos.size(); i++) {
-					eProducto = lstElemntosProductos.get(i);
-					if(eProducto.getAttributeValue("nombre").equals(producto))
-						return eProducto;
-				}
+		Element eCarrito = buscarCarritoUsuario(usuario);
+		if(eCarrito != null) {
+			Element eProducto;
+			List<Element> lstElemntosProductos = eCarrito.getChildren();
+			for (int i = 0; i<lstElemntosProductos.size(); i++) {
+				eProducto = lstElemntosProductos.get(i);
+				if(eProducto.getAttributeValue("nombre").equals(producto))
+					return eProducto;
 			}
 		}
 		return null;

@@ -21,19 +21,19 @@ public class Producto implements Serializable, Comparable<Producto>{
 	protected Double precio;
 	protected int cantidad;
 	protected TipoProducto tipoProducto;
-	protected Enum<?> tipoProductoTipo;
+	protected Enum<?> categoria;
 	protected Estado estado;
 	protected int descuento;
 	
 	
-	public Producto(int id, String nombre, String imagen, Double precio, int cantidad, TipoProducto tipoProducto, Enum<?> tipoProductoTipo, Estado estado, int descuento) {
+	public Producto(int id, String nombre, String imagen, Double precio, int cantidad, TipoProducto tipoProducto, Enum<?> categoria, Estado estado, int descuento) {
 		this.id = id;
 		this.nombre = nombre;
 		this.imagen = imagen;
 		this.precio = precio;
 		this.cantidad = cantidad;
 		this.tipoProducto = tipoProducto;
-		this.tipoProductoTipo = tipoProductoTipo;
+		this.categoria = categoria;
 		this.estado = estado;
 		this.descuento = descuento;
 	}
@@ -44,7 +44,7 @@ public class Producto implements Serializable, Comparable<Producto>{
 		this.precio = 0.0;
 		this.cantidad = 0;
 		this.tipoProducto = TipoProducto.ALIMENTO;
-		this.tipoProductoTipo = TipoAlimento.BEBIDAS;
+		this.categoria = TipoAlimento.BEBIDAS;
 		this.estado = Estado.AGOTADO;
 		this.descuento = 0;
 	}
@@ -97,20 +97,20 @@ public class Producto implements Serializable, Comparable<Producto>{
 		this.tipoProducto = tipoProducto;
 	}
 	
-	public Enum<?> getTipoProductoTipo() {
-		return tipoProductoTipo;
+	public Enum<?> getCategoria() {
+		return categoria;
 	}
 
 
-	public void setTipoProductoTipo(Enum<?> tipoProductoTipo) {
+	public void setCategoria(Enum<?> categoria) {
 		if (this.tipoProducto == TipoProducto.ALIMENTO) {
-			this.tipoProductoTipo = (TipoAlimento) tipoProductoTipo;
+			this.categoria = (TipoAlimento) categoria;
 		} else if (this.tipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
-			this.tipoProductoTipo = (TipoHigieneYBelleza) tipoProductoTipo;
+			this.categoria = (TipoHigieneYBelleza) categoria;
 		} else if (this.tipoProducto == TipoProducto.LIMPIEZA) {
-			this.tipoProductoTipo = (TipoLimpieza) tipoProductoTipo;
+			this.categoria = (TipoLimpieza) categoria;
 		} else {
-			throw new IllegalArgumentException("Tipo de producto no reconocido.");
+			throw new IllegalArgumentException("Categoria de producto no reconocido.");
 	    }
 	}
 
@@ -146,7 +146,7 @@ public class Producto implements Serializable, Comparable<Producto>{
 	@Override
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", imagen=" + imagen + ", precio=" + precio + ", cantidad="
-				+ cantidad + ", tipoProducto=" + tipoProducto + ", tipoProductoTipo=" + tipoProductoTipo + ", estado="
+				+ cantidad + ", tipoProducto=" + tipoProducto + ", categoria=" + categoria + ", estado="
 				+ estado + ", descuento=" + descuento + "]";
 	}
 

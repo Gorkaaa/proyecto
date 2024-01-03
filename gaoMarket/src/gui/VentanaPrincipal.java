@@ -277,7 +277,7 @@ public class VentanaPrincipal extends JFrame {
 		JButton addButton = new JButton("Añadir a la cesta");
 		addButton.addActionListener(e -> {
 			int cantidad = (int) spinner.getValue();
-			productosEnCesta.add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getTipoProductoTipo(), producto.getEstado(), producto.getDescuento()));
+			productosEnCesta.add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getCategoria(), producto.getEstado(), producto.getDescuento()));
 			spinner.setValue(1);
 			Usuario u = new Usuario("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya");
 			gestor.getGestorXML().anadirProducto(producto, cantidad, u.getNomUsuario());
