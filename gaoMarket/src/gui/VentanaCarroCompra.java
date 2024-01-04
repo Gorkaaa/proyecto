@@ -5,7 +5,6 @@ import java.awt.Container;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -19,9 +18,7 @@ import javax.swing.JTable;
 
 import domain.GestorMarket;
 import domain.Producto;
-import domain.TipoAlimento;
-import domain.TipoProducto;
-import domain.Producto.Estado;
+import domain.ProductoCarrito;
 
 public class VentanaCarroCompra extends JFrame{
 
@@ -31,7 +28,7 @@ public class VentanaCarroCompra extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	protected GestorMarket gestor;
-	protected List<Producto> productos;
+	protected List<ProductoCarrito> productos;
 	protected JTable tabla;
 	protected JScrollPane tablaScroll;
 	protected ModeloCarroCompra modeloCarrito;
@@ -49,13 +46,14 @@ public class VentanaCarroCompra extends JFrame{
 		Container cp = this.getContentPane();
 		
 		this.setLayout(new BorderLayout());
-		productos = new ArrayList<Producto>();
+		productos = gestor.getGestorXML().dameProductos("usu1");
 		
-		productos.add(new Producto(1, "Producto 1", "imagen1.png", 19.99, 2, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.POCAS_UNIDADES, 10));
+		/*productos.add(new Producto(1, "Producto 1", "imagen1.png", 19.99, 2, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.POCAS_UNIDADES, 10));
 		productos.add(new Producto(5, "Producto 5", "imagen5.png", 4.20, 6, TipoProducto.ALIMENTO, TipoAlimento.BEBIDAS, Estado.POCAS_UNIDADES, 0));
 		productos.add(new Producto(6, "Producto 6", "imagen6.png", 7.72, 2, TipoProducto.ALIMENTO, TipoAlimento.DULCES, Estado.AGOTADO, 15));
 		productos.add(new Producto(7, "Producto 7", "imagen7.png", 8.35, 1, TipoProducto.ALIMENTO, TipoAlimento.VEGETALES, Estado.POCAS_UNIDADES, 30));
-
+		*/
+		
 		modeloCarrito = new ModeloCarroCompra(productos);
 		tabla = new JTable(modeloCarrito);
 		tabla.setDefaultRenderer(Object.class, new RendererCarroCompra());
@@ -73,7 +71,7 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gestor.getGestorXML().vaciarCarrito("usuario");
+				gestor.getGestorXML().vaciarCarrito("usu1");
 			}
 		});
 		
@@ -81,7 +79,7 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gestor.getGestorXML().eliminarProducto("producto", "usuario");
+				gestor.getGestorXML().eliminarProducto("producto", "usu1");
 			}
 		});
 		
@@ -91,7 +89,7 @@ public class VentanaCarroCompra extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				//Actualizar la bbdd primero
 				
-				gestor.getGestorXML().vaciarCarrito("usuario");
+				gestor.getGestorXML().vaciarCarrito("usu1");
 			}
 		});
 		
@@ -128,9 +126,9 @@ public class VentanaCarroCompra extends JFrame{
 		}	
 	}
 	
-	public static Double sumarPrecioTotalCarroRecursivo(List<Producto> productos, int cont) {
+	public static Double sumarPrecioTotalCarroRecursivo(List<ProductoCarrito> productos, int cont) {
 		if(cont < 0) return 0.0;
-		return sumarPrecioTotalCarroRecursivo(productos, cont - 1) + sumarPrecioProductoRecursivo(productos.get(cont).getPrecio(), productos.get(cont).getCantidad());
+		return sumarPrecioTotalCarroRecursivo(productos, cont - 1) + sumarPrecioProductoRecursivo(productos.get(cont).getProducto().getPrecio(), productos.get(cont).getCantidad());
 	}
 	
 	public static Double sumarPrecioProductoRecursivo(Double precio, int cantidad) {

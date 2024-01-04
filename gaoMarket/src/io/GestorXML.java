@@ -2,9 +2,8 @@ package io;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 import org.jdom2.Document;
@@ -16,6 +15,7 @@ import org.jdom2.output.XMLOutputter;
 
 import domain.GestorMarket;
 import domain.Producto;
+import domain.ProductoCarrito;
 
 public class GestorXML {
 	
@@ -47,8 +47,8 @@ public class GestorXML {
 	}
 	
 	//Metodo dameProductos
-	public Map<Producto, Integer> dameProductos(String usuario) {
-		Map<Producto, Integer> mapaProductos = new HashMap<>();
+	public List<ProductoCarrito> dameProductos(String usuario) {
+		List<ProductoCarrito> listaProductos = new ArrayList<>();
 		Element eCarritos = doc.getRootElement();
 
 		for (Element eCarrito : eCarritos.getChildren()) {
@@ -58,11 +58,11 @@ public class GestorXML {
 				for (Element eProducto : lstElemntosProductos) {
 					String nombre = eProducto.getAttributeValue("nombre");
 					int cantidad = Integer.parseInt(eProducto.getChildText("cantidad"));
-					mapaProductos.put(gestor.getGestorBD().buscarProducto(nombre), cantidad);
+					listaProductos.add(new ProductoCarrito(gestor.getGestorBD().buscarProducto(nombre), cantidad));
 				}
 			}
 		}
-		return mapaProductos;
+		return listaProductos;
 	}
 
 	//Metodo anadirProducto

@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 
 import domain.GestorMarket;
 import domain.Producto;
+import domain.ProductoCarrito;
 
 public class ModeloCarroCompra extends DefaultTableModel{
 
@@ -16,10 +17,10 @@ public class ModeloCarroCompra extends DefaultTableModel{
 	private static final long serialVersionUID = 1L;
 
 	protected GestorMarket gestor;
-	protected List<Producto> productos;
+	protected List<ProductoCarrito> productos;
 	protected final List<String> cabeceras = Arrays.asList("Producto", "Nombre", "Precio", "Cantidad", "Total");
 			
-	public ModeloCarroCompra(List<Producto> productos) {
+	public ModeloCarroCompra(List<ProductoCarrito> productos) {
 		this.productos = productos;
 	}
 	
@@ -56,7 +57,7 @@ public class ModeloCarroCompra extends DefaultTableModel{
 	@Override
 	public Object getValueAt(int row, int column) {
 		
-		Producto p = productos.get(row);
+		Producto p = productos.get(row).getProducto();
 		switch (column) {
 			case 0: return p.getImagen();
 			case 1: return p.getNombre();
