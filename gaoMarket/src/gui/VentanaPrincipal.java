@@ -118,7 +118,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Tiene que verificar el usuario para que se inicie el 
+				// Tiene que verificar el usuario para que se inicie el carrito del usuario con el que se ha accedido al programa
 				ventanaCarroCompra.setVisible(true);
 			}
 			
