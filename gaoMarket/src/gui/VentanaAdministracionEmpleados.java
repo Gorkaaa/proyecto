@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.List;
 
 
@@ -19,7 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import domain.Empleado;
@@ -34,7 +35,7 @@ public class VentanaAdministracionEmpleados extends JFrame{
 	
 	protected GestorMarket gestor;
 	protected List<Empleado> empleados;
-	protected DefaultTableModel mTablaEmpleado;
+	protected JTable tablaEmpleados;
 	
 	public VentanaAdministracionEmpleados(GestorMarket gestor) {
 		this.setLayout(new BorderLayout());
@@ -163,7 +164,7 @@ public class VentanaAdministracionEmpleados extends JFrame{
 		}
 		
 		ModeloTabla modeloTabla = new ModeloTabla(empleados);
-		JTable tablaEmpleados = new JTable(modeloTabla);
+		tablaEmpleados = new JTable(modeloTabla);
 		tablaEmpleados.setDefaultRenderer(Object.class, new RendererTabla());
 		JScrollPane scrollPane = new JScrollPane(tablaEmpleados);
 		add(scrollPane, "Center");
@@ -224,6 +225,23 @@ public class VentanaAdministracionEmpleados extends JFrame{
 		this.setSize(1000, 480);
 		this.setVisible(false);
 		
+		this.addWindowFocusListener(new WindowFocusListener() {
+			
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+
+			}
+			
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				empleados = gestor.getGestorBD().listarEmpleados();
+				modeloTabla.fireTableDataChanged();
+				
+			}
+		});
+		
 	}
+	
+	
 
 }

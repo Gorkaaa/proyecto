@@ -5,8 +5,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.List;
 
 
@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import domain.GestorMarket;
@@ -36,7 +35,6 @@ public class VentanaAdministracionUsuarios extends JFrame{
 	
 	protected GestorMarket gestor;
 	protected List<Usuario> usuarios;
-	protected DefaultTableModel mTablaUsuario;
 	
 	public VentanaAdministracionUsuarios(GestorMarket gestor) {
 		this.setLayout(new BorderLayout());
@@ -51,7 +49,7 @@ public class VentanaAdministracionUsuarios extends JFrame{
 			 */
 			private static final long serialVersionUID = 1L;
 			
-			String[] cabeceras = { "Nombre", "Apellidos", "Nombre Usuario", "Teléfono", "Correo", "Contraseña"};
+			protected String[] cabeceras = { "Nombre", "Apellidos", "Nombre Usuario", "Teléfono", "Correo", "Contraseña"};
 				
 			public ModeloTabla(List<Usuario> usuarios) {
 				VentanaAdministracionUsuarios.this.usuarios = usuarios;
@@ -222,12 +220,21 @@ public class VentanaAdministracionUsuarios extends JFrame{
 		this.setSize(1000, 480);
 		this.setVisible(false);
 		
-		this.addMouseListener(new MouseAdapter() {
-			 public void mouseClicked(MouseEvent e) {
-				 usuarios = gestor.getGestorBD().listarUsuarios();
-				 tablaUsuarios.repaint();
-			 }
-		});
+		this.addWindowFocusListener(new WindowFocusListener() {
+			
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+
+			}
+			
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				usuarios = gestor.getGestorBD().listarUsuarios();
+				modeloTabla.fireTableDataChanged();
+				
+			}
+		});;
 	}
+	
 
 }
