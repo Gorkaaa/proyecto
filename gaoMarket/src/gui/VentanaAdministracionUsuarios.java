@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 
@@ -220,6 +222,12 @@ public class VentanaAdministracionUsuarios extends JFrame{
 		this.setSize(1000, 480);
 		this.setVisible(false);
 		
+		this.addMouseListener(new MouseAdapter() {
+			 public void mouseClicked(MouseEvent e) {
+				 usuarios = gestor.getGestorBD().listarUsuarios();
+				 tablaUsuarios.repaint();
+			 }
+		});
 	}
 
 }
