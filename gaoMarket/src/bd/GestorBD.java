@@ -98,6 +98,10 @@ public class GestorBD {
 	    return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
 	}
 	
+	private static final String lower(String str) {
+	    return str.toLowerCase();
+	}
+	
 	//// Consultas de Usuarios
 	
 	// Metodo que busca un usuario en la BD por su nomUsuario y contraseña
@@ -117,13 +121,39 @@ public class GestorBD {
             ps.close();
          }
          catch (Exception e)  {
-        	 logger.log(Level.SEVERE, "Error en verificarCredenciales(Usuario, password): " + e);
+        	 logger.log(Level.WARNING, "Error en verificarCredenciales(Usuario, password): " + e);
          } 
 		 return u;
 	}
 	
 	// Metodo que busca un usuario en la BD por su nomUsuario
-	public boolean buscaUsuario(String nomUsuario) {
+	public Usuario buscarUsuario(String usuario) {
+		Usuario u = new Usuario();
+        String sql = "SELECT * FROM usuario WHERE nomUsuario = ?";
+
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
+	        ps.setString(1, usuario);
+            ResultSet rs = ps.executeQuery();        
+            while (rs.next()) {
+            	String nombre = capitalize(rs.getString("nombre"));
+            	String apellidos = capitalize(rs.getString("apellidos"));
+            	String nomUsuario = rs.getString("nomUsuario");
+            	int numTelefono = rs.getInt("numTelefono");
+            	String correoElectronico = lower(rs.getString("correoElectronico"));
+            	String contrasenya = rs.getString("contrasenya");
+		        u = new Usuario(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya);
+            }
+            rs.close();
+            ps.close();
+         }
+	     catch (Exception e)  {
+	    	 logger.log(Level.WARNING, "Error en buscarUsuario(usuario): " + e);
+	     } 
+		 return u;
+	}
+	
+	// Metodo que verifica si existe un usuario en la BD por su nomUsuario
+	public boolean existeUsuario(String nomUsuario) {
 		boolean existe = false;
         String sql = "SELECT * FROM usuario WHERE nomUsuario = ?";
 
@@ -135,14 +165,14 @@ public class GestorBD {
             ps.close();
          }
 	     catch (Exception e)  {
-	    	 logger.log(Level.SEVERE, "Error en buscaUsuario(Usuario): " + e);
+	    	 logger.log(Level.WARNING, "Error en existeUsuario(Usuario): " + e);
 	     } 
 		 return existe;
 	}
-	
+		
 	//Metodo para introducir un nuevo usuario en la base de datos
 	public boolean guardarUsuario(Usuario u) {
-		if(buscaUsuario(u.getNomUsuario()))
+		if(existeUsuario(u.getNomUsuario()))
 			return false;
 	    boolean guardado = false;
 	    String sql =
@@ -154,14 +184,14 @@ public class GestorBD {
 			ps.setString(2, capitalize(u.getApellidos()));
 			ps.setString(3, u.getNomUsuario());
 			ps.setInt(4, u.getNumTelefono());
-			ps.setString(5, u.getCorreoElectronico());
+			ps.setString(5, lower(u.getCorreoElectronico()));
 			ps.setString(6, u.getContrasenya());
 			ps.executeUpdate();
 			guardado = true;
 			
 			ps.close();
 		} catch (SQLException ex) {
-			logger.log(Level.SEVERE, "Error en metodo guardarCliente: " + ex);
+			logger.log(Level.WARNING, "Error en metodo guardarCliente: " + ex);
 		}
 	
 	    return guardado;
@@ -176,7 +206,7 @@ public class GestorBD {
 	       	ps.close();
 	       	return true;
 	   	} catch (SQLException ex) {
-	   		logger.log(Level.SEVERE, "Error en metodo borrarUsuario: " + ex);
+	   		logger.log(Level.WARNING, "Error en metodo borrarUsuario: " + ex);
 	       	return false;
 	   	}
 	}
@@ -193,14 +223,14 @@ public class GestorBD {
             	String apellidos = capitalize(rs.getString("apellidos"));
             	String nomUsuario = rs.getString("nomUsuario");
             	int numTelefono = rs.getInt("numTelefono");
-            	String correoElectronico = rs.getString("correoElectronico");
+            	String correoElectronico = lower(rs.getString("correoElectronico"));
             	String contrasenya = rs.getString("contrasenya");
 		        usuarios.add(new Usuario(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya));
 	      }
 	      rs.close();
 	      st.close();
 	    } catch (SQLException e) {
-	    	logger.log(Level.SEVERE, "Error en metodo listarUsuarios: " + e);
+	    	logger.log(Level.WARNING, "Error en metodo listarUsuarios: " + e);
 	    }
 	    return usuarios;
 	}
@@ -220,7 +250,7 @@ public class GestorBD {
            ps.close();
         }
 	     catch (Exception e)  {
-	    	 logger.log(Level.SEVERE, "Error en buscaEmpleado(Empleado): " + e);
+	    	 logger.log(Level.WARNING, "Error en buscaEmpleado(Empleado): " + e);
 	     } 
 		 return existe;
 	}
@@ -239,7 +269,7 @@ public class GestorBD {
 			ps.setString(2, capitalize(e.getApellidos()));
 			ps.setString(3, e.getNomUsuario());
 			ps.setInt(4, e.getNumTelefono());
-			ps.setString(5, e.getCorreoElectronico());
+			ps.setString(5, lower(e.getCorreoElectronico()));
 			ps.setString(6, e.getContrasenya());
 			ps.setString(7, e.getDni());
 			ps.executeUpdate();
@@ -247,7 +277,7 @@ public class GestorBD {
 			
 			ps.close();
 		} catch (SQLException ex) {
-			logger.log(Level.SEVERE, "Error en metodo guardarEmpleado: " + ex);
+			logger.log(Level.WARNING, "Error en metodo guardarEmpleado: " + ex);
 		}
 	
 	    return guardado;
@@ -262,7 +292,7 @@ public class GestorBD {
 	       	ps.close();
 	       	return true;
 	   	} catch (SQLException ex) {
-	   		logger.log(Level.SEVERE, "Error en metodo borrarEmpleado: " + ex);
+	   		logger.log(Level.WARNING, "Error en metodo borrarEmpleado: " + ex);
 	       	return false;
 	   	}
 	}
@@ -279,7 +309,7 @@ public class GestorBD {
         	   String apellidos = capitalize(rs.getString("apellidos"));
         	   String nomUsuario = rs.getString("nomUsuario");
         	   int numTelefono = rs.getInt("numTelefono");
-        	   String correoElectronico = rs.getString("correoElectronico");
+        	   String correoElectronico = lower(rs.getString("correoElectronico"));
         	   String contrasenya = rs.getString("contrasenya");
         	   String dni = rs.getString("dni");
         	   empleado.add(new Empleado(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya, dni));
@@ -287,7 +317,7 @@ public class GestorBD {
 	      rs.close();
 	      st.close();
 	    } catch (SQLException e) {
-	    	logger.log(Level.SEVERE, "Error en metodo listarEmpleados: " + e);
+	    	logger.log(Level.WARNING, "Error en metodo listarEmpleados: " + e);
 	    }
 	    return empleado;
 	}
@@ -310,7 +340,7 @@ public class GestorBD {
 			rs.close();
 			st.close();
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "Error en metodo anyadirProducto: " + e);
+			logger.log(Level.WARNING, "Error en metodo anyadirProducto: " + e);
 			anyadir = false;
 		}
 		return anyadir;
@@ -366,7 +396,7 @@ public class GestorBD {
 			rs.close();
 			st.close();
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "Error en metodo listarProductos: " + e);
+			logger.log(Level.WARNING, "Error en metodo listarProductos: " + e);
 		}
 		return productos;
 	}
@@ -424,7 +454,7 @@ public class GestorBD {
 			rs.close();
 			ps.close();
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "Error en metodo listarProductosPorCategoria: " + e);
+			logger.log(Level.WARNING, "Error en metodo listarProductosPorCategoria: " + e);
 		}
 		return productos;
 	}
@@ -479,7 +509,7 @@ public class GestorBD {
             ps.close();
          }
 	     catch (Exception e)  {
-	    	 logger.log(Level.SEVERE, "Error en buscarAlimento(nombre): " + e);
+	    	 logger.log(Level.WARNING, "Error en buscarAlimento(nombre): " + e);
 	     } 
 		 return p;
 	}

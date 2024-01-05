@@ -26,7 +26,7 @@ public class VentanaInicioSesion extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	protected GestorMarket gestor;
-	protected JTextField cajaCorreo;
+	protected JTextField cajaUsuario;
 	protected JPasswordField cajaContrasena;
 	protected VentanaRegistro ventanaRegistro;
 	protected ImageIcon iconoUsuario;
@@ -42,7 +42,7 @@ public class VentanaInicioSesion extends JFrame {
 		iconoUsuario = new ImageIcon("resources/iconos/usuario.png");
 		iconoUsuario = new ImageIcon(iconoUsuario.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
     	JLabel correoLabel = new JLabel(iconoUsuario);
-    	cajaCorreo = new JTextField(40);
+    	cajaUsuario = new JTextField(40);
     	iconoContrasena = new ImageIcon("resources/iconos/llave.png");
     	iconoContrasena = new ImageIcon(iconoContrasena.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
     	JLabel contrasenaLabel = new JLabel(iconoContrasena);
@@ -54,11 +54,12 @@ public class VentanaInicioSesion extends JFrame {
     	botonIniciarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String correo = cajaCorreo.getText();
+                String usuario = cajaUsuario.getText();
                 char[] contrasena = cajaContrasena.getPassword();
                 
                 // Verifica las credenciales
-                if (verificarCredenciales(correo, new String(contrasena))) {
+                if (verificarCredenciales(usuario, new String(contrasena))) {
+                	gestor.setUsuario(gestor.getGestorBD().buscarUsuario(usuario));
                     JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
                     
                 } else {
@@ -81,17 +82,17 @@ public class VentanaInicioSesion extends JFrame {
 
         // Crear un panel para organizar los componentes
         JPanel panel = new JPanel(new BorderLayout());
-        JPanel panelCorreo = new JPanel();
+        JPanel panelUsuario = new JPanel();
         JPanel panelContrasena = new JPanel();
         JPanel panelCajas = new JPanel();
         JPanel panelBotones = new JPanel();
 
         
-        panelCorreo.add(correoLabel);
-        panelCorreo.add(cajaCorreo);
+        panelUsuario.add(correoLabel);
+        panelUsuario.add(cajaUsuario);
         panelContrasena.add(contrasenaLabel);
         panelContrasena.add(cajaContrasena);
-        panelCajas.add(panelCorreo);
+        panelCajas.add(panelUsuario);
         panelCajas.add(panelContrasena);
         panelCajas.setBorder(new EmptyBorder(10,50,10,50));
         panelBotones.add(botonIniciarSesion);
@@ -113,9 +114,9 @@ public class VentanaInicioSesion extends JFrame {
      }
 
     // Método para verificar las credenciales
-    private boolean verificarCredenciales(String correo, String contrasena) {
+    private boolean verificarCredenciales(String usuario, String contrasena) {
     	
-    	return correo.equals("correo") && contrasena.equals("contrasena");
+    	return usuario.equals("usuario") && contrasena.equals("contrasena");
     }
 
 }

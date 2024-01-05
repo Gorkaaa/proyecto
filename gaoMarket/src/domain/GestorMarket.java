@@ -25,11 +25,12 @@ public class GestorMarket {
 	protected Logger logger;
 	protected GestorXML gestorXML;
 	protected GestorBD gestorBD;
+	protected Usuario usuario;
 
 	public GestorMarket(List<Persona> personas, List<Producto> productos, Map<String, List<Persona>> mapaPersonas,
 			Map<TipoAlimento, Set<Producto>> mapaAlimentos,
 			Map<TipoHigieneYBelleza, Set<Producto>> mapaHigieneYBelleza,
-			Map<TipoLimpieza, Set<Producto>> mapaLimpieza) {
+			Map<TipoLimpieza, Set<Producto>> mapaLimpieza, Usuario usuario) {
 		this.personas = personas;
 		this.productos = productos;
 		this.mapaPersonas = mapaPersonas;
@@ -37,6 +38,7 @@ public class GestorMarket {
 		this.mapaHigieneYBelleza = mapaHigieneYBelleza;
 		this.mapaLimpieza = mapaLimpieza;
 		this.gestorBD = new GestorBD();
+		this.usuario = usuario;
 	}
 
 
@@ -65,6 +67,7 @@ public class GestorMarket {
 	    }
 		this.gestorXML = new GestorXML(this);
 		this.gestorBD = new GestorBD();
+		this.usuario = null;
 	}
 
 	public List<Persona> getPersonas() {
@@ -138,4 +141,13 @@ public class GestorMarket {
 	public void setGestorBD(GestorBD gestorBD) {
 		this.gestorBD = gestorBD;
 	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
 }
