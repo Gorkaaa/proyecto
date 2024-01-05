@@ -124,6 +124,8 @@ public class Producto implements Serializable, Comparable<Producto>{
 		}
 		else if (this.cantidad <= 10) {
 			this.estado = Estado.POCAS_UNIDADES;
+		} else {
+			this.estado = Estado.NORMAL;
 		}
 	}
 
@@ -136,10 +138,6 @@ public class Producto implements Serializable, Comparable<Producto>{
 		if (descuento >= 0 && descuento <= 100) {
 			this.descuento = descuento;
 		}
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 	
 
