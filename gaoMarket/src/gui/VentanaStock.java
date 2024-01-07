@@ -64,7 +64,7 @@ public class VentanaStock extends JFrame {
 
         modeloTabla = new ModeloStock(null);
         tabla = new JTable(modeloTabla);
-        tabla.setDefaultRenderer(Object.class, new RendererStock());
+ 
         scrollTabla = new JScrollPane(tabla);
         getContentPane().add(scrollTabla, BorderLayout.CENTER);
 
@@ -74,7 +74,6 @@ public class VentanaStock extends JFrame {
                 TreePath tp = e.getPath();
                 tipoProductoSeleccionado = tp.getLastPathComponent().toString();
                 
-                // Realiza las acciones necesarias con tipoProductoSeleccionado
                 if (CadenaProductos.getMapaTipoProducto().containsKey(TipoProducto.valueOf(tipoProductoSeleccionado))) {
                     List<Producto> l = CadenaProductos.obtenerListaTipoProductos(TipoProducto.valueOf(tipoProductoSeleccionado));
                     tabla.setModel(new ModeloStock(l));
@@ -84,7 +83,6 @@ public class VentanaStock extends JFrame {
         });
         
 	}
-    
 
 	private void cargarArbol() {
 		DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloArbol.getRoot();

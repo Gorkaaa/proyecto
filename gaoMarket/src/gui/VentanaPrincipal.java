@@ -33,7 +33,6 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import domain.Empleado;
 import domain.GestorMarket;
 import domain.Producto;
 import domain.TipoAlimento;

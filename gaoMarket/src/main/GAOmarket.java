@@ -47,6 +47,7 @@ public class GAOmarket {
 					}
 				});
 				hilo.start();
+				CadenaProductos.cargarMapaTipoProducto("resources/datos/productos.csv");
 				ventana.setVisible(true);
 				hilo.interrupt();
 			}
