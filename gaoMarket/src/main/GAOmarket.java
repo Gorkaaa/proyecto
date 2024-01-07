@@ -3,6 +3,7 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Image;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -35,9 +36,9 @@ public class GAOmarket {
 						 
 						try {
 							Thread.sleep(5000);
-							logger.info("Hilo finalizado");
+							logger.log(Level.INFO, "Hilo finalizado");
 						} catch (InterruptedException e) {
-							logger.info("Hilo finalizado");
+							logger.log(Level.INFO, "Hilo finalizado");
 						}
 						 finally {
 							 vCarga.dispose();
