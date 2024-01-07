@@ -33,6 +33,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import domain.Empleado;
 import domain.GestorMarket;
 import domain.Producto;
 import domain.TipoAlimento;
@@ -61,6 +62,7 @@ public class VentanaPrincipal extends JFrame {
 	protected JButton botonCesta;
 	protected JButton botonUsuario;
 	protected JButton botonGestionUsuario;
+	protected JButton botonStock;
 	protected JTextField barraBusqueda;
 	
 	protected List<Producto> productos;
@@ -156,6 +158,17 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 		
+		
+		botonStock = new JButton("Gestion de Stock");
+		botonStock.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				VentanaStock stock = new VentanaStock();
+				stock.setVisible(true);
+			}
+		});
+		
 		barraBusqueda = new JTextField(20);
 		
 		iconoGAO = new ImageIcon("resources/imagenes/GAOmarket.png");
@@ -173,6 +186,7 @@ public class VentanaPrincipal extends JFrame {
 		panelArriba.add(panelIconos);
 		panelSubIconos.add(botonGestionUsuario);
 		panelSubIconos.add(botonUsuario);
+		panelSubIconos.add(botonStock);
 		panelIconos.add(panelSubIconos, "North");
 		panelIconos.add(botonCesta, "Center");
 		
