@@ -139,7 +139,10 @@ public class Producto implements Serializable, Comparable<Producto>{
 			this.descuento = descuento;
 		}
 	}
-	
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	@Override
 	public String toString() {
