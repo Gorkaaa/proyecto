@@ -28,12 +28,27 @@ public class RendererStock implements TableCellRenderer {
 				label.setText(value.toString());
 				break;
 			case 2:
-				label.setText(String.format("%.2f €", Double.parseDouble(value.toString())));
-				break;
-			case 3:
 				label.setText(value.toString());
 				break;
+			case 3:
+				label.setText(String.format("%.2f €", Double.parseDouble(value.toString())));
+				break;
 			case 4:
+				label.setText(value.toString());
+				break;
+			case 5:
+				label.setText(value.toString());
+				break;
+			case 6:
+				label.setText(value.toString());
+				break;
+			case 7:
+				label.setText(value.toString());
+				break;
+			case 8:
+				label.setText(value.toString());
+				break;
+			case 9:
 				label.setText(String.format("%.2f €", Double.parseDouble(value.toString())));
 				break;
             default:
