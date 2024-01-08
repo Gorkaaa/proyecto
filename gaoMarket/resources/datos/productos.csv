@@ -1,4 +1,4 @@
-ID;Nombre;Imagen;Cantidad;Precio;TipoProducto;TipoProductoTipo;Estado;Descuento
+ID;Nombre;Imagen;Cantidad;Precio;TipoProducto;Categoria;Estado;Descuento
 1;Manzanas;manzanas.png;56;3.55;ALIMENTO;FRUTAS;NORMAL;0
 2;Shampoo;shampoo.png;34;4.99;HIGIENE_Y_BELLEZA;CUIDADO_CABELLO;NORMAL;0
 3;Detergente;detergente.png;78;6.99;LIMPIEZA;PRODUCTOS_LIMPIEZA;NORMAL;0
