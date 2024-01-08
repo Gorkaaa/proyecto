@@ -73,10 +73,38 @@ public class VentanaStock extends JFrame {
             public void valueChanged(TreeSelectionEvent e) {
                 TreePath tp = e.getPath();
                 tipoProductoSeleccionado = tp.getLastPathComponent().toString();
+                categoriaSeleccionada = tp.getLastPathComponent().toString();
+                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tp.getLastPathComponent();
+                Object selectedObject = selectedNode.getUserObject();
                 
-                if (CadenaProductos.getMapaTipoProducto().containsKey(TipoProducto.valueOf(tipoProductoSeleccionado))) {
-                    List<Producto> l = CadenaProductos.obtenerListaTipoProductos(TipoProducto.valueOf(tipoProductoSeleccionado));
-                    tabla.setModel(new ModeloStock(l));
+                if (selectedObject instanceof TipoProducto) {
+                    tipoProductoSeleccionado = selectedObject.toString();
+
+                    if (CadenaProductos.getMapaTipoProducto().containsKey(TipoProducto.valueOf(tipoProductoSeleccionado))) {
+                        List<Producto> l = CadenaProductos.obtenerListaTipoProductos(TipoProducto.valueOf(tipoProductoSeleccionado));
+                        tabla.setModel(new ModeloStock(l));
+                    }
+                } else if (selectedObject instanceof TipoAlimento) {
+                	categoriaSeleccionada = ((TipoAlimento) selectedObject).toString();
+
+                    if (CadenaProductos.getMapaCategoriaProducto().containsKey(TipoAlimento.valueOf(categoriaSeleccionada))) {
+                        List<Producto> l = CadenaProductos.obtenerListaCategoriaProductos(TipoAlimento.valueOf(categoriaSeleccionada));
+                        tabla.setModel(new ModeloStock(l));
+                    }
+                } else if (selectedObject instanceof TipoHigieneYBelleza) {
+                	categoriaSeleccionada = ((TipoHigieneYBelleza) selectedObject).toString();
+
+                    if (CadenaProductos.getMapaCategoriaProducto().containsKey(TipoHigieneYBelleza.valueOf(categoriaSeleccionada))) {
+                        List<Producto> l = CadenaProductos.obtenerListaCategoriaProductos(TipoHigieneYBelleza.valueOf(categoriaSeleccionada));
+                        tabla.setModel(new ModeloStock(l));
+                    }
+                } else {
+                	categoriaSeleccionada = ((TipoLimpieza) selectedObject).toString();
+
+                    if (CadenaProductos.getMapaCategoriaProducto().containsKey(TipoLimpieza.valueOf(categoriaSeleccionada))) {
+                        List<Producto> l = CadenaProductos.obtenerListaCategoriaProductos(TipoLimpieza.valueOf(categoriaSeleccionada));
+                        tabla.setModel(new ModeloStock(l));
+                    }
                 }
             }
            

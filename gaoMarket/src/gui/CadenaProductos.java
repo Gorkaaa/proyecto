@@ -40,24 +40,22 @@ public class CadenaProductos {
 		for(Producto p: mapaTipoProducto.get(tipoProducto)) {
 			l.add(p);
 		}
-		System.out.println(l);
 		return l;
 	}
 	
 	public static List<Producto> obtenerListaCategoriaProductos(Enum<?> categoria){
 		List<Producto> l = new ArrayList<>();
-		for(Producto p: mapaTipoProducto.get(categoria)) {
+		for(Producto p: mapaCategoriaProducto.get(categoria)) {
 			l.add(p);
 		}
-		System.out.println(l);
 		return l;
 	}
 	
 	public static void cargarMapaTipoProducto(String nomfich) {
 		try {
 			Scanner sc = new Scanner(new FileReader(nomfich));
-			String titulos = sc.nextLine();
-			String linea ;
+			sc.nextLine();
+			String linea;
 			while(sc.hasNext()) {
 				linea = sc.nextLine();
 				String [] partes = linea.split(";");
