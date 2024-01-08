@@ -2,69 +2,45 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.DefaultTableCellRenderer;
 
-import domain.Producto;
 import domain.Producto.Estado;
 
-public class RendererStock implements TableCellRenderer {
+public class RendererStock extends DefaultTableCellRenderer {
 
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Producto p = new Producto();
-		JLabel label = new JLabel();
+	
+		Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		
-		label.setBackground(table.getBackground());
+		setHorizontalAlignment(CENTER);
 		
-		label.setHorizontalAlignment(JLabel.CENTER);
-		switch (column) {
-			case 0:
-				label.setText(value.toString());
-			case 1:
-				label.setText(value.toString());
+		ModeloStock modelo = (ModeloStock) table.getModel();
+		Estado estado = (Estado) modelo.getValueAt(row, 7);
+
+		switch (estado) {
+			case POCAS_UNIDADES:
+				setBackground(Color.YELLOW);
 				break;
-			case 2:
-				label.setText(value.toString());
+			case AGOTADO:
+				setBackground(Color.RED);
 				break;
-			case 3:
-				label.setText(String.format("%.2f €", Double.parseDouble(value.toString())));
+			case NORMAL:
+				setBackground(Color.GREEN);
 				break;
-			case 4:
-				label.setText(value.toString());
-				break;
-			case 5:
-				label.setText(value.toString());
-				break;
-			case 6:
-				label.setText(value.toString());
-				break;
-			case 7:
-				label.setText(value.toString());
-				break;
-			case 8:
-				label.setText(value.toString());
-				break;
-			case 9:
-				label.setText(String.format("%.2f €", Double.parseDouble(value.toString())));
-				break;
-            default:
-                break;
-        }
-		
-		if (p.getEstado() == Estado.POCAS_UNIDADES) {
-			label.setBackground(Color.YELLOW);
-		} else if (p.getEstado() == Estado.AGOTADO) {
-			label.setBackground(Color.RED);
-		} else {
-			label.setBackground(Color.GREEN);
+			default:
+				setBackground(table.getBackground());
 		}
 		
-		label.setOpaque(true);
-		return label;
+		return component;
 	}
 
 }

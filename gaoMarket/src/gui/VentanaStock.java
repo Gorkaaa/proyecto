@@ -62,8 +62,10 @@ public class VentanaStock extends JFrame {
         cargarArbol();
         getContentPane().add(scrollArbol, BorderLayout.WEST);
 
+        renderer = new RendererStock();
         modeloTabla = new ModeloStock(null);
         tabla = new JTable(modeloTabla);
+        tabla.setDefaultRenderer(Object.class, renderer);
  
         scrollTabla = new JScrollPane(tabla);
         getContentPane().add(scrollTabla, BorderLayout.CENTER);
