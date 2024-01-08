@@ -26,9 +26,9 @@ import domain.Producto.Estado;
 
 public class GestorBD {
 	private Connection conn;
-	public static final String DB_PATH = "resources/db/GAOmarket.db";
+	//public static final String DB_PATH = "resources/db/GAOmarket.db";
 	public static final String DB_PROPERTIES_PATH = "resources/db/configuracion.properties";
-	
+	public static String nombreBD;
 	private static Logger logger = Logger.getLogger(GestorBD.class.getName());
 	
 	public GestorBD() {
@@ -42,9 +42,7 @@ public class GestorBD {
 			FileInputStream input = new FileInputStream(DB_PROPERTIES_PATH);
 			properties.load(input);
 
-			String nombreBD = properties.getProperty("nombreBD");
-			String nombre = properties.getProperty("nombre");
-			String fecha = properties.getProperty("fecha");
+			nombreBD = properties.getProperty("nombreBD");
 		
 		} catch (FileNotFoundException e) {
 			logger.log(Level.WARNING, "No se ha podido encontrar el fichero de Base de Datos");
@@ -57,8 +55,8 @@ public class GestorBD {
 	public void connect(){
 		try {
 			Class.forName("org.sqlite.JDBC");
-			conn = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
-			
+			//conn = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
+			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/" + nombreBD);
 			Statement statement = conn.createStatement();
 			String sent = "CREATE TABLE IF NOT EXISTS Producto (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre varchar(100), imagen varchar(100), precio double, cantidad int, tipoProducto varchar(100), categoria varchar(100), estado varchar(100), descuento int);";
 			statement.executeUpdate( sent );
