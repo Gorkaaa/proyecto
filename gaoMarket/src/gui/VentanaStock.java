@@ -83,6 +83,7 @@ public class VentanaStock extends JFrame {
                     tipoProductoSeleccionado = selectedObject.toString();
 
                     if (CadenaProductos.getMapaTipoProducto().containsKey(TipoProducto.valueOf(tipoProductoSeleccionado))) {
+                    	//Esta lista que he añadido tengo que hacerlo en los JMenu para que cuando toque se filtren los productos de la VentanaPrincipal.
                         List<Producto> l = CadenaProductos.obtenerListaTipoProductos(TipoProducto.valueOf(tipoProductoSeleccionado));
                         tabla.setModel(new ModeloStock(l));
                     }
