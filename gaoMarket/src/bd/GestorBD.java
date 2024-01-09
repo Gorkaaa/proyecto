@@ -54,7 +54,37 @@ public class GestorBD {
 		
 	}
 	
-	public void cargarMapaTipoProducto(String nomfich) {
+	
+	
+	public void connect(){
+		try {
+			Class.forName("org.sqlite.JDBC");
+			//conn = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
+			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/" + nombreBD);
+			Statement statement = conn.createStatement();
+			String sent = "CREATE TABLE IF NOT EXISTS producto (id INTEGER PRIMARY KEY, nombre varchar(100), imagen varchar(100), precio double, cantidad int, tipoProducto varchar(100), categoria varchar(100), estado varchar(100), descuento int);";
+			statement.executeUpdate( sent );
+			sent = "CREATE TABLE IF NOT EXISTS usuario (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100));";
+			statement.executeUpdate( sent );
+			sent = "CREATE TABLE IF NOT EXISTS empleado (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100), dni varchar(9));";
+			statement.executeUpdate( sent );
+			
+		} catch (ClassNotFoundException e) {
+			logger.log(Level.WARNING, "No se ha podido cargar el driver de la base de datos");
+		} catch (SQLException e) {
+			logger.log(Level.WARNING, "Error conectando a la BD", e);
+		}
+	}
+	
+	public void disconnect(){
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			logger.log(Level.WARNING, "Error cerrando la conexión con la BD", e);
+		}
+	}
+	
+public void cargarMapaTipoProducto(String nomfich) {
 		
 		try {
 			Scanner sc = new Scanner(new FileReader(nomfich));
@@ -109,50 +139,30 @@ public class GestorBD {
 	
 	public void volcarCSV(Producto p) {
 		try {
-			
-			Class.forName("org.sqlite.JDBC");
-			//conn = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
+
 			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/" + nombreBD);
 			Statement statement = conn.createStatement();
-			String sql = String.format("INSERT INTO producto (id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento) VALUES('%d', '%s', '%s', '%.2f', '%d', '%s', '%s', '%s', '%d')", p.getId(), p.getNombre(), p.getImagen(), p.getPrecio(), p.getCantidad(), p.getTipoProducto(), p.getCategoria(), p.getEstado(), p.getDescuento());
-			statement.executeUpdate(sql);
-				
+			
+			if (!existeProductoEnBD(p.getId())) {
+				String sql = String.format("INSERT INTO producto (id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento) VALUES('%d', '%s', '%s', '%.2f', '%d', '%s', '%s', '%s', '%d')", p.getId(), p.getNombre(), p.getImagen(), p.getPrecio(), p.getCantidad(), p.getTipoProducto(), p.getCategoria(), p.getEstado(), p.getDescuento());
+				statement.executeUpdate(sql);
+			}
 			statement.close();
-		} catch (ClassNotFoundException e) {
-			logger.log(Level.WARNING, "No se ha podido cargar el driver de la base de datos");
 		} catch (SQLException e) {
 			logger.log(Level.WARNING, "Error conectando a la BD", e);
 		}
 	}    
 
-	
-	public void connect(){
-		try {
-			Class.forName("org.sqlite.JDBC");
-			//conn = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/" + nombreBD);
-			Statement statement = conn.createStatement();
-			String sent = "CREATE TABLE IF NOT EXISTS producto (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre varchar(100), imagen varchar(100), precio double, cantidad int, tipoProducto varchar(100), categoria varchar(100), estado varchar(100), descuento int);";
-			statement.executeUpdate( sent );
-			sent = "CREATE TABLE IF NOT EXISTS usuario (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100));";
-			statement.executeUpdate( sent );
-			sent = "CREATE TABLE IF NOT EXISTS empleado (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100), dni varchar(9));";
-			statement.executeUpdate( sent );
-			
-		} catch (ClassNotFoundException e) {
-			logger.log(Level.WARNING, "No se ha podido cargar el driver de la base de datos");
-		} catch (SQLException e) {
-			logger.log(Level.WARNING, "Error conectando a la BD", e);
+	private boolean existeProductoEnBD(int id) throws SQLException {
+		String sql = "SELECT id FROM producto WHERE id = ?";
+		try (PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, id);
+			try (ResultSet rs = ps.executeQuery()) {
+				return rs.next();
+			}
 		}
 	}
 	
-	public void disconnect(){
-		try {
-			conn.close();
-		} catch (SQLException e) {
-			logger.log(Level.WARNING, "Error cerrando la conexión con la BD", e);
-		}
-	}
 	
 	public ResultSet realizarQuery(String sql, Statement st) {
 		ResultSet rs = null;
