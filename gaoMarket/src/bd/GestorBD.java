@@ -85,17 +85,17 @@ public class GestorBD {
 				if (tipoProducto == TipoProducto.ALIMENTO) {
 					categoria  = TipoAlimento.valueOf(partes[6]);
 					p.setCategoria(categoria);
-					anyadirProducto1(p);
+					volcarCSV(p);
 					
 				} else if (tipoProducto == TipoProducto.HIGIENE_Y_BELLEZA){
 					categoria  = TipoHigieneYBelleza.valueOf(partes[6]);
 					p.setCategoria(categoria);
-					anyadirProducto1(p);
+					volcarCSV(p);
 					
 				} else {
 					categoria = TipoLimpieza.valueOf(partes[6]);
 					p.setCategoria(categoria);
-					anyadirProducto1(p);
+					volcarCSV(p);
 				}
 				
 
@@ -107,7 +107,7 @@ public class GestorBD {
 			
 	}
 	
-	public void anyadirProducto1(Producto p) {
+	public void volcarCSV(Producto p) {
 		try {
 			
 			Class.forName("org.sqlite.JDBC");
