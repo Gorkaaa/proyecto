@@ -1,8 +1,10 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -35,40 +37,40 @@ public class VentanaStock extends JFrame {
 	protected JScrollPane scrollTabla;
 	protected JSlider sUnidades;
 	protected RendererStock renderer;
+	protected ImageIcon iconoStock;
 	
 	protected String tipoProductoSeleccionado;
 	protected String categoriaSeleccionada;
     
     public VentanaStock() {
-        super();
-        setBounds(300, 200, 600, 400);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setVisible(false);
+		super();
+		tipoProductoSeleccionado = "";
+		categoriaSeleccionada = "";
+		
+		iconoStock = new ImageIcon("resources/iconos/iconoGAO.png");
+		iconoStock = new ImageIcon(iconoStock.getImage().getScaledInstance(207, 207, Image.SCALE_SMOOTH));
+		
+		
+		pOeste = new JPanel();
+		pNorte = new JPanel();
+		pCentro = new JPanel();
+		
+		getContentPane().add(pNorte, BorderLayout.NORTH);
+		
+		DefaultMutableTreeNode nraiz = new DefaultMutableTreeNode("TIPOS DE PRODUCTO");
+		modeloArbol = new DefaultTreeModel(nraiz);
+		arbol = new JTree(modeloArbol);
+		scrollArbol = new JScrollPane(arbol);
+		cargarArbol();
+		getContentPane().add(scrollArbol, BorderLayout.WEST);
 
-        tipoProductoSeleccionado = "";
-        categoriaSeleccionada = "";
-        
-        
-        pOeste = new JPanel();
-        pNorte = new JPanel();
-        pCentro = new JPanel();
-
-        getContentPane().add(pNorte, BorderLayout.NORTH);
-
-        DefaultMutableTreeNode nraiz = new DefaultMutableTreeNode("TIPOS DE PRODUCTO");
-        modeloArbol = new DefaultTreeModel(nraiz);
-        arbol = new JTree(modeloArbol);
-        scrollArbol = new JScrollPane(arbol);
-        cargarArbol();
-        getContentPane().add(scrollArbol, BorderLayout.WEST);
-
-        renderer = new RendererStock();
-        modeloTabla = new ModeloStock(null);
-        tabla = new JTable(modeloTabla);
-        tabla.setDefaultRenderer(Object.class, renderer);
+		renderer = new RendererStock();
+		modeloTabla = new ModeloStock(null);
+		tabla = new JTable(modeloTabla);
+		tabla.setDefaultRenderer(Object.class, renderer);
  
-        scrollTabla = new JScrollPane(tabla);
-        getContentPane().add(scrollTabla, BorderLayout.CENTER);
+		scrollTabla = new JScrollPane(tabla);
+		getContentPane().add(scrollTabla, BorderLayout.CENTER);
 
         arbol.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
@@ -109,9 +111,20 @@ public class VentanaStock extends JFrame {
                         tabla.setModel(new ModeloStock(l));
                     }
                 }
+//                tabla.getColumnModel().getColumn(0).setPreferredWidth(3);
+//                tabla.getColumnModel().getColumn(3).setPreferredWidth(1);
+//                tabla.getColumnModel().getColumn(4).setPreferredWidth(4);
+//                tabla.getColumnModel().getColumn(8).setPreferredWidth(3);
+//                tabla.getColumnModel().getColumn(9).setPreferredWidth(5);
             }
+            
            
         });
+        
+        setBounds(25, 100, 1490, 600);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setVisible(false);
+		setIconImage(iconoStock.getImage());
         
 	}
 
