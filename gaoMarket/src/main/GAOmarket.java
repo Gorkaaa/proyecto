@@ -13,16 +13,19 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import bd.GestorBD;
 import domain.GestorMarket;
 import gui.*;
 
 public class GAOmarket {
 	protected static GestorMarket gestor;
+	protected static GestorBD gestorBD;
 	private static Logger logger = Logger.getLogger(GAOmarket.class.getName());
 
 	public static void main(String[] args) {
 		VentanaCarga vCarga = new VentanaCarga();
 		vCarga.setVisible(true);
+		gestorBD = new GestorBD();
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -47,6 +50,7 @@ public class GAOmarket {
 					}
 				});
 				hilo.start();
+				gestorBD.cargarMapaTipoProducto("resources/datos/productos.csv");
 				CadenaProductos.cargarMapaTipoProducto("resources/datos/productos.csv");
 				ventana.setVisible(true);
 				hilo.interrupt();

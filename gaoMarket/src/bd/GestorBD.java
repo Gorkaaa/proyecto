@@ -2,6 +2,7 @@ package bd;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,17 +54,89 @@ public class GestorBD {
 		
 	}
 	
+	public void cargarMapaTipoProducto(String nomfich) {
+		
+		try {
+			Scanner sc = new Scanner(new FileReader(nomfich));
+			sc.nextLine();
+			String linea;
+			while(sc.hasNext()) {
+				linea = sc.nextLine();
+				String [] partes = linea.split(";");
+				int id = Integer.parseInt(partes[0]);
+				String nombre = partes[1];
+				String imagen = partes[2];
+				int cantidad = Integer.parseInt(partes[3]);
+				Double precio = Double.parseDouble(partes[4]);
+				TipoProducto tipoProducto = TipoProducto.valueOf(partes[5]);
+				Estado estado = Estado.valueOf(partes[7]);
+				int descuento = Integer.parseInt(partes[8]);
+				Producto p = new Producto();
+				p.setId(id);
+				p.setNombre(nombre);
+				p.setImagen(imagen);
+				p.setPrecio(precio);
+				p.setCantidad(cantidad);
+				p.setTipoProducto(tipoProducto);
+				p.setEstado(estado);
+				p.setDescuento(descuento);
+				Enum<?> categoria;
+				
+				if (tipoProducto == TipoProducto.ALIMENTO) {
+					categoria  = TipoAlimento.valueOf(partes[6]);
+					p.setCategoria(categoria);
+					anyadirProducto1(p);
+					
+				} else if (tipoProducto == TipoProducto.HIGIENE_Y_BELLEZA){
+					categoria  = TipoHigieneYBelleza.valueOf(partes[6]);
+					p.setCategoria(categoria);
+					anyadirProducto1(p);
+					
+				} else {
+					categoria = TipoLimpieza.valueOf(partes[6]);
+					p.setCategoria(categoria);
+					anyadirProducto1(p);
+				}
+				
+
+			}
+			sc.close();
+		} catch (FileNotFoundException e) {
+			logger.log(Level.WARNING, "Error al volcar datos .csv en la base de datos");
+		}
+			
+	}
+	
+	public void anyadirProducto1(Producto p) {
+		try {
+			
+			Class.forName("org.sqlite.JDBC");
+			//conn = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
+			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/" + nombreBD);
+			Statement statement = conn.createStatement();
+			String sql = String.format("INSERT INTO producto (id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento) VALUES('%d', '%s', '%s', '%.2f', '%d', '%s', '%s', '%s', '%d')", p.getId(), p.getNombre(), p.getImagen(), p.getPrecio(), p.getCantidad(), p.getTipoProducto(), p.getCategoria(), p.getEstado(), p.getDescuento());
+			statement.executeUpdate(sql);
+				
+			statement.close();
+		} catch (ClassNotFoundException e) {
+			logger.log(Level.WARNING, "No se ha podido cargar el driver de la base de datos");
+		} catch (SQLException e) {
+			logger.log(Level.WARNING, "Error conectando a la BD", e);
+		}
+	}    
+
+	
 	public void connect(){
 		try {
 			Class.forName("org.sqlite.JDBC");
 			//conn = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
 			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/" + nombreBD);
 			Statement statement = conn.createStatement();
-			String sent = "CREATE TABLE IF NOT EXISTS Producto (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre varchar(100), imagen varchar(100), precio double, cantidad int, tipoProducto varchar(100), categoria varchar(100), estado varchar(100), descuento int);";
+			String sent = "CREATE TABLE IF NOT EXISTS producto (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre varchar(100), imagen varchar(100), precio double, cantidad int, tipoProducto varchar(100), categoria varchar(100), estado varchar(100), descuento int);";
 			statement.executeUpdate( sent );
-			sent = "CREATE TABLE IF NOT EXISTS Usuario (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100));";
+			sent = "CREATE TABLE IF NOT EXISTS usuario (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100));";
 			statement.executeUpdate( sent );
-			sent = "CREATE TABLE IF NOT EXISTS Empleado (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100), dni varchar(9));";
+			sent = "CREATE TABLE IF NOT EXISTS empleado (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100), dni varchar(9));";
 			statement.executeUpdate( sent );
 			
 		} catch (ClassNotFoundException e) {
@@ -326,10 +400,10 @@ public class GestorBD {
 		boolean anyadir = true;
 		try {
 			Statement st = conn.createStatement();
-			String sql = String.format("SELECT * FROM Producto WHERE codigo = '%s'" , p.getId());
+			String sql = String.format("SELECT * FROM producto WHERE id = '%s'" , p.getId());
 			ResultSet rs = st.executeQuery(sql);
 			if(rs.next()) {
-				sql = String.format("INSERT INTO Producto (id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento) VALUES('%d', '%s', '%s', '%.2f', '%d', '%s', '%s', '%s', '%d')", p.getId(), p.getNombre(), p.getImagen(), p.getPrecio(), p.getCantidad(), p.getTipoProducto(), p.getCategoria(), p.getEstado(), p.getDescuento());
+				sql = String.format("INSERT INTO producto (id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento) VALUES('%d', '%s', '%s', '%.2f', '%d', '%s', '%s', '%s', '%d')", p.getId(), p.getNombre(), p.getImagen(), p.getPrecio(), p.getCantidad(), p.getTipoProducto(), p.getCategoria(), p.getEstado(), p.getDescuento());
 				st.executeUpdate(sql);
 				
 			}else {
@@ -514,7 +588,7 @@ public class GestorBD {
 	
 	//Metodo que al realizar una compra, reste la cantidad al stock de un producto
 	public void realizarCompra(String nombre, int cantidad) {
-		String sql = "UPDATE Producto SET cantidad = ? WHERE nombre = ?";
+		String sql = "UPDATE producto SET cantidad = ? WHERE nombre = ?";
 	    try (PreparedStatement ps = conn.prepareStatement(sql)){
 	      ps.setInt(1, cantidad);
 	      ps.setString(2, nombre);
