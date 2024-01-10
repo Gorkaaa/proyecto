@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <carritos>
   <carrito usuario="usu1">
-    <producto nombre="Producto 3">
+    <producto nombre="Manzanas">
       <tipo>ALIMENTO</tipo>
       <cantidad>1</cantidad>
     </producto>
-    <producto nombre="Producto 6">
-      <tipo>ALIMENTO</tipo>
-      <cantidad>1</cantidad>
-    </producto>
-    <producto nombre="Producto 7">
-      <tipo>ALIMENTO</tipo>
+    <producto nombre="Shampoo">
+      <tipo>HIGIENE_Y_BELLEZA</tipo>
       <cantidad>5</cantidad>
+    </producto>
+    <producto nombre="Limpiador multiusos">
+      <tipo>LIMPIEZA</tipo>
+      <cantidad>1</cantidad>
+    </producto>
+    <producto nombre="Perfume">
+      <tipo>HIGIENE_Y_BELLEZA</tipo>
+      <cantidad>2</cantidad>
     </producto>
   </carrito>
 </carritos>

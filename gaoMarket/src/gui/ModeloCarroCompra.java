@@ -62,8 +62,8 @@ public class ModeloCarroCompra extends DefaultTableModel{
 			case 0: return p.getImagen();
 			case 1: return p.getNombre();
 			case 2: return Double.valueOf(p.getPrecio());
-			case 3: return Integer.valueOf(p.getCantidad());
-			case 4: return sumarPrecioProductoRecursivo(p.getPrecio(), p.getCantidad());
+			case 3: return Integer.valueOf(productos.get(row).getCantidad());
+			case 4: return sumarPrecioProductoRecursivo(p.getPrecio(), productos.get(row).getCantidad());
 			default: return null;
 		}
 	}

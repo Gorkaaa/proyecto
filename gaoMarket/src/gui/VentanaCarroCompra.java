@@ -48,12 +48,6 @@ public class VentanaCarroCompra extends JFrame{
 		this.setLayout(new BorderLayout());
 		productos = gestor.getGestorXML().dameProductos("usu1");
 		
-		/*productos.add(new Producto(1, "Producto 1", "imagen1.png", 19.99, 2, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.POCAS_UNIDADES, 10));
-		productos.add(new Producto(5, "Producto 5", "imagen5.png", 4.20, 6, TipoProducto.ALIMENTO, TipoAlimento.BEBIDAS, Estado.POCAS_UNIDADES, 0));
-		productos.add(new Producto(6, "Producto 6", "imagen6.png", 7.72, 2, TipoProducto.ALIMENTO, TipoAlimento.DULCES, Estado.AGOTADO, 15));
-		productos.add(new Producto(7, "Producto 7", "imagen7.png", 8.35, 1, TipoProducto.ALIMENTO, TipoAlimento.VEGETALES, Estado.POCAS_UNIDADES, 30));
-		*/
-		
 		modeloCarrito = new ModeloCarroCompra(productos);
 		tabla = new JTable(modeloCarrito);
 		tabla.setDefaultRenderer(Object.class, new RendererCarroCompra());
