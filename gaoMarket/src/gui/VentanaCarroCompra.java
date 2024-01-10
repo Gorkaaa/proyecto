@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -19,6 +21,7 @@ import javax.swing.JTable;
 import domain.GestorMarket;
 import domain.Producto;
 import domain.ProductoCarrito;
+import domain.Usuario;
 
 public class VentanaCarroCompra extends JFrame{
 
@@ -40,13 +43,16 @@ public class VentanaCarroCompra extends JFrame{
 	protected JPanel panelCentral;
 	protected JPanel panelAbajo;
 	protected JLabel lblPrecioTotal;
+	protected Usuario u;
     
 	public VentanaCarroCompra(GestorMarket gestor) {
 		this.gestor = gestor;
 		Container cp = this.getContentPane();
 		
 		this.setLayout(new BorderLayout());
-		productos = gestor.getGestorXML().dameProductos("usu1");
+		u = gestor.getUsuario();
+		if(u != null)
+			productos = gestor.getGestorXML().dameProductos(u.getNomUsuario());
 		
 		modeloCarrito = new ModeloCarroCompra(productos);
 		tabla = new JTable(modeloCarrito);
@@ -65,7 +71,7 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gestor.getGestorXML().vaciarCarrito("usu1");
+				gestor.getGestorXML().vaciarCarrito(u.getNomUsuario());
 			}
 		});
 		
@@ -73,7 +79,7 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gestor.getGestorXML().eliminarProducto("producto", "usu1");
+				gestor.getGestorXML().eliminarProducto("producto", u.getNomUsuario());
 			}
 		});
 		
@@ -83,11 +89,11 @@ public class VentanaCarroCompra extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				//Actualizar la bbdd primero
 				
-				gestor.getGestorXML().vaciarCarrito("usu1");
+				gestor.getGestorXML().vaciarCarrito(u.getNomUsuario());
 			}
 		});
-		
-		lblPrecioTotal = new JLabel("Total: " + String.format("%.2f €", sumarPrecioTotalCarroRecursivo(productos, productos.size() - 1)));
+		if(productos == null) lblPrecioTotal = new JLabel("Total: 0€");
+		else lblPrecioTotal = new JLabel("Total: " + String.format("%.2f €", sumarPrecioTotalCarroRecursivo(productos, productos.size() - 1)));
 		panelCentral.add(tablaScroll, "Center");
 		panelCentral.add(lblPrecioTotal, "South");
 		
@@ -108,6 +114,22 @@ public class VentanaCarroCompra extends JFrame{
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setBounds(680, 80, 500, 400);
 		this.setVisible(false);
+		
+		this.addWindowFocusListener(new WindowFocusListener() {
+			
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+
+			}
+			
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				u = gestor.getUsuario();
+				if(u != null) productos = gestor.getGestorXML().dameProductos(u.getNomUsuario());
+				modeloCarrito.fireTableDataChanged();
+				
+			}
+		});;
 	}
 	
 	

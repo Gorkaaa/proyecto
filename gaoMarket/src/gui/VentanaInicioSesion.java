@@ -2,6 +2,7 @@ package gui;
 
 
 import domain.GestorMarket;
+import domain.Usuario;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -61,9 +62,8 @@ public class VentanaInicioSesion extends JFrame {
                 
                 // Verifica las credenciales
                 if (verificarCredenciales(usuario, new String(contrasena))) {
-                	gestor.setUsuario(gestor.getGestorBD().buscarUsuario(usuario));
                     JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
-                    
+                    dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Inicio de sesión fallido");
                 }
@@ -117,8 +117,11 @@ public class VentanaInicioSesion extends JFrame {
 
     // Método para verificar las credenciales
     private boolean verificarCredenciales(String usuario, String contrasena) {
-    	
-    	return usuario.equals("usuario") && contrasena.equals("contrasena");
+    	if(usuario == null || contrasena == null) return false;
+    	Usuario u = gestor.getGestorBD().verificarCredenciales(usuario, contrasena);
+    	if(u == null)
+    		return false;
+    	gestor.setUsuario(u);
+    	return true;
     }
-
 }

@@ -38,9 +38,6 @@ import domain.Producto;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
 import domain.TipoLimpieza;
-import domain.TipoProducto;
-import domain.Usuario;
-import domain.Producto.Estado;
 
 public class VentanaPrincipal extends JFrame {	
 	/**
@@ -195,7 +192,6 @@ public class VentanaPrincipal extends JFrame {
 		
 		cp.add(panelArriba, BorderLayout.NORTH);
 		
-		//productos = createProductos();
 		productos = gestor.getGestorBD().listarProductos();
 		productosEnCesta = new ArrayList<>();
 		
@@ -215,6 +211,7 @@ public class VentanaPrincipal extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
+            	gestor.getGestorBD().disconnect();
                logger.info("Programa finalizado");
             }
         });
@@ -295,12 +292,16 @@ public class VentanaPrincipal extends JFrame {
 		
 		JButton addButton = new JButton("Añadir a la cesta");
 		addButton.addActionListener(e -> {
-			int cantidad = (int) spinner.getValue();
-			productosEnCesta.add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getCategoria(), producto.getEstado(), producto.getDescuento()));
-			spinner.setValue(1);
-			Usuario u = new Usuario("Nombre1", "Apellido1", "usu1", 666666666, "correo@gmail.com", "contrasenya");
-			gestor.getGestorXML().anadirProducto(producto, cantidad, u.getNomUsuario());
-			JOptionPane.showMessageDialog(null, "Producto añadido a la cesta");
+			if(gestor.getUsuario() == null) {
+				JOptionPane.showMessageDialog(null, "Primero tienes que iniciar sesión");
+				ventanaInicioSesion.setVisible(true);
+			}else {
+				int cantidad = (int) spinner.getValue();
+				productosEnCesta.add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getCategoria(), producto.getEstado(), producto.getDescuento()));
+				spinner.setValue(1);
+				gestor.getGestorXML().anadirProducto(producto, cantidad, gestor.getUsuario().getNomUsuario());
+				JOptionPane.showMessageDialog(null, "Producto añadido a la cesta");
+			}
 		});
 
 		JPanel spinnerAndButtonPanel = new JPanel(new BorderLayout());
@@ -314,7 +315,7 @@ public class VentanaPrincipal extends JFrame {
 		return panel;
 	}
     
-	private List<Producto> createProductos() {
+	/*private List<Producto> createProductos() {
 		List<Producto> productos = new ArrayList<>();
 
 		// Agregar productos a la lista
@@ -330,5 +331,5 @@ public class VentanaPrincipal extends JFrame {
 		productos.add(new Producto(10, "Producto 10", "imagen10.png", 14.34, 72, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.NORMAL, 10));
 		
 		return productos;
-	}
+	}*/
 }

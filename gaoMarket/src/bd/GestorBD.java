@@ -84,7 +84,7 @@ public class GestorBD {
 		}
 	}
 	
-public void cargarMapaTipoProducto(String nomfich) {
+	public void cargarMapaTipoProducto(String nomfich) {
 		
 		try {
 			Scanner sc = new Scanner(new FileReader(nomfich));
@@ -197,7 +197,7 @@ public void cargarMapaTipoProducto(String nomfich) {
             ResultSet rs = ps.executeQuery();
             
             if(rs.next()) { 
-            	u = new Usuario(rs.getString("nombre"), rs.getString("apellido"), rs.getString("nomUsuario"), rs.getInt("numTelefono"), rs.getString("correoElectronico"), rs.getString("contrasenya"));
+            	u = new Usuario(rs.getString("nombre"), rs.getString("apellidos"), rs.getString("nomUsuario"), rs.getInt("numTelefono"), rs.getString("correoElectronico"), rs.getString("contrasenya"));
             }
             rs.close();
             ps.close();
