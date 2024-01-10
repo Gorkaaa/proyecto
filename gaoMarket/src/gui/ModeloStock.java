@@ -3,9 +3,11 @@ package gui;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import domain.*;
+import domain.Producto.Estado;
 
 public class ModeloStock extends DefaultTableModel {
 	/**
@@ -66,4 +68,5 @@ public class ModeloStock extends DefaultTableModel {
 			default: return null;
 		}
 	}
+	
 }

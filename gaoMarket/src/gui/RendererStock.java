@@ -42,6 +42,9 @@ public class RendererStock extends DefaultTableCellRenderer {
 		
 		ModeloStock modelo = (ModeloStock) table.getModel();
 		Estado estado = (Estado) modelo.getValueAt(row, 7);
+		if (!isSelected) {
+	        setForeground(Color.BLACK);
+	    }
 
 		switch (estado) {
 			case POCAS_UNIDADES:
@@ -49,12 +52,18 @@ public class RendererStock extends DefaultTableCellRenderer {
 				break;
 			case AGOTADO:
 				setBackground(Color.RED);
+				setForeground(Color.WHITE);
 				break;
 			case NORMAL:
 				setBackground(Color.GREEN);
 				break;
 			default:
 				setBackground(table.getBackground());
+		}
+		
+		if (isSelected) {
+			setBackground(Color.BLUE);
+			setForeground(Color.WHITE);
 		}
 		
 		return component;
