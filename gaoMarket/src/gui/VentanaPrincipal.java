@@ -119,7 +119,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(VentanaInicioSesion.usuario == null) {
+				if(gestor.getUsuario() == null) {
 					JOptionPane.showMessageDialog(null, "Primero tienes que iniciar sesión");
 					ventanaInicioSesion.setVisible(true);
 				}else {
@@ -195,7 +195,8 @@ public class VentanaPrincipal extends JFrame {
 		
 		cp.add(panelArriba, BorderLayout.NORTH);
 		
-		productos = createProductos();
+		//productos = createProductos();
+		productos = gestor.getGestorBD().listarProductos();
 		productosEnCesta = new ArrayList<>();
 		
 		JPanel backgroundPanel = new JPanel(new GridLayout(8, 4, 10, 10));

@@ -31,13 +31,12 @@ public class VentanaInicioSesion extends JFrame {
 	protected VentanaRegistro ventanaRegistro;
 	protected ImageIcon iconoUsuario;
 	protected ImageIcon iconoContrasena;
-	public static String usuario;
 	
     public VentanaInicioSesion(GestorMarket gestor) {
     	this.gestor = gestor;
 		Container cp = this.getContentPane();
 		
-		usuario = null;
+		gestor.setUsuario(null);
 		
 		ventanaRegistro = new VentanaRegistro(gestor);
 		
@@ -57,7 +56,7 @@ public class VentanaInicioSesion extends JFrame {
     	botonIniciarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                usuario = cajaUsuario.getText();
+                String usuario = cajaUsuario.getText();
                 char[] contrasena = cajaContrasena.getPassword();
                 
                 // Verifica las credenciales
