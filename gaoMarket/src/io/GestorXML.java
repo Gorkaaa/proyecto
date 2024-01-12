@@ -30,9 +30,9 @@ public class GestorXML {
 		try {
 			doc = builder.build(NOM_FICH_XML);
 		} catch (JDOMException e) {
-			gestor.getLogger().log(Level.SEVERE, "Documento XML corrupto");
+			gestor.getLogger().log(Level.WARNING, "Documento XML corrupto");
 		} catch (IOException e) {
-			gestor.getLogger().log(Level.SEVERE, "Documento XML no exist");
+			gestor.getLogger().log(Level.WARNING, "Documento XML no exist");
 		}
 	}
 		
@@ -42,7 +42,7 @@ public class GestorXML {
 		try {
 			outputter.output(doc, new FileWriter(NOM_FICH_XML));
 		} catch (IOException e) {
-			gestor.getLogger().log(Level.SEVERE, "Fichero " + NOM_FICH_XML + " no exist");;
+			gestor.getLogger().log(Level.WARNING, "Fichero " + NOM_FICH_XML + " no exist");;
 		}
 	}
 	
