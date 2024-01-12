@@ -18,6 +18,7 @@ import io.GestorXML;
 public class GestorMarket {
 	protected List<Persona> personas;
 	protected List<Producto> productos;
+	protected List<ProductoCarrito> productoCarrito;
 	protected Map<String, List<Persona>> mapaPersonas;
 	protected Map<TipoAlimento, Set<Producto>> mapaAlimentos;
 	protected Map<TipoHigieneYBelleza, Set<Producto>> mapaHigieneYBelleza;
@@ -27,12 +28,13 @@ public class GestorMarket {
 	protected GestorBD gestorBD;
 	protected Usuario usuario;
 
-	public GestorMarket(List<Persona> personas, List<Producto> productos, Map<String, List<Persona>> mapaPersonas,
+	public GestorMarket(List<Persona> personas, List<Producto> productos, List<ProductoCarrito> productoCarrito, Map<String, List<Persona>> mapaPersonas,
 			Map<TipoAlimento, Set<Producto>> mapaAlimentos,
 			Map<TipoHigieneYBelleza, Set<Producto>> mapaHigieneYBelleza,
 			Map<TipoLimpieza, Set<Producto>> mapaLimpieza, Usuario usuario) {
 		this.personas = personas;
 		this.productos = productos;
+		this.productoCarrito = productoCarrito;
 		this.mapaPersonas = mapaPersonas;
 		this.mapaAlimentos = mapaAlimentos;
 		this.mapaHigieneYBelleza = mapaHigieneYBelleza;
@@ -45,6 +47,7 @@ public class GestorMarket {
 	public GestorMarket() {
 		this.personas = new ArrayList<>();
 		this.productos = new ArrayList<>();
+		this.productoCarrito = new ArrayList<>();
 		this.mapaPersonas = new HashMap<>();
 		this.mapaAlimentos = new HashMap<>();
 		for (TipoAlimento alimento : TipoAlimento.values()) {
@@ -85,6 +88,17 @@ public class GestorMarket {
 	public void setProductos(List<Producto> productos) {
 		this.productos = productos;
 	}
+	
+
+	public List<ProductoCarrito> getProductoCarrito() {
+		return productoCarrito;
+	}
+
+
+	public void setProductoCarrito(List<ProductoCarrito> productoCarrito) {
+		this.productoCarrito = productoCarrito;
+	}
+
 
 	public Map<String, List<Persona>> getMapaPersonas() {
 		return mapaPersonas;
