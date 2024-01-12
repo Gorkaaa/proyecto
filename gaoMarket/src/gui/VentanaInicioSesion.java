@@ -63,6 +63,7 @@ public class VentanaInicioSesion extends JFrame {
                 // Verifica las credenciales
                 if (verificarCredenciales(usuario, new String(contrasena))) {
                     JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
+                    gestor.getUsuario().setNomUsuario(usuario);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Inicio de sesión fallido");

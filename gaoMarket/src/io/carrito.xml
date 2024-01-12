@@ -3,11 +3,27 @@
   <carrito usuario="omar">
     <producto nombre="Detergente">
       <tipo>LIMPIEZA</tipo>
+      <cantidad>15</cantidad>
+    </producto>
+    <producto nombre="Manzanas">
+      <tipo>ALIMENTO</tipo>
+      <cantidad>2</cantidad>
+    </producto>
+    <producto nombre="Shampoo">
+      <tipo>HIGIENE_Y_BELLEZA</tipo>
+      <cantidad>3</cantidad>
+    </producto>
+    <producto nombre="Toallas">
+      <tipo>HIGIENE_Y_BELLEZA</tipo>
       <cantidad>1</cantidad>
+    </producto>
+    <producto nombre="Pollo">
+      <tipo>ALIMENTO</tipo>
+      <cantidad>6</cantidad>
     </producto>
     <producto nombre="Tomates">
       <tipo>ALIMENTO</tipo>
-      <cantidad>2</cantidad>
+      <cantidad>1</cantidad>
     </producto>
   </carrito>
 </carritos>

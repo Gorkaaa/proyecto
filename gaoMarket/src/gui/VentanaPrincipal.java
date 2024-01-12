@@ -35,6 +35,7 @@ import javax.swing.border.LineBorder;
 
 import domain.GestorMarket;
 import domain.Producto;
+import domain.ProductoCarrito;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
 import domain.TipoLimpieza;
@@ -60,13 +61,16 @@ public class VentanaPrincipal extends JFrame {
 	protected JButton botonGestionUsuario;
 	protected JButton botonStock;
 	protected JTextField barraBusqueda;
-	
+	protected String nombreUsuario;
+
 	protected List<Producto> productos;
-	protected List<Producto> productosEnCesta;
+	protected List<ProductoCarrito> productosEnCesta;
 	
 	public VentanaPrincipal(GestorMarket gestor) {
 		this.gestor = gestor;
 		Container cp = this.getContentPane();
+//		if(nombreUsuario != null)
+//			productosEnCesta = gestor.getGestorXML().dameProductos(gestor.getUsuario().getNomUsuario());
 		
 		JMenuBar menuBar = new JMenuBar();
 		
@@ -297,7 +301,11 @@ public class VentanaPrincipal extends JFrame {
 				ventanaInicioSesion.setVisible(true);
 			}else {
 				int cantidad = (int) spinner.getValue();
-				productosEnCesta.add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getCategoria(), producto.getEstado(), producto.getDescuento()));
+				productos.add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getCategoria(), producto.getEstado(), producto.getDescuento()));
+				
+				gestor.getProductoCarrito().add(new ProductoCarrito(producto, cantidad));
+				gestor.getProductos().add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getCategoria(), producto.getEstado(), producto.getDescuento()));
+				
 				spinner.setValue(1);
 				gestor.getGestorXML().anadirProducto(producto, cantidad, gestor.getUsuario().getNomUsuario());
 				JOptionPane.showMessageDialog(null, "Producto añadido a la cesta");
