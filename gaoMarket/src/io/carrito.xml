@@ -1,29 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <carritos>
-  <carrito usuario="omar">
-    <producto nombre="Detergente">
-      <tipo>LIMPIEZA</tipo>
-      <cantidad>15</cantidad>
+  <carrito usuario="juan">
+    <producto nombre="Pasta dental">
+      <tipo>HIGIENE_Y_BELLEZA</tipo>
+      <cantidad>4</cantidad>
     </producto>
-    <producto nombre="Manzanas">
+    <producto nombre="Loci�n corporal">
+      <tipo>HIGIENE_Y_BELLEZA</tipo>
+      <cantidad>1</cantidad>
+    </producto>
+    <producto nombre="Refresco">
       <tipo>ALIMENTO</tipo>
       <cantidad>2</cantidad>
-    </producto>
-    <producto nombre="Shampoo">
-      <tipo>HIGIENE_Y_BELLEZA</tipo>
-      <cantidad>3</cantidad>
-    </producto>
-    <producto nombre="Toallas">
-      <tipo>HIGIENE_Y_BELLEZA</tipo>
-      <cantidad>1</cantidad>
-    </producto>
-    <producto nombre="Pollo">
-      <tipo>ALIMENTO</tipo>
-      <cantidad>6</cantidad>
-    </producto>
-    <producto nombre="Tomates">
-      <tipo>ALIMENTO</tipo>
-      <cantidad>1</cantidad>
     </producto>
   </carrito>
 </carritos>

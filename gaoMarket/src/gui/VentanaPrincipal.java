@@ -58,7 +58,6 @@ public class VentanaPrincipal extends JFrame {
 	protected JButton botonCesta;
 	protected JButton botonUsuario;
 	protected JButton botonGestionUsuario;
-	protected JButton botonStock;
 	protected JTextField barraBusqueda;
 
 	protected List<Producto> productos;
@@ -104,7 +103,6 @@ public class VentanaPrincipal extends JFrame {
 
 		this.setJMenuBar(menuBar);
 		
-		ventanaCarroCompra = new VentanaCarroCompra(gestor);
 		ventanaInicioSesion = new VentanaInicioSesion(gestor);
 		ventanaAdministracionUsuarios = new VentanaAdministracionUsuarios(gestor);
 		ventanaAdministracionEmpleados = new VentanaAdministracionEmpleados(gestor);
@@ -120,6 +118,7 @@ public class VentanaPrincipal extends JFrame {
 					JOptionPane.showMessageDialog(null, "Primero tienes que iniciar sesión");
 					ventanaInicioSesion.setVisible(true);
 				}else {
+					ventanaCarroCompra = new VentanaCarroCompra(gestor);
 					ventanaCarroCompra.setVisible(true);
 				}
 			}
@@ -145,27 +144,20 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String[] gestion = {"Administrar Usuarios", "Administrar Empleados"};
+				String[] gestion = {"Administrar Usuarios", "Administrar Empleados", "Administrar Stock"};
 				String resp = (String) JOptionPane.showInputDialog( null, "Selecciona que quiere administar", "Modo de trabajo", JOptionPane.QUESTION_MESSAGE, null, gestion, "Administrar Usuarios");
 				if(resp != null){
-					if (resp.equals(gestion[0])){
-						ventanaAdministracionUsuarios.setVisible(true);
-						
-					} else {
-						ventanaAdministracionEmpleados.setVisible(true);
+					if (resp.equals(gestion[0]))
+						ventanaAdministracionUsuarios.setVisible(true);	
+					else {
+						if (resp.equals(gestion[0]))
+							ventanaAdministracionEmpleados.setVisible(true);
+						else {
+							VentanaStock stock = new VentanaStock();
+							stock.setVisible(true);
+						}
 					}
 				}
-			}
-		});
-		
-		
-		botonStock = new JButton("Gestion de Stock");
-		botonStock.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				VentanaStock stock = new VentanaStock();
-				stock.setVisible(true);
 			}
 		});
 		
@@ -186,7 +178,6 @@ public class VentanaPrincipal extends JFrame {
 		panelArriba.add(panelIconos);
 		panelSubIconos.add(botonGestionUsuario);
 		panelSubIconos.add(botonUsuario);
-		panelSubIconos.add(botonStock);
 		panelIconos.add(panelSubIconos, "North");
 		panelIconos.add(botonCesta, "Center");
 		
@@ -299,7 +290,6 @@ public class VentanaPrincipal extends JFrame {
 				int cantidad = (int) spinner.getValue();
 				productos.add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getCategoria(), producto.getEstado(), producto.getDescuento()));
 				
-				gestor.getProductoCarrito().add(new ProductoCarrito(producto, cantidad));
 				gestor.getProductos().add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getCategoria(), producto.getEstado(), producto.getDescuento()));
 				spinner.setValue(1);
 				gestor.getGestorXML().anadirProducto(producto, cantidad, gestor.getUsuario().getNomUsuario());
@@ -317,22 +307,4 @@ public class VentanaPrincipal extends JFrame {
 
 		return panel;
 	}
-    
-	/*private List<Producto> createProductos() {
-		List<Producto> productos = new ArrayList<>();
-
-		// Agregar productos a la lista
-		productos.add(new Producto(1, "Producto 1", "imagen1.png", 19.99, 1, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.POCAS_UNIDADES, 0));
-		productos.add(new Producto(2, "Producto 2", "imagen2.png", 24.99, 48, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.NORMAL, 10));
-		productos.add(new Producto(3, "Producto 3", "imagen3.png", 21.52, 21, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.NORMAL, 30));
-		productos.add(new Producto(4, "Producto 4", "imagen4.png", 9.24, 23, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.NORMAL, 15));
-		productos.add(new Producto(5, "Producto 5", "imagen5.png", 4.20, 6, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.POCAS_UNIDADES, 5));
-		productos.add(new Producto(6, "Producto 6", "imagen6.png", 7.72, 0, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.AGOTADO, 0));
-		productos.add(new Producto(7, "Producto 7", "imagen7.png", 8.35, 1, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.POCAS_UNIDADES, 5));
-		productos.add(new Producto(8, "Producto 8", "imagen8.png", 1.39, 64, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.NORMAL, 10));
-		productos.add(new Producto(9, "Producto 9", "imagen9.png", 6.01, 0, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.AGOTADO, 30));
-		productos.add(new Producto(10, "Producto 10", "imagen10.png", 14.34, 72, TipoProducto.ALIMENTO, TipoAlimento.CARNICOS, Estado.NORMAL, 10));
-		
-		return productos;
-	}*/
 }

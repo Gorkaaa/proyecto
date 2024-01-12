@@ -38,12 +38,6 @@ public class Empleado extends Persona {
 	}
 
 	@Override
-	public boolean verificarUsuario(String nomUsuario, String contraseña) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean esEmpleado() {
 		return true;
 	}

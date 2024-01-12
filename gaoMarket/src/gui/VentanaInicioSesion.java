@@ -37,7 +37,7 @@ public class VentanaInicioSesion extends JFrame {
     	this.gestor = gestor;
 		Container cp = this.getContentPane();
 		
-		gestor.setUsuario(null);
+		GestorMarket.usuario = null;
 		
 		ventanaRegistro = new VentanaRegistro(gestor);
 		
@@ -63,7 +63,7 @@ public class VentanaInicioSesion extends JFrame {
                 // Verifica las credenciales
                 if (verificarCredenciales(usuario, new String(contrasena))) {
                     JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
-                    gestor.getUsuario().setNomUsuario(usuario);
+                    GestorMarket.usuario = gestor.getGestorBD().buscarUsuario(usuario);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Inicio de sesión fallido");
@@ -122,7 +122,6 @@ public class VentanaInicioSesion extends JFrame {
     	Usuario u = gestor.getGestorBD().verificarCredenciales(usuario, contrasena);
     	if(u == null)
     		return false;
-    	gestor.setUsuario(u);
     	return true;
     }
 }

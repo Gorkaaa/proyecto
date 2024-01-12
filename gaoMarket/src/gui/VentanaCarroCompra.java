@@ -22,6 +22,7 @@ import javax.swing.JTable;
 import domain.GestorMarket;
 import domain.Producto;
 import domain.ProductoCarrito;
+import domain.Usuario;
 
 public class VentanaCarroCompra extends JFrame{
 
@@ -43,7 +44,7 @@ public class VentanaCarroCompra extends JFrame{
 	protected JPanel panelCentral;
 	protected JPanel panelAbajo;
 	protected JLabel lblPrecioTotal;
-	protected String usuario;
+	protected Usuario usuario;
     
 	public VentanaCarroCompra(GestorMarket gestor) {
 		this.gestor = gestor;
@@ -52,13 +53,10 @@ public class VentanaCarroCompra extends JFrame{
 		
 		this.setLayout(new BorderLayout());
 		
+		usuario = gestor.getUsuario();
+		productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
 		
-		if(usuario != null)
-			usuario = gestor.getUsuario().getNomUsuario();
-		
-		
-		
-		modeloCarrito = new ModeloCarroCompra(gestor.getProductoCarrito());
+		modeloCarrito = new ModeloCarroCompra(productoCarrito);
 		tabla = new JTable(modeloCarrito);
 		tabla.setDefaultRenderer(Object.class, new RendererCarroCompra());
 		tabla.setRowHeight(35);
@@ -75,7 +73,7 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gestor.getGestorXML().vaciarCarrito(usuario);
+				gestor.getGestorXML().vaciarCarrito(usuario.getNomUsuario());
 			}
 		});
 		
@@ -83,22 +81,22 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gestor.getGestorXML().eliminarProducto("producto", usuario);
-				System.out.println(usuario);
+				gestor.getGestorXML().eliminarProducto("producto", usuario.getNomUsuario());
 			}
 		});
 		
 		btnComprar.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				//Actualizar la bbdd primero
-				
-				gestor.getGestorXML().vaciarCarrito(usuario);
+			public void actionPerformed(ActionEvent e) {				
+				gestor.getGestorXML().vaciarCarrito(usuario.getNomUsuario());
+				productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
+				tabla.repaint();
+				modeloCarrito.fireTableDataChanged();
 			}
 		});
-		if(gestor.getProductoCarrito() == null) lblPrecioTotal = new JLabel("Total: 0€");
-		else lblPrecioTotal = new JLabel("Total: " + String.format("%.2f €", sumarPrecioTotalCarroRecursivo(gestor.getProductoCarrito(), gestor.getProductoCarrito().size() - 1)));
+		if(productoCarrito.size() == 0) lblPrecioTotal = new JLabel("Total: 0€");
+		else lblPrecioTotal = new JLabel("Total: " + String.format("%.2f €", sumarPrecioTotalCarroRecursivo(productoCarrito, productoCarrito.size() - 1)));
 		panelCentral.add(tablaScroll, "Center");
 		panelCentral.add(lblPrecioTotal, "South");
 		
@@ -106,7 +104,6 @@ public class VentanaCarroCompra extends JFrame{
 		panelAbajo.add(btnEliminar);
 		panelAbajo.add(btnComprar);
 		
-		//cp.add(tablaScroll);
 		cp.add(panelCentral);
 		cp.add(panelAbajo, BorderLayout.SOUTH);
 		
@@ -129,15 +126,11 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void windowGainedFocus(WindowEvent e) {
-				usuario = gestor.getUsuario().getNomUsuario();
+				usuario = gestor.getUsuario();
 				if(usuario != null)
-					System.out.println(usuario);
-					productoCarrito = gestor.getGestorXML().dameProductos(usuario);
-					tabla.repaint();
-					modeloCarrito.fireTableDataChanged();
-					
-					
-				
+					productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
+				tabla.repaint();
+				modeloCarrito.fireTableDataChanged();
 			}
 		});;
 		
@@ -145,31 +138,15 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void windowOpened(WindowEvent e) {
-				usuario = gestor.getUsuario().getNomUsuario();
+				usuario = gestor.getUsuario();
 				if(usuario != null)
-					System.out.println(usuario);
-					productoCarrito = gestor.getGestorXML().dameProductos(usuario);
-					gestor.getProductoCarrito();
-					tabla.repaint();
-				
+					productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
+				tabla.repaint();
 			}
 			
 			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void windowActivated(WindowEvent e) {}
 		});
-	}
-	
-	
-	public void actualizarCarrito() {
-		tabla.setModel(new ModeloCarroCompra(gestor.getProductoCarrito()));//cambiar por  jModeloCarro.setModel(new ModeloCarroCompra(productosEnCesta));
-		RendererCarroCompra compraRenderer = new RendererCarroCompra();
-
-		for (int i=0; i<tabla.getColumnModel().getColumnCount(); i++) {
-			tabla.getColumnModel().getColumn(i).setCellRenderer(compraRenderer);
-		}	
 	}
 	
 	public static Double sumarPrecioTotalCarroRecursivo(List<ProductoCarrito> productos, int cont) {

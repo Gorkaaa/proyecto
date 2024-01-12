@@ -108,11 +108,7 @@ abstract public class Persona implements Serializable {
 		Persona other = (Persona) obj;
 		return Objects.equals(correoElectronico, other.correoElectronico)
 				&& Objects.equals(nomUsuario, other.nomUsuario) && numTelefono == other.numTelefono;
-	}	
-	
-	public abstract boolean verificarUsuario(String nomUsuario, String contrasenya);
+	}
 	
 	public abstract boolean esEmpleado();
-
-	
 }
