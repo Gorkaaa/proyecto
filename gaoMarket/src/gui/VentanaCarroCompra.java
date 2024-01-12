@@ -22,7 +22,6 @@ import javax.swing.JTable;
 import domain.GestorMarket;
 import domain.Producto;
 import domain.ProductoCarrito;
-import domain.Usuario;
 
 public class VentanaCarroCompra extends JFrame{
 

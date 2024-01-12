@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -61,7 +60,6 @@ public class VentanaPrincipal extends JFrame {
 	protected JButton botonGestionUsuario;
 	protected JButton botonStock;
 	protected JTextField barraBusqueda;
-	protected String nombreUsuario;
 
 	protected List<Producto> productos;
 	protected List<ProductoCarrito> productosEnCesta;
@@ -69,8 +67,6 @@ public class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal(GestorMarket gestor) {
 		this.gestor = gestor;
 		Container cp = this.getContentPane();
-//		if(nombreUsuario != null)
-//			productosEnCesta = gestor.getGestorXML().dameProductos(gestor.getUsuario().getNomUsuario());
 		
 		JMenuBar menuBar = new JMenuBar();
 		
@@ -197,7 +193,7 @@ public class VentanaPrincipal extends JFrame {
 		cp.add(panelArriba, BorderLayout.NORTH);
 		
 		productos = gestor.getGestorBD().listarProductos();
-		productosEnCesta = new ArrayList<>();
+		
 		
 		JPanel backgroundPanel = new JPanel(new GridLayout(8, 4, 10, 10));
 		backgroundPanel.setBackground(Color.GREEN);
@@ -305,7 +301,6 @@ public class VentanaPrincipal extends JFrame {
 				
 				gestor.getProductoCarrito().add(new ProductoCarrito(producto, cantidad));
 				gestor.getProductos().add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getCategoria(), producto.getEstado(), producto.getDescuento()));
-				
 				spinner.setValue(1);
 				gestor.getGestorXML().anadirProducto(producto, cantidad, gestor.getUsuario().getNomUsuario());
 				JOptionPane.showMessageDialog(null, "Producto añadido a la cesta");
