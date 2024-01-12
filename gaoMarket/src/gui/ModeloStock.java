@@ -68,5 +68,65 @@ public class ModeloStock extends DefaultTableModel {
 			default: return null;
 		}
 	}
+
+
+//	@Override
+//	public void setValueAt(Object aValue, int row, int column) {
+//		
+//        super.setValueAt(aValue, row, column);
+//	    try {
+//	        switch (column) {
+//	            case 0: // ID
+//	                productos.get(row).setId((Integer) aValue);
+//	                break;
+//	            case 1: // Nombre
+//	                productos.get(row).setNombre((String) aValue);
+//	                break;
+//	            case 2: // Imagen
+//	                productos.get(row).setImagen((String) aValue);
+//	                break;
+//	            case 3: // Precio
+//	                productos.get(row).setPrecio((double) aValue);
+//	                break;
+//	            case 4: // Cantidad
+//	                productos.get(row).setCantidad((int) aValue);
+//	                break;
+//	            case 5: // Tipo de producto
+//	            	TipoProducto tipoProducto = (TipoProducto) aValue;
+//	            	boolean isValidTipoProducto = false;
+//
+//	            	for (TipoProducto enumValue : TipoProducto.values()) {
+//	            	    if (enumValue.equals(tipoProducto)) {
+//	            	        isValidTipoProducto = true;
+//	            	        break;
+//	            	    }
+//	            	}
+//	            	
+//	            	if (isValidTipoProducto) {
+//	            	    productos.get(row).setTipoProducto(tipoProducto);
+//	            	} else {
+//	            	    JOptionPane.showMessageDialog(null, "El tipo de producto debe ser uno de los siguientes: " + Arrays.toString(TipoProducto.values()), "Error", JOptionPane.ERROR_MESSAGE);
+//	            	}
+//	                break;
+//	            case 6: // Categoría
+//	                productos.get(row).setCategoria((Enum<?>) aValue);
+//	                break;
+//	            case 7: // Estado
+//	                productos.get(row).setEstado((Estado) aValue);
+//	                break;
+//	            case 8: // Descuento
+//	                productos.get(row).setDescuento((int) aValue);
+//	                break;
+//	            default:
+//	                break;
+//	        }
+//
+//
+//	    } catch (Exception e) {
+//	        JOptionPane.showMessageDialog(null, "Error: Los datos no son correctos", "Error", JOptionPane.ERROR_MESSAGE);
+//	    }
+//	}
+
+	
 	
 }
