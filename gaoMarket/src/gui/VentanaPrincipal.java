@@ -56,7 +56,7 @@ public class VentanaPrincipal extends JFrame {
 	protected ImageIcon iconoGestorUsuario;
 	protected ImageIcon iconoGAO;
 	protected JButton botonCesta;
-	protected JButton botonUsuario;
+	protected static JButton botonUsuario;
 	protected JButton botonGestionUsuario;
 	protected JTextField barraBusqueda;
 
@@ -132,8 +132,15 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ventanaInicioSesion.setVisible(true);
-				
+				if(gestor.getUsuario() == null)
+					ventanaInicioSesion.setVisible(true);
+				else {
+					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?", "Cerrar Sesión", JOptionPane.YES_NO_OPTION);
+					if (confirmacion == JOptionPane.YES_OPTION) {
+						GestorMarket.usuario = null;
+						botonUsuario.setIcon(iconoUsuario);
+					}
+				}	
 			}
 		});
 		

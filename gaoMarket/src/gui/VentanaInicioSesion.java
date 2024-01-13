@@ -64,6 +64,9 @@ public class VentanaInicioSesion extends JFrame {
                 if (verificarCredenciales(usuario, new String(contrasena))) {
                     JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
                     GestorMarket.usuario = gestor.getGestorBD().buscarUsuario(usuario);
+                    ImageIcon iconoUsuario = new ImageIcon("resources/iconos/cerrarSesion.png");
+            		iconoUsuario = new ImageIcon(iconoUsuario.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
+                    VentanaPrincipal.botonUsuario.setIcon(iconoUsuario);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Inicio de sesión fallido");
@@ -71,6 +74,7 @@ public class VentanaInicioSesion extends JFrame {
                 
                 // Limpia los campos después del intento de inicio de sesión
                 cajaContrasena.setText("");
+                cajaUsuario.setText("");
             }
         });
         
