@@ -19,7 +19,7 @@ import domain.ProductoCarrito;
 
 public class GestorXML {
 	
-	public static final String NOM_FICH_XML = "resoirces/datos/carrito.xml";
+	public static final String NOM_FICH_XML = "resources/datos/carrito.xml";
 	private Document doc;
 	private GestorMarket gestor;
 	
