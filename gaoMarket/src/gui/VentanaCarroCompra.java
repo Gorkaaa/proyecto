@@ -96,7 +96,11 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gestor.getGestorXML().vaciarCarrito(usuario.getNomUsuario());
+				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Desea finalizar la compra?", "Confirmación de compra", JOptionPane.YES_NO_OPTION);
+				if (confirmacion == JOptionPane.YES_OPTION) {
+					// Se debe acualizar la cantidad de los productos que se han comprado, restando la cantidad que habia en el carrito de la BBDD
+					gestor.getGestorXML().vaciarCarrito(usuario.getNomUsuario());
+				}
 			}
 		});
 		if(productoCarrito.size() == 0) lblPrecioTotal = new JLabel("Total: 0€");
