@@ -59,7 +59,7 @@ public class GestorMarket {
 		for (TipoLimpieza limpieza : TipoLimpieza.values()) {
 			mapaLimpieza.put(limpieza, new TreeSet<Producto>());
 		}
-		try (FileInputStream fis = new FileInputStream("src/io/logger.properties")) {
+		try (FileInputStream fis = new FileInputStream("conf/logger.properties")) {
 	        LogManager.getLogManager().readConfiguration(fis);
 	    } catch (IOException e) {
 	        logger.log(Level.SEVERE, "No se pudo leer el fichero de configuración del logger");

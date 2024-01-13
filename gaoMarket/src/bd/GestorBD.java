@@ -29,7 +29,7 @@ import domain.Producto.Estado;
 public class GestorBD {
 	private Connection conn;
 	//public static final String DB_PATH = "resources/db/GAOmarket.db";
-	public static final String DB_PROPERTIES_PATH = "resources/db/configuracion.properties";
+	public static final String DB_PROPERTIES_PATH = "conf/configuracion.properties";
 	public static String nombreBD;
 	private static Logger logger = Logger.getLogger(GestorBD.class.getName());
 	
