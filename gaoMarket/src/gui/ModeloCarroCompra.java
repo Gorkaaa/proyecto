@@ -68,6 +68,12 @@ public class ModeloCarroCompra extends DefaultTableModel{
 		}
 	}
 	
+	public void setProductoCarrito(List<ProductoCarrito> productos) {
+	    this.productos = productos;
+	    fireTableDataChanged();
+	}
+
+
 	public static Double sumarPrecioProductoRecursivo(Double precio, int cantidad) {
 		if(cantidad < 2) return precio;
 		return sumarPrecioProductoRecursivo(precio, --cantidad) + precio;

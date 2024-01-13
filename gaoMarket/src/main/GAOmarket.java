@@ -50,8 +50,8 @@ public class GAOmarket {
 					}
 				});
 				hilo.start();
-				gestorBD.cargarMapaTipoProducto("resources/datos/productos.csv");
 				CadenaProductos.cargarMapaTipoProducto("resources/datos/productos.csv");
+				gestorBD.cargarMapaTipoProducto("resources/datos/productos.csv");
 				ventana.setVisible(true);
 				hilo.interrupt();
 			}

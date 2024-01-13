@@ -5,7 +5,6 @@ import java.awt.Container;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.util.List;
@@ -14,14 +13,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import domain.GestorMarket;
-import domain.Producto;
 import domain.ProductoCarrito;
 import domain.Usuario;
 
@@ -38,7 +35,6 @@ public class VentanaCarroCompra extends JFrame{
 	protected JScrollPane tablaScroll;
 	protected ModeloCarroCompra modeloCarrito;
 	protected RendererCarroCompra rendererCompra;
-	protected JList<Producto> lstCarrito;
 	protected JButton btnEliminar;
 	protected JButton btnComprar;
 	protected JButton btnVaciar;
@@ -87,7 +83,6 @@ public class VentanaCarroCompra extends JFrame{
 				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar el producto seleccionado de la cesta?", "Confirmación de eliminación", JOptionPane.YES_NO_OPTION);
 				if (confirmacion == JOptionPane.YES_OPTION) {
 					gestor.getGestorXML().eliminarProducto(usuario.getNomUsuario(), productoCarrito.get(tabla.getSelectedRow()).getProducto().getNombre());
-					productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
 				}
 			}
 		});
@@ -134,26 +129,11 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void windowGainedFocus(WindowEvent e) {
-				usuario = gestor.getUsuario();
-				if(usuario != null)
-					productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
-				tabla.repaint();
+
+				productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
+				modeloCarrito.setProductoCarrito(productoCarrito);
 				modeloCarrito.fireTableDataChanged();
 			}
-		});;
-		
-		addWindowListener(new WindowAdapter() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				usuario = gestor.getUsuario();
-				if(usuario != null)
-					productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
-				tabla.repaint();
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent e) {}
 		});
 	}
 	
