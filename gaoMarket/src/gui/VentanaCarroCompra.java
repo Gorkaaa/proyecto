@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -73,7 +74,9 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gestor.getGestorXML().vaciarCarrito(usuario.getNomUsuario());
+				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres vaciar la cesta?", "Vaciar cesta", JOptionPane.YES_NO_OPTION);
+				if (confirmacion == JOptionPane.YES_OPTION)
+					gestor.getGestorXML().vaciarCarrito(usuario.getNomUsuario());
 			}
 		});
 		
@@ -81,18 +84,19 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gestor.getGestorXML().eliminarProducto("producto", usuario.getNomUsuario());
+				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar el producto seleccionado de la cesta?", "Confirmación de eliminación", JOptionPane.YES_NO_OPTION);
+				if (confirmacion == JOptionPane.YES_OPTION) {
+					gestor.getGestorXML().eliminarProducto(usuario.getNomUsuario(), productoCarrito.get(tabla.getSelectedRow()).getProducto().getNombre());
+					productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
+				}
 			}
 		});
 		
 		btnComprar.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {				
+			public void actionPerformed(ActionEvent e) {
 				gestor.getGestorXML().vaciarCarrito(usuario.getNomUsuario());
-				productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
-				tabla.repaint();
-				modeloCarrito.fireTableDataChanged();
 			}
 		});
 		if(productoCarrito.size() == 0) lblPrecioTotal = new JLabel("Total: 0€");

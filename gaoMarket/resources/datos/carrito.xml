@@ -1,17 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<carritos>
-  <carrito usuario="juan">
-    <producto nombre="Pasta dental">
-      <tipo>HIGIENE_Y_BELLEZA</tipo>
-      <cantidad>4</cantidad>
-    </producto>
-    <producto nombre="Loci�n corporal">
-      <tipo>HIGIENE_Y_BELLEZA</tipo>
-      <cantidad>1</cantidad>
-    </producto>
-    <producto nombre="Refresco">
-      <tipo>ALIMENTO</tipo>
-      <cantidad>2</cantidad>
-    </producto>
-  </carrito>
-</carritos>
+<carritos />
