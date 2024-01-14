@@ -3,19 +3,21 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -31,8 +33,6 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 import domain.GestorMarket;
 import domain.Producto;
@@ -74,56 +74,134 @@ public class VentanaPrincipal extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		
 		JMenu jMenu = new JMenu("Menú");
+		jMenu.addMouseListener((MouseListener) new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				backgroundPanel.removeAll();
+				productos = gestor.getGestorBD().listarProductos();
+				backgroundPanel.repaint();
+				createRowPanels(backgroundPanel);
+				
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			
+		});
 		
 		JMenu jProductos = new JMenu("Productos");
 
-		JMenu jAlimentos = new JMenu("Alimentos");
+		JMenuItem jAlimentos = new JMenu("Alimentos");
 		for (TipoAlimento tipo : TipoAlimento.values()) {
 			JMenuItem menuTipo = new JMenuItem(tipo.toString());
 			jAlimentos.add(menuTipo);
 		}
 		
-		JMenu jHigieneYBelleza = new JMenu("Higiene y Belleza");
+		JMenuItem jHigieneYBelleza = new JMenu("Higiene y Belleza");
 		for (TipoHigieneYBelleza tipo : TipoHigieneYBelleza.values()) {
 			JMenuItem menuTipo = new JMenuItem(tipo.toString());
 			jHigieneYBelleza.add(menuTipo);
 		}
 		
-		JMenu jLimpieza = new JMenu("Limpieza");
+		JMenuItem jLimpieza = new JMenu("Limpieza");
 		for (TipoLimpieza tipo : TipoLimpieza.values()) {
 			JMenuItem menuTipo = new JMenuItem(tipo.toString());
 			jLimpieza.add(menuTipo);
+			
+			menuTipo.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					backgroundPanel.removeAll();
+					productos = gestor.getGestorBD().listarProductosPorCategoria(tipo.toString());
+					System.out.println(tipo);
+					System.out.println(productos);
+					createRowPanels(backgroundPanel);
+					
+				}
+				
+			});
 		}
-		jAlimentos.addMenuListener(new MenuListener() {
-
+		
+		jAlimentos.addActionListener(new ActionListener() {
 
 			@Override
-			public void menuSelected(MenuEvent e) {
-				productos = gestor.getGestorBD().listarProductosPorTipo(TipoProducto.ALIMENTO);
-				System.out.println(productos);
+			public void actionPerformed(ActionEvent e) {
+				backgroundPanel.removeAll();
+				productos = gestor.getGestorBD().listarProductosPorTipo(TipoProducto.LIMPIEZA);
 				createRowPanels(backgroundPanel);
-				
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 		});
+		
 
 		jProductos.add(jAlimentos);
 		jProductos.add(jHigieneYBelleza);
 		jProductos.add(jLimpieza);
 
 		JMenu jPromociones = new JMenu("Promociones");
+		
+		jPromociones.addMouseListener((MouseListener) new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+				backgroundPanel.removeAll();
+				productos = gestor.getGestorBD().listarProductosConDescuento();
+				backgroundPanel.repaint();
+				createRowPanels(backgroundPanel);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 
 		menuBar.add(jMenu);
 		menuBar.add(jProductos);
@@ -218,18 +296,20 @@ public class VentanaPrincipal extends JFrame {
 		
 		cp.add(panelArriba, BorderLayout.NORTH);
 		
-		productos = gestor.getGestorBD().listarProductos();
 		
-		
-		backgroundPanel = new JPanel(new GridLayout(8, 4, 10, 10));
+		backgroundPanel = new JPanel();
 		backgroundPanel.setBackground(Color.GREEN);
 		JScrollPane scrollPane = new JScrollPane(backgroundPanel);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(20);
         
         cp.add(scrollPane);
+        
 		
-        createRowPanels(backgroundPanel);
+        productos = gestor.getGestorBD().listarProductos();
+		createRowPanels(backgroundPanel);
+		
+        
 		 
 		ImageIcon iconoPrincipal = new ImageIcon("resources/iconos/iconoGAO.png");
 		iconoPrincipal = new ImageIcon(iconoPrincipal.getImage().getScaledInstance(207, 207, Image.SCALE_SMOOTH));
@@ -240,49 +320,44 @@ public class VentanaPrincipal extends JFrame {
             	gestor.getGestorBD().disconnect();
             	logger.info("Programa finalizado");
             }
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+				
+				
+			}
+
         });
+
 		
 		this.setIconImage(iconoPrincipal.getImage());
 		
 		this.setTitle("GAO Market");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cambiar a DISPOSE_ON_CLOSE por si el usuario se equivoca, que no cierre todo el programa.
-		this.setBounds(150, 40, 1200, 730);
+		this.setBounds(85, 30, 1400, 730);
 		this.setVisible(false);
 		logger.info("Progrma iniciado");
 	}
 	
-	// 	#IAG gorkaBidaurratzagaPérez_2023-11-05_18-30.txt  El uso de la IAG se ha utilizado para la creación de los metodos createRowPanels y createRowPanel
-	// 		y se han realizado cambios a ambos metodos para garantizar su funcionalidad, mejor aspecto y buen rendimiento del programa.
+	
+	
+	
 	private void createRowPanels(JPanel backgroundPanel) {
-	    int colCount = 8;
-	    int colWidth = 80;
-	    int rowHeight = 120;
-
-	    int rowCount = productos.size();
-
-	    for (int i = 0; i < rowCount; i += colCount) {
-	        JPanel rowPanel = new JPanel(new GridLayout(1, colCount, 15, 15));
-
-	        // Configurar el panel para que tenga fondo transparente y sin márgenes
-	        rowPanel.setOpaque(false);
-	        rowPanel.setBorder(BorderFactory.createEmptyBorder());
-
-	        for (int j = 0; j < colCount; j++) {
-	            int index = i + j;
-	            if (index < productos.size()) {
-	                Producto producto = productos.get(index);
-	                JPanel productPanel = createRowPanel(producto, rowHeight, colWidth);
-	                rowPanel.add(productPanel);
-	            } else {
-	                // Si no hay más productos, agregar un componente vacío para ocupar el espacio restante
-	                rowPanel.add(Box.createRigidArea(new Dimension(colWidth, rowHeight)));
-	            }
-	        }
-
-	        backgroundPanel.add(rowPanel);
-	    }
+		int numColumnas = 4;
+		
+		int filas = productos.size() / numColumnas;
+		
+		JPanel panelProductos = new JPanel();
+		panelProductos.setLayout(new GridLayout(filas, numColumnas, 15, 15));
+		panelProductos.setOpaque(false);
+		panelProductos.setBorder(BorderFactory.createEmptyBorder());
+		
+		for (Producto producto : productos) {
+			JPanel productPanel = createRowPanel(producto, 100, 100);
+			panelProductos.add(productPanel);
+		}
+		backgroundPanel.add(panelProductos);
 	}
-
 	
 
 	// 	#IAG gorkaBidaurratzagaPérez_2023-11-05_18-30.txt  El uso de la IAG se ha utilizado para la creación de los metodos createRowPanels y createRowPanel
@@ -311,7 +386,7 @@ public class VentanaPrincipal extends JFrame {
 		jPanelArriba.setBorder(new LineBorder(Color.BLACK));
 		
 		JLabel textLabel = new JLabel(producto.getNombre());
-		JLabel priceLabel = new JLabel("Precio: " + producto.getPrecio() + "€");
+		JLabel priceLabel = new JLabel(String.format("Precio %.2f €  ", producto.getPrecio()));
 		
 		jPanelArriba.add(textLabel, BorderLayout.WEST);
 		jPanelArriba.add(priceLabel, BorderLayout.EAST);
@@ -325,7 +400,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		JButton addButton = new JButton("Añadir a la cesta");
 		addButton.addActionListener(e -> {
-			if(gestor.getUsuario() == null) {
+			if(gestor.getUsuario() == null && gestor.getEmpleado() == null) {
 				JOptionPane.showMessageDialog(null, "Primero tienes que iniciar sesión");
 				ventanaInicioSesion.setVisible(true);
 			}else {
@@ -365,4 +440,5 @@ public class VentanaPrincipal extends JFrame {
 
 		return panel;
 	}
+
 }
