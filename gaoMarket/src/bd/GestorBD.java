@@ -69,6 +69,9 @@ public class GestorBD {
 			sent = "CREATE TABLE IF NOT EXISTS empleado (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100), dni varchar(9));";
 			statement.executeUpdate( sent );
 			
+			sent = "INSERT INTO empleado(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya, dni) VALUES(admin, admin, admin, 000000000, admin@gaomarket.com, admin, 46373459P)" ;
+			statement.executeUpdate( sent );
+			
 		} catch (ClassNotFoundException e) {
 			logger.log(Level.WARNING, "No se ha podido cargar el driver de la base de datos");
 		} catch (SQLException e) {
@@ -138,20 +141,43 @@ public class GestorBD {
 	}
 	
 	public void volcarCSV(Producto p) {
-		try {
+	    try {
+	        // Establecer la conexión y desactivar autocommit
+	        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:resources/db/" + nombreBD)) {
+	            conn.setAutoCommit(false);  // Desactivar el modo de autocommit
+	            
+	            // Comprobar si el producto ya existe
+	            if (!existeProductoEnBD(p.getId())) {
+	                // Utilizar una sentencia preparada para evitar la inyección SQL
+	                String sql = "INSERT INTO producto (id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	                try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+	                    // Establecer los parámetros para la sentencia preparada
+	                    preparedStatement.setInt(1, p.getId());
+	                    preparedStatement.setString(2, p.getNombre());
+	                    preparedStatement.setString(3, p.getImagen());
+	                    preparedStatement.setDouble(4, p.getPrecio());
+	                    preparedStatement.setInt(5, p.getCantidad());
+	                    preparedStatement.setString(6, p.getTipoProducto().toString());
+	                    preparedStatement.setString(7, p.getCategoria().toString());
+	                    preparedStatement.setString(8, p.getEstado().toString());
+	                    preparedStatement.setInt(9, p.getDescuento());
 
-			conn = DriverManager.getConnection("jdbc:sqlite:resources/db/" + nombreBD);
-			Statement statement = conn.createStatement();
-			
-			if (!existeProductoEnBD(p.getId())) {
-				String sql = String.format("INSERT INTO producto (id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento) VALUES('%d', '%s', '%s', '%.2f', '%d', '%s', '%s', '%s', '%d')", p.getId(), p.getNombre(), p.getImagen(), p.getPrecio(), p.getCantidad(), p.getTipoProducto(), p.getCategoria(), p.getEstado(), p.getDescuento());
-				statement.executeUpdate(sql);
-			}
-			statement.close();
-		} catch (SQLException e) {
-			logger.log(Level.WARNING, "Error conectando a la BD", e);
-		}
-	}    
+	                    // Ejecutar la actualización
+	                    preparedStatement.executeUpdate();
+	                }
+	                
+	                conn.commit();  // Realizar el commit para aplicar los cambios
+	            }
+	        }
+	    } catch (SQLException e) {
+	        logger.log(Level.WARNING, "Error conectando a la base de datos o ejecutando SQL", e);
+	        try {
+	            conn.rollback();  // Deshacer la transacción en caso de error
+	        } catch (SQLException rollbackException) {
+	            logger.log(Level.WARNING, "Error al deshacer la transacción", rollbackException);
+	        }
+	    }
+	}
 
 	private boolean existeProductoEnBD(int id) throws SQLException {
 		String sql = "SELECT id FROM producto WHERE id = ?";
@@ -408,19 +434,24 @@ public class GestorBD {
 	
 	public boolean anyadirProducto(Producto p) {
 		boolean anyadir = true;
-		try {
-			Statement st = conn.createStatement();
-			String sql = String.format("SELECT * FROM producto WHERE id = '%s'" , p.getId());
-			ResultSet rs = st.executeQuery(sql);
-			if(rs.next()) {
-				sql = String.format("INSERT INTO producto (id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento) VALUES('%d', '%s', '%s', '%.2f', '%d', '%s', '%s', '%s', '%d')", p.getId(), p.getNombre(), p.getImagen(), p.getPrecio(), p.getCantidad(), p.getTipoProducto(), p.getCategoria(), p.getEstado(), p.getDescuento());
-				st.executeUpdate(sql);
-				
-			}else {
-				anyadir = false;
-			}
-			rs.close();
-			st.close();
+		String sql = String.format("INSERT INTO producto "
+				+ "(id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
+	        ps.setInt(1, p.getId());
+	        ps.setString(2, p.getNombre());
+	        ps.setString(3, p.getImagen());
+	        ps.setDouble(4, p.getPrecio());
+	        ps.setInt(5, p.getCantidad());
+	        ps.setString(6, p.getTipoProducto().toString());
+	        ps.setString(7, p.getCategoria().toString());
+	        ps.setString(8, p.getEstado().toString());
+	        ps.setInt(9, p.getDescuento());
+			
+           ResultSet rs = ps.executeQuery();        
+           if (rs.next()) anyadir = true;
+           rs.close();
+           ps.close();
+		
 		} catch (SQLException e) {
 			logger.log(Level.WARNING, "Error en metodo anyadirProducto: " + e);
 			anyadir = false;
@@ -502,19 +533,19 @@ public class GestorBD {
 		String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento "
 				+ "FROM Producto WHERE categoria = ?";
 		try (PreparedStatement ps = conn.prepareStatement(sql)){
-			ps.setString(1, capitalize(categoria));
+			ps.setString(1, categoria);
             ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				String nombre = capitalize(rs.getString("nombre"));
 				String imagen = rs.getString("imagen");
 				Double precio = rs.getDouble("precio");
 				int cantidad = rs.getInt("cantidad");
-				String tipoProducto = rs.getString("ALIMENTO");
+				String tipoProducto = rs.getString("tipoProducto");
 				String cat = rs.getString("categoria");
 				String estadoStr = rs.getString("estado");
 				Estado estado = Estado.valueOf(estadoStr);
 				int descuento = rs.getInt("descuento");
-				
+
 				Producto p = new Producto();
 				if(p.getTipoProducto() == TipoProducto.ALIMENTO) {
 					p.setNombre(nombre);
@@ -611,52 +642,58 @@ public class GestorBD {
 	
 	// Metodo que devuelve todos los productos de un tipo
 	public List<Producto> listarProductosPorTipo(TipoProducto tipoProducto) {
-	    List<Producto> productos = new ArrayList<>();
-	    String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento "
-	            + "FROM producto WHERE tipoProducto = ?";
-	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-	        ps.setString(1, capitalize(tipoProducto.toString()));
-	        ResultSet rs = ps.executeQuery();
-	        while (rs.next()) {
-	            String nombre = capitalize(rs.getString("nombre"));
-	            String imagen = rs.getString("imagen");
-	            Double precio = rs.getDouble("precio");
-	            int cantidad = rs.getInt("cantidad");
-	            String tipoProdu = rs.getString("tipoProducto");
-	            TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProdu);
-	            String categoria = rs.getString("categoria");
-	            String estadoStr = rs.getString("estado");
-	            Estado estado = Estado.valueOf(estadoStr);
-	            int descuento = rs.getInt("descuento");
+		List<Producto> productos = new ArrayList<>();
+		String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento "
+				+ "FROM Producto WHERE tipoProducto = ?";
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
+			ps.setString(1, tipoProducto.toString());
+            ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String nombre = capitalize(rs.getString("nombre"));
+				String imagen = rs.getString("imagen");
+				Double precio = rs.getDouble("precio");
+				int cantidad = rs.getInt("cantidad");
+				String tipo = rs.getString("tipoProducto");
+				String cat = rs.getString("categoria");
+				String estadoStr = rs.getString("estado");
+				Estado estado = Estado.valueOf(estadoStr);
+				int descuento = rs.getInt("descuento");
 
-	            Producto p = new Producto();
-	            p.setNombre(nombre);
-	            p.setImagen(imagen);
-	            p.setPrecio(precio);
-	            p.setCantidad(cantidad);
-	            p.setTipoProducto(enumTipoProducto);
+				Producto p = new Producto();
+				p.setNombre(nombre);
+				p.setImagen(imagen);
+				p.setPrecio(precio);
+				p.setCantidad(cantidad);
 
-	            if (enumTipoProducto == TipoProducto.ALIMENTO) {
-	                TipoAlimento enumTipoA = TipoAlimento.valueOf(categoria);
-	                p.setCategoria(enumTipoA);
-	            } else if (enumTipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
-	                TipoHigieneYBelleza enumTipoHYB = TipoHigieneYBelleza.valueOf(categoria);
-	                p.setCategoria(enumTipoHYB);
-	            } else if (enumTipoProducto == TipoProducto.LIMPIEZA) {
-	                TipoLimpieza enumTipoL = TipoLimpieza.valueOf(categoria);
-	                p.setCategoria(enumTipoL);
-	            }
+				TipoProducto enumTipoProducto = TipoProducto.valueOf(tipo);
+				p.setTipoProducto(enumTipoProducto);
 
-	            p.setEstado(estado);
-	            p.setDescuento(descuento);
+				if (enumTipoProducto == TipoProducto.ALIMENTO) {
+					TipoAlimento enumTipoA = TipoAlimento.valueOf(cat);
+					p.setCategoria(enumTipoA);
+				}
+	            
+				if (enumTipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
+					TipoHigieneYBelleza enumTipoHYB = TipoHigieneYBelleza.valueOf(cat);
+					p.setCategoria(enumTipoHYB);
+				}
+	            
+				if (enumTipoProducto == TipoProducto.LIMPIEZA) {
+					TipoLimpieza enumTipoL = TipoLimpieza.valueOf(cat);
+					p.setCategoria(enumTipoL);
+				}
 
-	            productos.add(p);
-	        }
-	        rs.close();
-	    } catch (SQLException e) {
-	        logger.log(Level.WARNING, "Error en método listarProductosPorTipo: " + e);
-	    }
-	    return productos;
+				p.setEstado(estado);
+				p.setDescuento(descuento);
+
+				productos.add(p);
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			logger.log(Level.WARNING, "Error en metodo listarProductosPorTipo: " + e);
+		}
+		return productos;
 	}
 	
 	//Metodo que al realizar una compra, reste la cantidad al stock de un producto
