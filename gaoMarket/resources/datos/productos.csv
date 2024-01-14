@@ -41,7 +41,7 @@ ID;Nombre;Imagen;Cantidad;Precio;TipoProducto;Categoria;Estado;Descuento
 40;Sopa enlatada;sopa_enlatada.png;24;2.89;ALIMENTO;CONGELADOS;NORMAL;0
 41;L�piz labial;lapiz_labial.png;19;8.72;HIGIENE_Y_BELLEZA;CUIDADO_CORPORAL;NORMAL;0
 42;Arroz;arroz.png;44;1.5;ALIMENTO;CEREALES;NORMAL;0
-43;Agua embotellada;agua_embotellada.png;60;1;ALIMENTO;BEBIDAS;NORMAL;0
+43;Agua embotellada;agua_embotellada.png;60;1.1;ALIMENTO;BEBIDAS;NORMAL;0
 44;Toallitas h�medas;toallitas_humedas.png;37;3.44;HIGIENE_Y_BELLEZA;HIGIENE_INTIMA;NORMAL;0
 45;Mantequilla;mantequilla.png;26;4.22;ALIMENTO;LACTEOS;NORMAL;0
 46;Gel de ducha;gel_ducha.png;21;7.43;HIGIENE_Y_BELLEZA;CUIDADO_CORPORAL;NORMAL;0
