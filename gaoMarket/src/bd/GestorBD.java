@@ -483,57 +483,19 @@ public class GestorBD {
 		return productos;
 	}
 	
-	// Metodo que devuelve todos los productos de un tipo
-	public List<Producto> listarProductosPorTipo(TipoProducto tipoProducto) {
-	    List<Producto> productos = new ArrayList<>();
-	    String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento "
-	            + "FROM producto WHERE tipoProducto = ?";
-	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-	        ps.setString(1, capitalize(tipoProducto.toString()));
-	        ResultSet rs = ps.executeQuery();
-	        while (rs.next()) {
-	            String nombre = capitalize(rs.getString("nombre"));
-	            String imagen = rs.getString("imagen");
-	            Double precio = rs.getDouble("precio");
-	            int cantidad = rs.getInt("cantidad");
-	            String tipoProdu = rs.getString("tipoProducto");
-	            TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProdu);
-	            String categoria = rs.getString("categoria");
-	            String estadoStr = rs.getString("estado");
-	            Estado estado = Estado.valueOf(estadoStr);
-	            int descuento = rs.getInt("descuento");
+	public List<Producto> listarProductosConDescuento() {
+		List<Producto> productosConDescuento = new ArrayList<>();
 
-	            Producto p = new Producto();
-	            p.setNombre(nombre);
-	            p.setImagen(imagen);
-	            p.setPrecio(precio);
-	            p.setCantidad(cantidad);
-	            p.setTipoProducto(enumTipoProducto);
-
-	            if (enumTipoProducto == TipoProducto.ALIMENTO) {
-	                TipoAlimento enumTipoA = TipoAlimento.valueOf(categoria);
-	                p.setCategoria(enumTipoA);
-	            } else if (enumTipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
-	                TipoHigieneYBelleza enumTipoHYB = TipoHigieneYBelleza.valueOf(categoria);
-	                p.setCategoria(enumTipoHYB);
-	            } else if (enumTipoProducto == TipoProducto.LIMPIEZA) {
-	                TipoLimpieza enumTipoL = TipoLimpieza.valueOf(categoria);
-	                p.setCategoria(enumTipoL);
-	            }
-
-	            p.setEstado(estado);
-	            p.setDescuento(descuento);
-
-	            productos.add(p);
-	        }
-	        rs.close();
-	    } catch (SQLException e) {
-	        logger.log(Level.WARNING, "Error en método listarProductosPorTipo: " + e);
-	    }
-	    return productos;
+		List<Producto> todosLosProductos = listarProductos();
+	    
+		for (Producto producto : todosLosProductos) {
+			if (producto.getDescuento() > 0) {
+				productosConDescuento.add(producto);
+			}
+		}
+		return productosConDescuento;
 	}
 	
-
 	// Metodo que devuelve todos los productos de una categoria
 	public List<Producto> listarProductosPorCategoria(String categoria) {
 		List<Producto> productos = new ArrayList<>();
@@ -645,6 +607,56 @@ public class GestorBD {
 	    	 logger.log(Level.WARNING, "Error en buscarAlimento(nombre): " + e);
 	     } 
 		 return p;
+	}
+	
+	// Metodo que devuelve todos los productos de un tipo
+	public List<Producto> listarProductosPorTipo(TipoProducto tipoProducto) {
+	    List<Producto> productos = new ArrayList<>();
+	    String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento "
+	            + "FROM producto WHERE tipoProducto = ?";
+	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ps.setString(1, capitalize(tipoProducto.toString()));
+	        ResultSet rs = ps.executeQuery();
+	        while (rs.next()) {
+	            String nombre = capitalize(rs.getString("nombre"));
+	            String imagen = rs.getString("imagen");
+	            Double precio = rs.getDouble("precio");
+	            int cantidad = rs.getInt("cantidad");
+	            String tipoProdu = rs.getString("tipoProducto");
+	            TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProdu);
+	            String categoria = rs.getString("categoria");
+	            String estadoStr = rs.getString("estado");
+	            Estado estado = Estado.valueOf(estadoStr);
+	            int descuento = rs.getInt("descuento");
+
+	            Producto p = new Producto();
+	            p.setNombre(nombre);
+	            p.setImagen(imagen);
+	            p.setPrecio(precio);
+	            p.setCantidad(cantidad);
+	            p.setTipoProducto(enumTipoProducto);
+
+	            if (enumTipoProducto == TipoProducto.ALIMENTO) {
+	                TipoAlimento enumTipoA = TipoAlimento.valueOf(categoria);
+	                p.setCategoria(enumTipoA);
+	            } else if (enumTipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
+	                TipoHigieneYBelleza enumTipoHYB = TipoHigieneYBelleza.valueOf(categoria);
+	                p.setCategoria(enumTipoHYB);
+	            } else if (enumTipoProducto == TipoProducto.LIMPIEZA) {
+	                TipoLimpieza enumTipoL = TipoLimpieza.valueOf(categoria);
+	                p.setCategoria(enumTipoL);
+	            }
+
+	            p.setEstado(estado);
+	            p.setDescuento(descuento);
+
+	            productos.add(p);
+	        }
+	        rs.close();
+	    } catch (SQLException e) {
+	        logger.log(Level.WARNING, "Error en método listarProductosPorTipo: " + e);
+	    }
+	    return productos;
 	}
 	
 	//Metodo que al realizar una compra, reste la cantidad al stock de un producto
