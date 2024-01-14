@@ -255,13 +255,13 @@ public class VentanaPrincipal extends JFrame {
 	// 		y se han realizado cambios a ambos metodos para garantizar su funcionalidad, mejor aspecto y buen rendimiento del programa.
 	private void createRowPanels(JPanel backgroundPanel) {
         int colCount = 3;
-        int colWidth = 50;
+        int colWidth = 80;
         int rowHeight = 120;
 
         int rowCount = (int) Math.ceil((double) productos.size() / colCount);
 
         for (int i = 0; i < rowCount; i++) {
-            JPanel rowPanel = new JPanel(new GridLayout(1, colCount, 10, 10));
+            JPanel rowPanel = new JPanel(new GridLayout(1, colCount, 15, 15));
 
             // Configurar el panel para que tenga fondo transparente y sin márgenes
             rowPanel.setOpaque(false);
