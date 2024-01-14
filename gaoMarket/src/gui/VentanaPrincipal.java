@@ -31,6 +31,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import domain.GestorMarket;
 import domain.Producto;
@@ -38,6 +40,7 @@ import domain.ProductoCarrito;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
 import domain.TipoLimpieza;
+import domain.TipoProducto;
 
 public class VentanaPrincipal extends JFrame {	
 	/**
@@ -59,7 +62,8 @@ public class VentanaPrincipal extends JFrame {
 	protected static JButton botonUsuario;
 	protected JButton botonGestionUsuario;
 	protected JTextField barraBusqueda;
-
+	protected JPanel backgroundPanel;
+	
 	protected List<Producto> productos;
 	protected List<ProductoCarrito> productosEnCesta;
 	
@@ -90,6 +94,30 @@ public class VentanaPrincipal extends JFrame {
 			JMenuItem menuTipo = new JMenuItem(tipo.toString());
 			jLimpieza.add(menuTipo);
 		}
+		jAlimentos.addMenuListener(new MenuListener() {
+
+
+			@Override
+			public void menuSelected(MenuEvent e) {
+				productos = gestor.getGestorBD().listarProductosPorTipo(TipoProducto.ALIMENTO);
+				System.out.println(productos);
+				createRowPanels(backgroundPanel);
+				
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 
 		jProductos.add(jAlimentos);
 		jProductos.add(jHigieneYBelleza);
@@ -193,7 +221,7 @@ public class VentanaPrincipal extends JFrame {
 		productos = gestor.getGestorBD().listarProductos();
 		
 		
-		JPanel backgroundPanel = new JPanel(new GridLayout(8, 4, 10, 10));
+		backgroundPanel = new JPanel(new GridLayout(8, 4, 10, 10));
 		backgroundPanel.setBackground(Color.GREEN);
 		JScrollPane scrollPane = new JScrollPane(backgroundPanel);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -210,7 +238,7 @@ public class VentanaPrincipal extends JFrame {
             @Override
             public void windowClosed(WindowEvent e) {
             	gestor.getGestorBD().disconnect();
-               logger.info("Programa finalizado");
+            	logger.info("Programa finalizado");
             }
         });
 		
@@ -226,8 +254,8 @@ public class VentanaPrincipal extends JFrame {
 	// 	#IAG gorkaBidaurratzagaPérez_2023-11-05_18-30.txt  El uso de la IAG se ha utilizado para la creación de los metodos createRowPanels y createRowPanel
 	// 		y se han realizado cambios a ambos metodos para garantizar su funcionalidad, mejor aspecto y buen rendimiento del programa.
 	private void createRowPanels(JPanel backgroundPanel) {
-        int colCount = 4;
-        int colWidth = 180;
+        int colCount = 3;
+        int colWidth = 50;
         int rowHeight = 120;
 
         int rowCount = (int) Math.ceil((double) productos.size() / colCount);
@@ -239,7 +267,7 @@ public class VentanaPrincipal extends JFrame {
             rowPanel.setOpaque(false);
             rowPanel.setBorder(BorderFactory.createEmptyBorder());
 
-            int productsInThisRow = Math.min(colCount, productos.size() - i * colCount);
+            int productsInThisRow = Math.min(3, productos.size() - i * colCount);
 
             for (int j = 0; j < colCount; j++) {
                 if (j < productsInThisRow) {
@@ -263,30 +291,38 @@ public class VentanaPrincipal extends JFrame {
 	
 	private JPanel createRowPanel(Producto producto, int rowHeight, int colWidth) {
 		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());            
+		panel.setLayout(new BorderLayout());
+		panel.setBorder(new LineBorder(Color.BLACK));
+    	
+    	
+    	JPanel panelContenido = new JPanel();
+    	panelContenido.setLayout(new BorderLayout());
+    	panelContenido.setBorder(new LineBorder(Color.BLACK));
+    	
+    	JPanel panelFoto = new JPanel();            
 		
 		ImageIcon productoIcono = new ImageIcon("resources/productos/" + producto.getImagen());
 		productoIcono = new ImageIcon(productoIcono.getImage().getScaledInstance(colWidth, rowHeight, Image.SCALE_SMOOTH));
 		
 		JLabel imageLabel = new JLabel(productoIcono);
-		panel.add(imageLabel, BorderLayout.NORTH);
+		panelFoto.add(imageLabel);
 		
-		
-		JPanel textPanel = new JPanel();
-		textPanel.setLayout(new BorderLayout());
-		textPanel.setBorder(new LineBorder(Color.BLACK));
-		
-		JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1)); // Configurar el JSpinner con valores entre 1 y 10
+		JPanel jPanelArriba = new JPanel();
+		jPanelArriba.setLayout(new BorderLayout());
+		jPanelArriba.setBorder(new LineBorder(Color.BLACK));
 		
 		JLabel textLabel = new JLabel(producto.getNombre());
 		JLabel priceLabel = new JLabel("Precio: " + producto.getPrecio() + "€");
 		
-		JPanel priceTextPanel = new JPanel(new BorderLayout());
-		priceTextPanel.add(textLabel, BorderLayout.WEST);
-		priceTextPanel.add(priceLabel, BorderLayout.EAST);
-		priceTextPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
+		jPanelArriba.add(textLabel, BorderLayout.WEST);
+		jPanelArriba.add(priceLabel, BorderLayout.EAST);
+		jPanelArriba.setBorder(new EmptyBorder(0, 10, 0, 10));
+
+        JPanel jPanelMedio = new JPanel();
+		jPanelMedio.setLayout(new BorderLayout());
+		jPanelMedio.setBorder(new LineBorder(Color.BLACK));
 		
-		textPanel.add(priceTextPanel, BorderLayout.CENTER);
+		JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
 		
 		JButton addButton = new JButton("Añadir a la cesta");
 		addButton.addActionListener(e -> {
@@ -303,14 +339,30 @@ public class VentanaPrincipal extends JFrame {
 				JOptionPane.showMessageDialog(null, "Producto añadido a la cesta");
 			}
 		});
+		
+		if (producto.getDescuento() > 0) {
+			double resultado = (Double) producto.getPrecio() * (1 - ((double) producto.getDescuento()) / 100);
+			resultado = Math.round(resultado * 100.0) / 100.0;
+			JLabel labelPrecioConDescuento = new JLabel(String.format("¡PROMOCION! Descuento del %d %%  ->  %.2f €  ", producto.getDescuento(),resultado));
+			jPanelMedio.add(labelPrecioConDescuento, BorderLayout.WEST);
+			jPanelMedio.add(spinner, BorderLayout.EAST);
+		} else {
+			jPanelMedio.add(spinner, BorderLayout.CENTER);
+		}
+		
+		
 
-		JPanel spinnerAndButtonPanel = new JPanel(new BorderLayout());
-		spinnerAndButtonPanel.add(spinner, BorderLayout.CENTER);
-		spinnerAndButtonPanel.add(addButton, BorderLayout.SOUTH);
-
-		textPanel.add(spinnerAndButtonPanel, BorderLayout.SOUTH);
-
-		panel.add(textPanel, BorderLayout.CENTER);
+		
+		JPanel panelAnyadir = new JPanel();
+		panelAnyadir.setBorder(new LineBorder(Color.BLACK));
+		panelAnyadir.add(addButton);
+	
+		panelContenido.add(jPanelArriba, BorderLayout.NORTH);
+		panelContenido.add(jPanelMedio, BorderLayout.CENTER);
+		panelContenido.add(panelAnyadir, BorderLayout.SOUTH);
+		
+		panel.add(panelFoto, BorderLayout.NORTH);
+		panel.add(panelContenido, BorderLayout.SOUTH);
 
 		return panel;
 	}
