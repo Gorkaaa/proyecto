@@ -77,6 +77,7 @@ public class VentanaStock extends JFrame {
             public void valueChanged(TreeSelectionEvent e) {
                 TreePath tp = e.getPath();
                 tipoProductoSeleccionado = tp.getLastPathComponent().toString();
+                if(tipoProductoSeleccionado.equals("TIPOS DE PRODUCTO")) return;
                 categoriaSeleccionada = tp.getLastPathComponent().toString();
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tp.getLastPathComponent();
                 Object selectedObject = selectedNode.getUserObject();
