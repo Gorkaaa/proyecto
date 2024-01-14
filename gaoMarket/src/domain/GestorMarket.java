@@ -26,6 +26,7 @@ public class GestorMarket {
 	protected GestorXML gestorXML;
 	protected GestorBD gestorBD;
 	public static Usuario usuario;
+	public static Empleado empleado;
 
 	public GestorMarket(List<Persona> personas, List<Producto> productos, Map<String, List<Persona>> mapaPersonas,
 			Map<TipoAlimento, Set<Producto>> mapaAlimentos,
@@ -143,4 +144,8 @@ public class GestorMarket {
 	public Usuario getUsuario() {
 		return usuario;
 	}	
+	
+	public Empleado getEmpleado() {
+		return empleado;
+	}
 }
