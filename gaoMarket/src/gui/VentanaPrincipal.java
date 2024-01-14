@@ -254,36 +254,35 @@ public class VentanaPrincipal extends JFrame {
 	// 	#IAG gorkaBidaurratzagaPérez_2023-11-05_18-30.txt  El uso de la IAG se ha utilizado para la creación de los metodos createRowPanels y createRowPanel
 	// 		y se han realizado cambios a ambos metodos para garantizar su funcionalidad, mejor aspecto y buen rendimiento del programa.
 	private void createRowPanels(JPanel backgroundPanel) {
-        int colCount = 3;
-        int colWidth = 80;
-        int rowHeight = 120;
+	    int colCount = 8;
+	    int colWidth = 80;
+	    int rowHeight = 120;
 
-        int rowCount = (int) Math.ceil((double) productos.size() / colCount);
+	    int rowCount = productos.size();
 
-        for (int i = 0; i < rowCount; i++) {
-            JPanel rowPanel = new JPanel(new GridLayout(1, colCount, 15, 15));
+	    for (int i = 0; i < rowCount; i += colCount) {
+	        JPanel rowPanel = new JPanel(new GridLayout(1, colCount, 15, 15));
 
-            // Configurar el panel para que tenga fondo transparente y sin márgenes
-            rowPanel.setOpaque(false);
-            rowPanel.setBorder(BorderFactory.createEmptyBorder());
+	        // Configurar el panel para que tenga fondo transparente y sin márgenes
+	        rowPanel.setOpaque(false);
+	        rowPanel.setBorder(BorderFactory.createEmptyBorder());
 
-            int productsInThisRow = Math.min(3, productos.size() - i * colCount);
+	        for (int j = 0; j < colCount; j++) {
+	            int index = i + j;
+	            if (index < productos.size()) {
+	                Producto producto = productos.get(index);
+	                JPanel productPanel = createRowPanel(producto, rowHeight, colWidth);
+	                rowPanel.add(productPanel);
+	            } else {
+	                // Si no hay más productos, agregar un componente vacío para ocupar el espacio restante
+	                rowPanel.add(Box.createRigidArea(new Dimension(colWidth, rowHeight)));
+	            }
+	        }
 
-            for (int j = 0; j < colCount; j++) {
-                if (j < productsInThisRow) {
-                    int index = i * colCount + j;
-                    Producto producto = productos.get(index);
-                    JPanel productPanel = createRowPanel(producto, rowHeight, colWidth);
-                    rowPanel.add(productPanel);
-                } else {
-                    // Si no hay más productos, agregar un componente vacío para ocupar el espacio restante
-                    rowPanel.add(Box.createRigidArea(new Dimension(colWidth, rowHeight)));
-                }
-            }
+	        backgroundPanel.add(rowPanel);
+	    }
+	}
 
-            backgroundPanel.add(rowPanel);
-        }
-    }
 	
 
 	// 	#IAG gorkaBidaurratzagaPérez_2023-11-05_18-30.txt  El uso de la IAG se ha utilizado para la creación de los metodos createRowPanels y createRowPanel
