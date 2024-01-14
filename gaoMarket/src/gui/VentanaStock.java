@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -88,6 +89,7 @@ public class VentanaStock extends JFrame {
                     if (CadenaProductos.getMapaTipoProducto().containsKey(TipoProducto.valueOf(tipoProductoSeleccionado))) {
                     	//Esta lista que he añadido tengo que hacerlo en los JMenu para que cuando toque se filtren los productos de la VentanaPrincipal.
                         List<Producto> l = CadenaProductos.obtenerListaTipoProductos(TipoProducto.valueOf(tipoProductoSeleccionado));
+                        Collections.sort(l);
                         tabla.setModel(new ModeloStock(l));
                     }
                 } else if (selectedObject instanceof TipoAlimento) {
@@ -95,6 +97,7 @@ public class VentanaStock extends JFrame {
 
                     if (CadenaProductos.getMapaCategoriaProducto().containsKey(TipoAlimento.valueOf(categoriaSeleccionada))) {
                         List<Producto> l = CadenaProductos.obtenerListaCategoriaProductos(TipoAlimento.valueOf(categoriaSeleccionada));
+                        Collections.sort(l);
                         tabla.setModel(new ModeloStock(l));
                     }
                 } else if (selectedObject instanceof TipoHigieneYBelleza) {
@@ -102,6 +105,7 @@ public class VentanaStock extends JFrame {
 
                     if (CadenaProductos.getMapaCategoriaProducto().containsKey(TipoHigieneYBelleza.valueOf(categoriaSeleccionada))) {
                         List<Producto> l = CadenaProductos.obtenerListaCategoriaProductos(TipoHigieneYBelleza.valueOf(categoriaSeleccionada));
+                        Collections.sort(l);
                         tabla.setModel(new ModeloStock(l));
                     }
                 } else {
@@ -109,6 +113,7 @@ public class VentanaStock extends JFrame {
 
                     if (CadenaProductos.getMapaCategoriaProducto().containsKey(TipoLimpieza.valueOf(categoriaSeleccionada))) {
                         List<Producto> l = CadenaProductos.obtenerListaCategoriaProductos(TipoLimpieza.valueOf(categoriaSeleccionada));
+                        Collections.sort(l);
                         tabla.setModel(new ModeloStock(l));
                     }
                 }
