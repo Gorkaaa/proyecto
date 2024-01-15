@@ -69,14 +69,17 @@ public class GestorBD {
 			sent = "CREATE TABLE IF NOT EXISTS empleado (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100), dni varchar(9));";
 			statement.executeUpdate( sent );
 			
-			sent = "INSERT INTO empleado(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya, dni) VALUES(admin, admin, admin, 000000000, admin@gaomarket.com, admin, 46373459P)" ;
-			statement.executeUpdate( sent );
+			anyadirAdmin();
 			
 		} catch (ClassNotFoundException e) {
 			logger.log(Level.WARNING, "No se ha podido cargar el driver de la base de datos");
 		} catch (SQLException e) {
 			logger.log(Level.WARNING, "Error conectando a la BD", e);
 		}
+	}
+	public void anyadirAdmin() {
+		Empleado empleado = new Empleado("admin", "admin", "admin", 000000000, "admin@gaomarket.com", "admin", "46373459P");
+		guardarEmpleado(empleado);
 	}
 	
 	public void disconnect(){
@@ -459,14 +462,30 @@ public class GestorBD {
 		return anyadir;
 	}
 	
+	// Metodo para eliminar productos
+	public boolean borrarProducto(int id){
+		String sql = "DELETE FROM producto WHERE id = ?";
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
+	       	ps.setInt(1, id); 
+	       	ps.executeUpdate();
+	       	ps.close();
+	       	return true;
+	   	} catch (SQLException ex) {
+	   		logger.log(Level.WARNING, "Error en metodo borrarProducto: " + ex);
+	       	return false;
+	   	}
+	}
+	
+	
 	//Metodo que devuelve todos los productos
 	public List<Producto> listarProductos() {
 		List<Producto> productos = new ArrayList<>();
-		String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento "
+		String sql = "SELECT id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento "
 				+ "FROM Producto";
 		try (Statement st = conn.createStatement()){
 			ResultSet rs = realizarQuery(sql, st);
 			while (rs.next()) {
+				int id = rs.getInt("id");
 				String nombre = capitalize(rs.getString("nombre"));
 				String imagen = rs.getString("imagen");
 				Double precio = rs.getDouble("precio");
@@ -478,6 +497,7 @@ public class GestorBD {
 				int descuento = rs.getInt("descuento");
 				
 				Producto p = new Producto();
+				p.setId(id);
 				p.setNombre(nombre);
 				p.setImagen(imagen);
 				p.setPrecio(precio);
@@ -530,12 +550,13 @@ public class GestorBD {
 	// Metodo que devuelve todos los productos de una categoria
 	public List<Producto> listarProductosPorCategoria(String categoria) {
 		List<Producto> productos = new ArrayList<>();
-		String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento "
+		String sql = "SELECT id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento "
 				+ "FROM Producto WHERE categoria = ?";
 		try (PreparedStatement ps = conn.prepareStatement(sql)){
 			ps.setString(1, categoria);
             ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
+				int id = rs.getInt("id");
 				String nombre = capitalize(rs.getString("nombre"));
 				String imagen = rs.getString("imagen");
 				Double precio = rs.getDouble("precio");
@@ -547,35 +568,34 @@ public class GestorBD {
 				int descuento = rs.getInt("descuento");
 
 				Producto p = new Producto();
-				if(p.getTipoProducto() == TipoProducto.ALIMENTO) {
-					p.setNombre(nombre);
-					p.setImagen(imagen);
-					p.setPrecio(precio);
-					p.setCantidad(cantidad);
+				p.setId(id);
+				p.setNombre(nombre);
+				p.setImagen(imagen);
+				p.setPrecio(precio);
+				p.setCantidad(cantidad);
 
-					TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProducto);
-					p.setTipoProducto(enumTipoProducto);
+				TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProducto);
+				p.setTipoProducto(enumTipoProducto);
 
-					if (enumTipoProducto == TipoProducto.ALIMENTO) {
-						TipoAlimento enumTipoA = TipoAlimento.valueOf(cat);
-						p.setCategoria(enumTipoA);
-					}
-		            
-					if (enumTipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
-						TipoHigieneYBelleza enumTipoHYB = TipoHigieneYBelleza.valueOf(cat);
-						p.setCategoria(enumTipoHYB);
-					}
-		            
-					if (enumTipoProducto == TipoProducto.LIMPIEZA) {
-						TipoLimpieza enumTipoL = TipoLimpieza.valueOf(cat);
-						p.setCategoria(enumTipoL);
-					}
-
-					p.setEstado(estado);
-					p.setDescuento(descuento);
-
-					productos.add(p);
+				if (enumTipoProducto == TipoProducto.ALIMENTO) {
+					TipoAlimento enumTipoA = TipoAlimento.valueOf(cat);
+					p.setCategoria(enumTipoA);
 				}
+	            
+				if (enumTipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
+					TipoHigieneYBelleza enumTipoHYB = TipoHigieneYBelleza.valueOf(cat);
+					p.setCategoria(enumTipoHYB);
+				}
+	            
+				if (enumTipoProducto == TipoProducto.LIMPIEZA) {
+					TipoLimpieza enumTipoL = TipoLimpieza.valueOf(cat);
+					p.setCategoria(enumTipoL);
+				}
+
+				p.setEstado(estado);
+				p.setDescuento(descuento);
+
+				productos.add(p);
 			}
 			rs.close();
 			ps.close();
@@ -594,6 +614,7 @@ public class GestorBD {
 	        ps.setString(1, nomb);
             ResultSet rs = ps.executeQuery();        
             while (rs.next()) {
+            	int id = rs.getInt("id");
             	String nombre = capitalize(rs.getString("nombre"));
 				String imagen = rs.getString("imagen");
 				Double precio = rs.getDouble("precio");
@@ -603,33 +624,32 @@ public class GestorBD {
 				String estadoStr = rs.getString("estado");
 				Estado estado = Estado.valueOf(estadoStr);
 				int descuento = rs.getInt("descuento");
-				if(p.getTipoProducto() == TipoProducto.ALIMENTO) {
-					p.setNombre(nombre);
-					p.setImagen(imagen);
-					p.setPrecio(precio);
-					p.setCantidad(cantidad);
+				p.setId(id);
+				p.setNombre(nombre);
+				p.setImagen(imagen);
+				p.setPrecio(precio);
+				p.setCantidad(cantidad);
 
-					TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProducto);
-					p.setTipoProducto(enumTipoProducto);
+				TipoProducto enumTipoProducto = TipoProducto.valueOf(tipoProducto);
+				p.setTipoProducto(enumTipoProducto);
 
-					if (enumTipoProducto == TipoProducto.ALIMENTO) {
-						TipoAlimento enumTipoA = TipoAlimento.valueOf(categoria);
-						p.setCategoria(enumTipoA);
-					}
-		            
-					if (enumTipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
-						TipoHigieneYBelleza enumTipoHYB = TipoHigieneYBelleza.valueOf(categoria);
-						p.setCategoria(enumTipoHYB);
-					}
-		            
-					if (enumTipoProducto == TipoProducto.LIMPIEZA) {
-						TipoLimpieza enumTipoL = TipoLimpieza.valueOf(categoria);
-						p.setCategoria(enumTipoL);
-					}
-
-					p.setEstado(estado);
-					p.setDescuento(descuento);
+				if (enumTipoProducto == TipoProducto.ALIMENTO) {
+					TipoAlimento enumTipoA = TipoAlimento.valueOf(categoria);
+					p.setCategoria(enumTipoA);
 				}
+	            
+				if (enumTipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
+					TipoHigieneYBelleza enumTipoHYB = TipoHigieneYBelleza.valueOf(categoria);
+					p.setCategoria(enumTipoHYB);
+				}
+	            
+				if (enumTipoProducto == TipoProducto.LIMPIEZA) {
+					TipoLimpieza enumTipoL = TipoLimpieza.valueOf(categoria);
+					p.setCategoria(enumTipoL);
+				}
+
+				p.setEstado(estado);
+				p.setDescuento(descuento);
             }
             rs.close();
             ps.close();
@@ -643,12 +663,13 @@ public class GestorBD {
 	// Metodo que devuelve todos los productos de un tipo
 	public List<Producto> listarProductosPorTipo(TipoProducto tipoProducto) {
 		List<Producto> productos = new ArrayList<>();
-		String sql = "SELECT nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento "
+		String sql = "SELECT id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento "
 				+ "FROM Producto WHERE tipoProducto = ?";
 		try (PreparedStatement ps = conn.prepareStatement(sql)){
 			ps.setString(1, tipoProducto.toString());
             ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
+				int id = rs.getInt("id");
 				String nombre = capitalize(rs.getString("nombre"));
 				String imagen = rs.getString("imagen");
 				Double precio = rs.getDouble("precio");
@@ -660,6 +681,7 @@ public class GestorBD {
 				int descuento = rs.getInt("descuento");
 
 				Producto p = new Producto();
+				p.setId(id);
 				p.setNombre(nombre);
 				p.setImagen(imagen);
 				p.setPrecio(precio);
