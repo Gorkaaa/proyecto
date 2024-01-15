@@ -407,7 +407,10 @@ public class VentanaPrincipal extends JFrame {
 				
 				gestor.getProductos().add(new Producto(producto.getId(), producto.getImagen(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getTipoProducto(), producto.getCategoria(), producto.getEstado(), producto.getDescuento()));
 				spinner.setValue(1);
-				gestor.getGestorXML().anadirProducto(producto, cantidad, gestor.getUsuario().getNomUsuario());
+				if(gestor.getUsuario() != null)
+					gestor.getGestorXML().anadirProducto(producto, cantidad, gestor.getUsuario().getNomUsuario());
+				else
+					gestor.getGestorXML().anadirProducto(producto, cantidad, gestor.getEmpleado().getNomUsuario());
 				JOptionPane.showMessageDialog(null, "Producto añadido a la cesta");
 			}
 		});

@@ -10,4 +10,5 @@
       <cantidad>1</cantidad>
     </producto>
   </carrito>
+  <carrito usuario="" />
 </carritos>

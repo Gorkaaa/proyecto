@@ -97,7 +97,9 @@ public class VentanaCarroCompra extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Desea finalizar la compra?", "Confirmación de compra", JOptionPane.YES_NO_OPTION);
 				if (confirmacion == JOptionPane.YES_OPTION) {
-					// Se debe acualizar la cantidad de los productos que se han comprado, restando la cantidad que habia en el carrito de la BBDD
+					for(ProductoCarrito pc: productoCarrito) {
+						gestor.getGestorBD().realizarCompra(pc.getProducto().getNombre(), pc.getProducto().getCantidad() - pc.getCantidad());
+					}
 					gestor.getGestorXML().vaciarCarrito(usuario);
 				}
 			}
