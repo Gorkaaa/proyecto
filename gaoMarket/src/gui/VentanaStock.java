@@ -1,12 +1,20 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
@@ -18,6 +26,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import domain.GestorMarket;
 import domain.Producto;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
@@ -29,7 +38,11 @@ public class VentanaStock extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected JPanel pOeste, pCentro, pNorte;
+	protected GestorMarket gestor;
+	protected JPanel pDerecha;
+	protected JPanel pArriba;
+	protected JPanel pCentro; 
+	protected JPanel pIzquierda;
 	protected DefaultTreeModel modeloArbol;
 	protected JTree arbol;
 	protected JScrollPane scrollArbol;
@@ -39,12 +52,14 @@ public class VentanaStock extends JFrame {
 	protected JSlider sUnidades;
 	protected RendererStock renderer;
 	protected ImageIcon iconoStock;
+	protected List<Producto> listaProductos;
 	
 	protected String tipoProductoSeleccionado;
 	protected String categoriaSeleccionada;
     
-    public VentanaStock() {
+    public VentanaStock(GestorMarket gestor) {
 		super();
+		this.gestor = gestor;
 		tipoProductoSeleccionado = "";
 		categoriaSeleccionada = "";
 		
@@ -52,11 +67,13 @@ public class VentanaStock extends JFrame {
 		iconoStock = new ImageIcon(iconoStock.getImage().getScaledInstance(207, 207, Image.SCALE_SMOOTH));
 		
 		
-		pOeste = new JPanel();
-		pNorte = new JPanel();
+		pIzquierda = new JPanel();
+		pArriba = new JPanel();
 		pCentro = new JPanel();
 		
-		getContentPane().add(pNorte, BorderLayout.NORTH);
+		
+		listaProductos = new ArrayList<Producto>();
+		getContentPane().add(pArriba, BorderLayout.NORTH);
 		
 		DefaultMutableTreeNode nraiz = new DefaultMutableTreeNode("TIPOS DE PRODUCTO");
 		modeloArbol = new DefaultTreeModel(nraiz);
@@ -87,50 +104,85 @@ public class VentanaStock extends JFrame {
                     tipoProductoSeleccionado = selectedObject.toString();
 
                     if (CadenaProductos.getMapaTipoProducto().containsKey(TipoProducto.valueOf(tipoProductoSeleccionado))) {
-                    	//Esta lista que he añadido tengo que hacerlo en los JMenu para que cuando toque se filtren los productos de la VentanaPrincipal.
-                        List<Producto> l = CadenaProductos.obtenerListaTipoProductos(TipoProducto.valueOf(tipoProductoSeleccionado));
-                        Collections.sort(l);
-                        tabla.setModel(new ModeloStock(l));
+                    	listaProductos = CadenaProductos.obtenerListaTipoProductos(TipoProducto.valueOf(tipoProductoSeleccionado));
+                        Collections.sort(listaProductos);
+                        tabla.setModel(new ModeloStock(listaProductos));
                     }
                 } else if (selectedObject instanceof TipoAlimento) {
                 	categoriaSeleccionada = ((TipoAlimento) selectedObject).toString();
 
                     if (CadenaProductos.getMapaCategoriaProducto().containsKey(TipoAlimento.valueOf(categoriaSeleccionada))) {
-                        List<Producto> l = CadenaProductos.obtenerListaCategoriaProductos(TipoAlimento.valueOf(categoriaSeleccionada));
-                        Collections.sort(l);
-                        tabla.setModel(new ModeloStock(l));
+                    	listaProductos = CadenaProductos.obtenerListaCategoriaProductos(TipoAlimento.valueOf(categoriaSeleccionada));
+                        Collections.sort(listaProductos);
+                        tabla.setModel(new ModeloStock(listaProductos));
                     }
                 } else if (selectedObject instanceof TipoHigieneYBelleza) {
                 	categoriaSeleccionada = ((TipoHigieneYBelleza) selectedObject).toString();
 
                     if (CadenaProductos.getMapaCategoriaProducto().containsKey(TipoHigieneYBelleza.valueOf(categoriaSeleccionada))) {
-                        List<Producto> l = CadenaProductos.obtenerListaCategoriaProductos(TipoHigieneYBelleza.valueOf(categoriaSeleccionada));
-                        Collections.sort(l);
-                        tabla.setModel(new ModeloStock(l));
+                    	listaProductos = CadenaProductos.obtenerListaCategoriaProductos(TipoHigieneYBelleza.valueOf(categoriaSeleccionada));
+                        Collections.sort(listaProductos);
+                        tabla.setModel(new ModeloStock(listaProductos));
                     }
                 } else {
                 	categoriaSeleccionada = ((TipoLimpieza) selectedObject).toString();
 
                     if (CadenaProductos.getMapaCategoriaProducto().containsKey(TipoLimpieza.valueOf(categoriaSeleccionada))) {
-                        List<Producto> l = CadenaProductos.obtenerListaCategoriaProductos(TipoLimpieza.valueOf(categoriaSeleccionada));
-                        Collections.sort(l);
-                        tabla.setModel(new ModeloStock(l));
+                    	listaProductos = CadenaProductos.obtenerListaCategoriaProductos(TipoLimpieza.valueOf(categoriaSeleccionada));
+                        Collections.sort(listaProductos);
+                        tabla.setModel(new ModeloStock(listaProductos));
                     }
                 }
-//                tabla.getColumnModel().getColumn(0).setPreferredWidth(3);
-//                tabla.getColumnModel().getColumn(3).setPreferredWidth(1);
-//                tabla.getColumnModel().getColumn(4).setPreferredWidth(4);
-//                tabla.getColumnModel().getColumn(8).setPreferredWidth(3);
-//                tabla.getColumnModel().getColumn(9).setPreferredWidth(5);
             }
             
            
         });
+        JPanel panelAbajo = new JPanel(new GridLayout(1, 2));
+        JButton botonEliminar = new JButton("Eliminar Producto");
+        botonEliminar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int filaSeleccionada = tabla.getSelectedRow();
+				ModeloStock modelo = (ModeloStock) tabla.getModel();
+				Producto productoEliminado = modelo.getProductoEnFila(filaSeleccionada);
+				
+				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres vaciar la cesta?", "Vaciar cesta", JOptionPane.YES_NO_OPTION);
+				if (confirmacion == JOptionPane.YES_OPTION) {
+					modelo.eliminarProducto(productoEliminado);
+					gestor.getGestorBD().borrarProducto(productoEliminado.getId());
+					modelo.fireTableDataChanged();
+				}
+
+			}
+        	
+        });
+        
+        JButton botonAnyadir = new JButton("Añadir Producto");
+        panelAbajo.add(botonAnyadir);
+        panelAbajo.add(botonEliminar);
+        
+        getContentPane().add(panelAbajo, BorderLayout.SOUTH);
         
         setBounds(25, 100, 1490, 600);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(false);
 		setIconImage(iconoStock.getImage());
+		
+		
+		this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+        		CadenaProductos.guardarProductos("resources/datos/productos.csv", gestor.getGestorBD().listarProductos());
+        		
+            }
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+				
+			}
+
+        });
         
 	}
 

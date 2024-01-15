@@ -2,7 +2,6 @@ package gui;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import domain.GestorMarket;
 import domain.Producto;
 import domain.Producto.Estado;
 import domain.TipoAlimento;
@@ -30,6 +30,7 @@ public class CadenaProductos {
 	protected static Map<Enum<?>, List<Producto>> mapaCategoriaProducto = new HashMap<>();
 	private static Logger logger = Logger.getLogger(CadenaProductos.class.getName());
 	protected static List<Producto> productos;
+	protected static GestorMarket gestor;
 
 	public static Map<TipoProducto, Set<Producto>> getMapaTipoProducto() {
 		return mapaTipoProducto;
@@ -169,39 +170,28 @@ public class CadenaProductos {
 		}
 	}
 	
-	public static void guardarProductos(String nomfich, List<Producto> productos) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(nomfich))) {
-            // Escribir la primera línea (encabezados)
-            writer.println("Id;Nombre;Imagen;Cantidad;Precio;TipoProducto;Categoria;Estado;Descuento");
-
-            // Escribir cada producto en una línea del archivo
-            for (Producto producto : productos) {
-                String tipoCategoria = "";
-                if (producto.getTipoProducto() == TipoProducto.ALIMENTO) {
-                    tipoCategoria = ((TipoAlimento) producto.getCategoria()).name();
-                } else if (producto.getTipoProducto() == TipoProducto.HIGIENE_Y_BELLEZA) {
-                    tipoCategoria = ((TipoHigieneYBelleza) producto.getCategoria()).name();
-                } else {
-                    tipoCategoria = ((TipoLimpieza) producto.getCategoria()).name();
-                }
-
+	public static void guardarProductos(String nomfich, List<Producto> productos1) {
+        try (PrintWriter writer = new PrintWriter(nomfich)) {
+        	writer.println("Id;Nombre;Imagen;Cantidad;Precio;TipoProducto;Categoria;Estado;Descuento");
+        	
+            for (Producto producto : productos1) {
                 writer.println(
                         producto.getId() + ";" +
                         producto.getNombre() + ";" +
                         producto.getImagen() + ";" +
                         producto.getCantidad() + ";" +
                         producto.getPrecio() + ";" +
-                        producto.getTipoProducto().name() + ";" +
-                        tipoCategoria + ";" +
-                        producto.getEstado().name() + ";" +
+                        producto.getTipoProducto() + ";" +
+                        producto.getCategoria() + ";" +
+                        producto.getEstado() + ";" +
                         producto.getDescuento()
                 );
             }
+            writer.close();
 
-            System.out.println("Datos guardados exitosamente en " + nomfich);
+            logger.log(Level.INFO, "Datos guardados CSV exitosamente");
         } catch (IOException e) {
-            System.err.println("Error al guardar datos en " + nomfich);
-            e.printStackTrace();
+        	logger.log(Level.WARNING, "Error al cargar datos CSV");
         }
     }
 	

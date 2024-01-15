@@ -263,10 +263,10 @@ public class VentanaPrincipal extends JFrame {
 					if (resp.equals(gestion[0]))
 						ventanaAdministracionUsuarios.setVisible(true);	
 					else {
-						if (resp.equals(gestion[0]))
+						if (resp.equals(gestion[1]))
 							ventanaAdministracionEmpleados.setVisible(true);
 						else {
-							VentanaStock stock = new VentanaStock();
+							VentanaStock stock = new VentanaStock(gestor);
 							stock.setVisible(true);
 						}
 					}
@@ -305,9 +305,9 @@ public class VentanaPrincipal extends JFrame {
         
         cp.add(scrollPane);
         
-		
         productos = gestor.getGestorBD().listarProductos();
 		createRowPanels(backgroundPanel);
+
 		
         
 		 
