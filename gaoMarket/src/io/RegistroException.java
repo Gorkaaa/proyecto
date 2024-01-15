@@ -19,6 +19,8 @@ public class RegistroException extends Exception{
 				return "Error a la hora de introducir numero de telefono";
 			case "3":
 				return "Error a la hora de introducir el correo";
+			case "4":
+				return "Error a la hora de introducir DNI, (La letra debe de estar en mayúscula)";
 		}
 		return null;
 	}

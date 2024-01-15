@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JButton;
@@ -129,6 +130,8 @@ public class VentanaRegistroEmpleado extends JFrame {
         }
         if(nombre.isBlank() || apellido.isBlank() || usuario.isBlank() || correo.isBlank() || cont.isBlank() || dni.isBlank())
         	throw new RegistroException("1");
+        if(!validarDNI(dni))
+        	throw new RegistroException("4");
         if(gestor.getGestorBD().guardarEmpleado(new Empleado(nombre, apellido, usuario, 
         		telefono,correo, cont, dni))) {
         	 JOptionPane.showMessageDialog(null, "Registrado con éxito: " + usuario);
@@ -142,5 +145,16 @@ public class VentanaRegistroEmpleado extends JFrame {
         return Pattern.compile("^(.+)@(.+)$")
           .matcher(correo)
           .matches();
+    }
+    public static boolean validarDNI(String dni) {
+    	 Matcher matcher = Pattern.compile("^[0-9]{8}[A-Za-z]$").matcher(dni);
+    	 if (matcher.matches()) {
+    		 String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+    		 String numero = dni.substring(0, 8);
+    		 char letra = dni.charAt(8);
+    		 char letraCalculada = letras.charAt(Integer.parseInt(numero) % 23);
+    		 return letra == letraCalculada;
+    	 }
+    	 return false;
     }
 }
