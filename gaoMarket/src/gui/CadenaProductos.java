@@ -2,6 +2,9 @@ package gui;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +29,7 @@ public class CadenaProductos {
 	protected static Map<TipoProducto, Set<Producto>> mapaTipoProducto = new TreeMap<>();
 	protected static Map<Enum<?>, List<Producto>> mapaCategoriaProducto = new HashMap<>();
 	private static Logger logger = Logger.getLogger(CadenaProductos.class.getName());
+	protected static List<Producto> productos;
 
 	public static Map<TipoProducto, Set<Producto>> getMapaTipoProducto() {
 		return mapaTipoProducto;
@@ -111,4 +115,96 @@ public class CadenaProductos {
 			logger.log(Level.WARNING, "Error al cargar datos .csv");
 		}
 	}
+	
+	public static void cargarProductos(String nomfich) {
+		try {
+			Scanner sc = new Scanner(new FileReader(nomfich));
+			sc.nextLine();
+			String linea;
+			while(sc.hasNext()) {
+				linea = sc.nextLine();
+				String [] partes = linea.split(";");
+				int id = Integer.parseInt(partes[0]);
+				String nombre = partes[1];
+				String imagen = partes[2];
+				int cantidad = Integer.parseInt(partes[3]);
+				Double precio = Double.parseDouble(partes[4]);
+				TipoProducto tipoProducto = TipoProducto.valueOf(partes[5]);				
+				Estado estado = Estado.valueOf(partes[7]);
+				int descuento = Integer.parseInt(partes[8]);
+				
+				productos = new ArrayList<Producto>();
+				
+				Producto p = new Producto();
+				p.setId(id);
+				p.setNombre(nombre);
+				p.setImagen(imagen);
+				p.setPrecio(precio);
+				p.setCantidad(cantidad);
+				p.setTipoProducto(tipoProducto);
+				p.setEstado(estado);
+				p.setDescuento(descuento);
+				
+				
+				if (tipoProducto == TipoProducto.ALIMENTO) {
+					TipoAlimento tipoAlimento  = TipoAlimento.valueOf(partes[6]);
+					p.setCategoria(tipoAlimento);
+					
+				} else if (tipoProducto == TipoProducto.HIGIENE_Y_BELLEZA){
+					TipoHigieneYBelleza tipoHigiene  = TipoHigieneYBelleza.valueOf(partes[6]);
+					p.setCategoria(tipoHigiene );
+					
+				} else {
+					TipoLimpieza tipoLimpieza  = TipoLimpieza.valueOf(partes[6]);
+					p.setCategoria(tipoLimpieza );
+				}
+				
+				
+				productos.add(p);
+				
+			}
+			sc.close();
+		} catch (FileNotFoundException e) {
+			logger.log(Level.WARNING, "Error al cargar datos .csv");
+		}
+	}
+	
+	public static void guardarProductos(String nomfich, List<Producto> productos) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(nomfich))) {
+            // Escribir la primera línea (encabezados)
+            writer.println("Id;Nombre;Imagen;Cantidad;Precio;TipoProducto;Categoria;Estado;Descuento");
+
+            // Escribir cada producto en una línea del archivo
+            for (Producto producto : productos) {
+                String tipoCategoria = "";
+                if (producto.getTipoProducto() == TipoProducto.ALIMENTO) {
+                    tipoCategoria = ((TipoAlimento) producto.getCategoria()).name();
+                } else if (producto.getTipoProducto() == TipoProducto.HIGIENE_Y_BELLEZA) {
+                    tipoCategoria = ((TipoHigieneYBelleza) producto.getCategoria()).name();
+                } else {
+                    tipoCategoria = ((TipoLimpieza) producto.getCategoria()).name();
+                }
+
+                writer.println(
+                        producto.getId() + ";" +
+                        producto.getNombre() + ";" +
+                        producto.getImagen() + ";" +
+                        producto.getCantidad() + ";" +
+                        producto.getPrecio() + ";" +
+                        producto.getTipoProducto().name() + ";" +
+                        tipoCategoria + ";" +
+                        producto.getEstado().name() + ";" +
+                        producto.getDescuento()
+                );
+            }
+
+            System.out.println("Datos guardados exitosamente en " + nomfich);
+        } catch (IOException e) {
+            System.err.println("Error al guardar datos en " + nomfich);
+            e.printStackTrace();
+        }
+    }
+	
+	
+	
 }
