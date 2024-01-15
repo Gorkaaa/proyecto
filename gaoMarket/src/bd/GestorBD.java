@@ -348,8 +348,57 @@ public class GestorBD {
 	
 	////Consultas de Empleados
 	
+	// Metodo que busca un empleado en la BD por su nomUsuario y contraseña
+	public Empleado verificarCredencialesEmpleado(String nomUsuario, String password) { 
+		Empleado emp = null;
+    	String sql = "SELECT * FROM empleado WHERE nomUsuario = ? AND contrasenya = ?";
+
+		 try (PreparedStatement ps = conn.prepareStatement(sql)){
+	        ps.setString(1, nomUsuario);
+	        ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()) { 
+            	emp = new Empleado(rs.getString("nombre"), rs.getString("apellidos"), rs.getString("nomUsuario"), rs.getInt("numTelefono"), rs.getString("correoElectronico"), rs.getString("contrasenya"), rs.getString("dni"));
+            }
+            rs.close();
+            ps.close();
+         }
+         catch (Exception e)  {
+        	 logger.log(Level.WARNING, "Error en verificarCredencialesEmpleado(Usuario, password): " + e);
+         } 
+		 return emp;
+	}
+	
 	// Metodo que busca un empleado en la BD por su nomUsuario
-	public boolean buscaEmpleado(String nomUsuario) {
+	public Empleado buscarEmpleado(String usuario) {
+		Empleado emp = new Empleado();
+        String sql = "SELECT * FROM empleado WHERE nomUsuario = ?";
+
+		try (PreparedStatement ps = conn.prepareStatement(sql)){
+	        ps.setString(1, usuario);
+            ResultSet rs = ps.executeQuery();        
+            while (rs.next()) {
+            	String nombre = capitalize(rs.getString("nombre"));
+            	String apellidos = capitalize(rs.getString("apellidos"));
+            	String nomUsuario = rs.getString("nomUsuario");
+            	int numTelefono = rs.getInt("numTelefono");
+            	String correoElectronico = lower(rs.getString("correoElectronico"));
+            	String contrasenya = rs.getString("contrasenya");
+            	String dni = rs.getString("dni");
+		        emp = new Empleado(nombre, apellidos, nomUsuario, numTelefono, correoElectronico, contrasenya, dni);
+            }
+            rs.close();
+            ps.close();
+         }
+	     catch (Exception e)  {
+	    	 logger.log(Level.WARNING, "Error en buscarEmpleado(usuario): " + e);
+	     } 
+		 return emp;
+	}
+	
+	// Metodo que busca un empleado en la BD por su nomUsuario
+	public boolean existeEmpleado(String nomUsuario) {
 		boolean existe = false;
        String sql = "SELECT * FROM empleado WHERE nomUsuario = ?";
 
@@ -361,14 +410,14 @@ public class GestorBD {
            ps.close();
         }
 	     catch (Exception e)  {
-	    	 logger.log(Level.WARNING, "Error en buscaEmpleado(Empleado): " + e);
+	    	 logger.log(Level.WARNING, "Error en existeEmpleado(Empleado): " + e);
 	     } 
 		 return existe;
 	}
 	
 	//Metodo para introducir un nuevo empleado en la base de datos
 	public boolean guardarEmpleado(Empleado e) {
-		if(buscaEmpleado(e.getNomUsuario()))
+		if(existeEmpleado(e.getNomUsuario()))
 			return false;
 	    boolean guardado = false;
 	    String sql =
