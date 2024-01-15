@@ -1,7 +1,7 @@
-ID;Nombre;Imagen;Cantidad;Precio;TipoProducto;Categoria;Estado;Descuento
-1;Manzanas;manzanas.png;56;3.55;ALIMENTO;FRUTAS;NORMAL;0
-2;Shampoo;shampoo.png;34;4.99;HIGIENE_Y_BELLEZA;CUIDADO_CABELLO;NORMAL;0
-3;Detergente;detergente.png;78;6.99;LIMPIEZA;PRODUCTOS_LIMPIEZA;NORMAL;0
+Id;Nombre;Imagen;Cantidad;Precio;TipoProducto;Categoria;Estado;Descuento
+1;Manzanas;manzanas.png;54;3.55;ALIMENTO;FRUTAS;NORMAL;0
+2;Shampoo;shampoo.png;30;4.99;HIGIENE_Y_BELLEZA;CUIDADO_CABELLO;NORMAL;0
+3;Detergente;detergente.png;76;6.99;LIMPIEZA;PRODUCTOS_LIMPIEZA;NORMAL;0
 4;Pollo;pollo.png;21;3.99;ALIMENTO;CARNICOS;NORMAL;0
 5;Jab�n de manos;jabon_manos.png;0;2.49;HIGIENE_Y_BELLEZA;HIGIENE_INTIMA;AGOTADO;0
 6;Escoba;escoba.png;63;2.99;LIMPIEZA;UTENSILIOS;NORMAL;0
@@ -23,7 +23,7 @@ ID;Nombre;Imagen;Cantidad;Precio;TipoProducto;Categoria;Estado;Descuento
 22;Champ�;champu.png;40;4.49;HIGIENE_Y_BELLEZA;CUIDADO_CABELLO;NORMAL;0
 23;Pan;pandulce.png;25;2.49;ALIMENTO;PAN;NORMAL;10
 24;Aceite;aceite.png;40;7.63;ALIMENTO;CARNICOS;NORMAL;5
-25;Loci�n corporal;locion_corporal.png;18;12.00;HIGIENE_Y_BELLEZA;CUIDADO_CORPORAL;NORMAL;15
+25;Loci�n corporal;locion_corporal.png;18;12.0;HIGIENE_Y_BELLEZA;CUIDADO_CORPORAL;NORMAL;15
 26;Pasta dental;pasta_dental.png;55;2.79;HIGIENE_Y_BELLEZA;HIGIENE_BUCAL;NORMAL;0
 27;Lim�n;limon.png;30;1.49;ALIMENTO;VEGETALES;NORMAL;0
 28;Desodorante;desodorante.png;48;3.99;HIGIENE_Y_BELLEZA;CUIDADO_CORPORAL;NORMAL;0
@@ -45,7 +45,7 @@ ID;Nombre;Imagen;Cantidad;Precio;TipoProducto;Categoria;Estado;Descuento
 44;Toallitas h�medas;toallitas_humedas.png;37;3.44;HIGIENE_Y_BELLEZA;HIGIENE_INTIMA;NORMAL;0
 45;Mantequilla;mantequilla.png;26;4.22;ALIMENTO;LACTEOS;NORMAL;0
 46;Gel de ducha;gel_ducha.png;21;7.43;HIGIENE_Y_BELLEZA;CUIDADO_CORPORAL;NORMAL;0
-47;Cereal para el desayuno;cereal_desayuno.png;55;3.80;ALIMENTO;CEREALES;NORMAL;0
+47;Cereal para el desayuno;cereal_desayuno.png;55;3.8;ALIMENTO;CEREALES;NORMAL;0
 48;Pilas;pilas.png;18;2.43;LIMPIEZA;PRODUCTOS_LIMPIEZA;NORMAL;0
 49;Salsa de tomate;salsa_tomate.png;31;15.21;ALIMENTO;CONGELADOS;NORMAL;0
 50;Secador de pelo;secador_pelo.png;12;19.99;HIGIENE_Y_BELLEZA;CUIDADO_CABELLO;NORMAL;0
@@ -54,7 +54,7 @@ ID;Nombre;Imagen;Cantidad;Precio;TipoProducto;Categoria;Estado;Descuento
 53;Pan integral;pan_integral.png;35;2.79;ALIMENTO;PAN;NORMAL;0
 54;Desinfectante para superficies;desinfectante_superficies.png;15;8.99;LIMPIEZA;PRODUCTOS_LIMPIEZA;NORMAL;0
 55;Sand�a;sandia.png;18;4.99;ALIMENTO;FRUTAS;NORMAL;0
-56;Lej�a;lejia.png;10;249.21;LIMPIEZA;UTENSILIOS;NORMAL;0
+56;Lej�a;lejia.png;10;249.21;LIMPIEZA;UTENSILIOS;POCAS_UNIDADES;0
 57;Brochas de maquillaje;brochas_maquillaje.png;22;12.49;HIGIENE_Y_BELLEZA;CUIDADO_CORPORAL;NORMAL;0
 58;Miel;miel.png;30;5.49;ALIMENTO;DULCES;NORMAL;0
 59;Fregona;fregona.png;8;23.75;LIMPIEZA;UTENSILIOS;POCAS_UNIDADES;0
