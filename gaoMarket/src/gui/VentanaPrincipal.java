@@ -36,7 +36,6 @@ import javax.swing.border.LineBorder;
 
 import domain.GestorMarket;
 import domain.Producto;
-import domain.ProductoCarrito;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
 import domain.TipoLimpieza;
@@ -60,12 +59,10 @@ public class VentanaPrincipal extends JFrame {
 	protected ImageIcon iconoGAO;
 	protected JButton botonCesta;
 	protected static JButton botonUsuario;
-	protected JButton botonGestionUsuario;
+	protected static JButton botonGestionUsuario;
 	protected JTextField barraBusqueda;
 	protected JPanel backgroundPanel;
-	
 	protected List<Producto> productos;
-	protected List<ProductoCarrito> productosEnCesta;
 	
 	public VentanaPrincipal(GestorMarket gestor) {
 		this.gestor = gestor;
@@ -218,7 +215,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(gestor.getUsuario() == null) {
+				if(gestor.getUsuario() == null && gestor.getEmpleado() == null) {
 					JOptionPane.showMessageDialog(null, "Primero tienes que iniciar sesión");
 					ventanaInicioSesion.setVisible(true);
 				}else {
@@ -236,13 +233,15 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(gestor.getUsuario() == null)
+				if(gestor.getUsuario() == null && gestor.getEmpleado() == null)
 					ventanaInicioSesion.setVisible(true);
 				else {
 					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?", "Cerrar Sesión", JOptionPane.YES_NO_OPTION);
 					if (confirmacion == JOptionPane.YES_OPTION) {
 						GestorMarket.usuario = null;
+						GestorMarket.empleado = null;
 						botonUsuario.setIcon(iconoUsuario);
+						botonGestionUsuario.setEnabled(false);
 					}
 				}	
 			}
@@ -251,6 +250,7 @@ public class VentanaPrincipal extends JFrame {
 		iconoGestorUsuario = new ImageIcon("resources/iconos/gestionUsuario.png");
 		iconoGestorUsuario = new ImageIcon(iconoGestorUsuario.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
 		botonGestionUsuario = new JButton(iconoGestorUsuario);
+		botonGestionUsuario.setEnabled(false);
 		botonGestionUsuario.addActionListener(new ActionListener() {
 
 			@Override

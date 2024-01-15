@@ -20,7 +20,6 @@ import javax.swing.JTable;
 
 import domain.GestorMarket;
 import domain.ProductoCarrito;
-import domain.Usuario;
 
 public class VentanaCarroCompra extends JFrame{
 
@@ -41,7 +40,7 @@ public class VentanaCarroCompra extends JFrame{
 	protected JPanel panelCentral;
 	protected JPanel panelAbajo;
 	protected JLabel lblPrecioTotal;
-	protected Usuario usuario;
+	protected String usuario;
     
 	public VentanaCarroCompra(GestorMarket gestor) {
 		this.gestor = gestor;
@@ -49,9 +48,12 @@ public class VentanaCarroCompra extends JFrame{
 
 		
 		this.setLayout(new BorderLayout());
+		if(gestor.getUsuario() != null)
+			usuario = gestor.getUsuario().getNomUsuario();
+		else
+			usuario = gestor.getEmpleado().getNomUsuario();
 		
-		usuario = gestor.getUsuario();
-		productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
+		productoCarrito = gestor.getGestorXML().dameProductos(usuario);
 		
 		modeloCarrito = new ModeloCarroCompra(productoCarrito);
 		tabla = new JTable(modeloCarrito);
@@ -72,7 +74,7 @@ public class VentanaCarroCompra extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres vaciar la cesta?", "Vaciar cesta", JOptionPane.YES_NO_OPTION);
 				if (confirmacion == JOptionPane.YES_OPTION)
-					gestor.getGestorXML().vaciarCarrito(usuario.getNomUsuario());
+					gestor.getGestorXML().vaciarCarrito(usuario);
 			}
 		});
 		
@@ -80,9 +82,11 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar el producto seleccionado de la cesta?", "Confirmación de eliminación", JOptionPane.YES_NO_OPTION);
-				if (confirmacion == JOptionPane.YES_OPTION) {
-					gestor.getGestorXML().eliminarProducto(usuario.getNomUsuario(), productoCarrito.get(tabla.getSelectedRow()).getProducto().getNombre());
+				if(tabla.getSelectedRow() != -1){
+					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar el producto seleccionado de la cesta?", "Confirmación de eliminación", JOptionPane.YES_NO_OPTION);
+					if (confirmacion == JOptionPane.YES_OPTION) {
+						gestor.getGestorXML().eliminarProducto(usuario, productoCarrito.get(tabla.getSelectedRow()).getProducto().getNombre());
+					}
 				}
 			}
 		});
@@ -94,7 +98,7 @@ public class VentanaCarroCompra extends JFrame{
 				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Desea finalizar la compra?", "Confirmación de compra", JOptionPane.YES_NO_OPTION);
 				if (confirmacion == JOptionPane.YES_OPTION) {
 					// Se debe acualizar la cantidad de los productos que se han comprado, restando la cantidad que habia en el carrito de la BBDD
-					gestor.getGestorXML().vaciarCarrito(usuario.getNomUsuario());
+					gestor.getGestorXML().vaciarCarrito(usuario);
 				}
 			}
 		});
@@ -129,8 +133,7 @@ public class VentanaCarroCompra extends JFrame{
 			
 			@Override
 			public void windowGainedFocus(WindowEvent e) {
-
-				productoCarrito = gestor.getGestorXML().dameProductos(usuario.getNomUsuario());
+				productoCarrito = gestor.getGestorXML().dameProductos(usuario);
 				modeloCarrito.setProductoCarrito(productoCarrito);
 				modeloCarrito.fireTableDataChanged();
 			}

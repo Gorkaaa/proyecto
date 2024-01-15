@@ -1,6 +1,7 @@
 package gui;
 
 
+import domain.Empleado;
 import domain.GestorMarket;
 import domain.Usuario;
 
@@ -38,6 +39,7 @@ public class VentanaInicioSesion extends JFrame {
 		Container cp = this.getContentPane();
 		
 		GestorMarket.usuario = null;
+		GestorMarket.empleado = null;
 		
 		ventanaRegistro = new VentanaRegistro(gestor);
 		
@@ -61,9 +63,15 @@ public class VentanaInicioSesion extends JFrame {
                 char[] contrasena = cajaContrasena.getPassword();
                 
                 // Verifica las credenciales
-                if (verificarCredenciales(usuario, new String(contrasena))) {
+                int inicio = verificarCredenciales(usuario, new String(contrasena));
+                if (inicio != 0) {
                     JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
-                    GestorMarket.usuario = gestor.getGestorBD().buscarUsuario(usuario);
+                    if(inicio == 1)
+                    	GestorMarket.usuario = gestor.getGestorBD().buscarUsuario(usuario);
+                    if(inicio == 2) {
+                    	VentanaPrincipal.botonGestionUsuario.setEnabled(true);
+                    	GestorMarket.empleado = gestor.getGestorBD().buscarEmpleado(usuario);
+                    }
                     ImageIcon iconoUsuario = new ImageIcon("resources/iconos/cerrarSesion.png");
             		iconoUsuario = new ImageIcon(iconoUsuario.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
                     VentanaPrincipal.botonUsuario.setIcon(iconoUsuario);
@@ -121,11 +129,12 @@ public class VentanaInicioSesion extends JFrame {
      }
 
     // Método para verificar las credenciales
-    private boolean verificarCredenciales(String usuario, String contrasena) {
-    	if(usuario == null || contrasena == null) return false;
+    private int verificarCredenciales(String usuario, String contrasena) {
+    	if(usuario == null || contrasena == null) return 0;
     	Usuario u = gestor.getGestorBD().verificarCredenciales(usuario, contrasena);
-    	if(u == null)
-    		return false;
-    	return true;
+    	Empleado e = gestor.getGestorBD().verificarCredencialesEmpleado(usuario, contrasena);
+    	if(u != null ) return 1;
+    	if(e != null) return 2;
+    	return 0;
     }
 }
