@@ -138,8 +138,6 @@ public class VentanaPrincipal extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					backgroundPanel.removeAll();
 					productos = gestor.getGestorBD().listarProductosPorCategoria(tipo.toString());
-					System.out.println(tipo);
-					System.out.println(productos);
 					createRowPanels(backgroundPanel);
 					
 				}
