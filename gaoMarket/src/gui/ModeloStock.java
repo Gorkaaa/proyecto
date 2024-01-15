@@ -66,8 +66,16 @@ public class ModeloStock extends DefaultTableModel {
 			default: return null;
 		}
 	}
+	
+	public Producto getProductoEnFila(int fila) {
+		return productos.get(fila);
+	}
 
+	public void eliminarProducto(Producto producto) {
+		productos.remove(producto);
+	}
 
+	
 //	@Override
 //	public void setValueAt(Object aValue, int row, int column) {
 //		
