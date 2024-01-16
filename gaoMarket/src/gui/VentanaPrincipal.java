@@ -116,12 +116,34 @@ public class VentanaPrincipal extends JFrame {
 		for (TipoAlimento tipo : TipoAlimento.values()) {
 			JMenuItem menuTipo = new JMenuItem(tipo.toString());
 			jAlimentos.add(menuTipo);
+			menuTipo.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					backgroundPanel.removeAll();
+					productos = gestor.getGestorBD().listarProductosPorCategoria(tipo.toString());
+					createRowPanels(backgroundPanel);
+					
+				}
+				
+			});
 		}
 		
 		JMenuItem jHigieneYBelleza = new JMenu("Higiene y Belleza");
 		for (TipoHigieneYBelleza tipo : TipoHigieneYBelleza.values()) {
 			JMenuItem menuTipo = new JMenuItem(tipo.toString());
 			jHigieneYBelleza.add(menuTipo);
+			menuTipo.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					backgroundPanel.removeAll();
+					productos = gestor.getGestorBD().listarProductosPorCategoria(tipo.toString());
+					createRowPanels(backgroundPanel);
+					
+				}
+				
+			});
 		}
 		
 		JMenuItem jLimpieza = new JMenu("Limpieza");
