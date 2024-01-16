@@ -26,7 +26,7 @@ abstract public class Persona implements Serializable {
 		this.correoElectronico = correoElectronico;
 		this.contrasenya = contrasenya;
 	}
-	
+
 	public Persona() {
 		super();
 		this.nombre = "";

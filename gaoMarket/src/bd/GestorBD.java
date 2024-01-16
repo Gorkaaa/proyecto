@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,6 +68,8 @@ public class GestorBD {
 			sent = "CREATE TABLE IF NOT EXISTS usuario (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100));";
 			statement.executeUpdate( sent );
 			sent = "CREATE TABLE IF NOT EXISTS empleado (nombre varchar(100), apellidos varchar(100), nomUsuario varchar(100), numTelefono int, correoElectronico varchar(100), contrasenya varchar(100), dni varchar(9));";
+			statement.executeUpdate( sent );
+			sent = "CREATE TABLE IF NOT EXISTS compra (usuario varchar(100), fecha date, total double);";
 			statement.executeUpdate( sent );
 			
 			anyadirAdmin();
@@ -283,7 +286,7 @@ public class GestorBD {
 		
 	//Metodo para introducir un nuevo usuario en la base de datos
 	public boolean guardarUsuario(Usuario u) {
-		if(existeUsuario(u.getNomUsuario()))
+		if(existeUsuario(u.getNomUsuario()) || existeEmpleado(u.getNomUsuario()))
 			return false;
 	    boolean guardado = false;
 	    String sql =
@@ -417,7 +420,7 @@ public class GestorBD {
 	
 	//Metodo para introducir un nuevo empleado en la base de datos
 	public boolean guardarEmpleado(Empleado e) {
-		if(existeEmpleado(e.getNomUsuario()))
+		if(existeEmpleado(e.getNomUsuario()) || existeUsuario(e.getNomUsuario()))
 			return false;
 	    boolean guardado = false;
 	    String sql =
@@ -776,7 +779,21 @@ public class GestorBD {
 	      ps.executeUpdate();
 	      ps.close();
 	    } catch (SQLException e) {
-	      e.printStackTrace();
+	    	logger.log(Level.WARNING, "Error en metodo realizarCompra: " + e);
+	    }
+	}
+	
+	//Metodo que crea una compra pasandole el nombre de Usuario que hace la compra y el total de esta
+	public void crearCompra(String usuario, double total) {
+		String sql = "INSERT INTO compra (usuario, fecha, total) VALUES (?, ?, ?);";
+	    try (PreparedStatement ps = conn.prepareStatement(sql)){
+	    	ps.setString(1, usuario);
+	      ps.setDate(2, new Date(System.currentTimeMillis()));
+	      ps.setDouble(3, total);
+	      ps.executeUpdate();
+	      ps.close();
+	    } catch (SQLException e) {
+	    	logger.log(Level.WARNING, "Error en metodo crearCompra: " + e);
 	    }
 	}
 }

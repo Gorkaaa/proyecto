@@ -91,23 +91,26 @@ public class VentanaCarroCompra extends JFrame{
 			}
 		});
 		
-		btnComprar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Desea finalizar la compra?", "Confirmación de compra", JOptionPane.YES_NO_OPTION);
-				if (confirmacion == JOptionPane.YES_OPTION) {
-					for(ProductoCarrito pc: productoCarrito) {
-						gestor.getGestorBD().realizarCompra(pc.getProducto().getNombre(), pc.getProducto().getCantidad() - pc.getCantidad());
-					}
-					gestor.getGestorXML().vaciarCarrito(usuario);
-				}
-			}
-		});
 		if(productoCarrito.size() == 0) lblPrecioTotal = new JLabel("Total: 0€");
 		else lblPrecioTotal = new JLabel("Total: " + String.format("%.2f €", sumarPrecioTotalCarroRecursivo(productoCarrito, productoCarrito.size() - 1)));
 		panelCentral.add(tablaScroll, "Center");
 		panelCentral.add(lblPrecioTotal, "South");
+		
+		btnComprar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(productoCarrito.size() > 0) {
+					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Desea finalizar la compra?", "Confirmación de compra", JOptionPane.YES_NO_OPTION);
+					if (confirmacion == JOptionPane.YES_OPTION) {
+						for(ProductoCarrito pc: productoCarrito) {
+							gestor.getGestorBD().realizarCompra(pc.getProducto().getNombre(), pc.getProducto().getCantidad() - pc.getCantidad());
+						}
+						gestor.getGestorXML().vaciarCarrito(usuario);
+						gestor.getGestorBD().crearCompra(usuario, sumarPrecioTotalCarroRecursivo(productoCarrito, productoCarrito.size() - 1));
+					}
+				}
+			}
+		});
 		
 		panelAbajo.add(btnVaciar);
 		panelAbajo.add(btnEliminar);
