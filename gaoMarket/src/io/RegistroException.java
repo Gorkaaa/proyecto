@@ -11,6 +11,10 @@ public class RegistroException extends Exception{
 		this.caso = caso;
 	}
 
+	public String getCaso() {
+		return caso;
+	}
+
 	public String mostrar() {
 		switch (caso) {
 			case "1":
