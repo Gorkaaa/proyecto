@@ -60,7 +60,6 @@ public class VentanaPrincipal extends JFrame {
 	protected JButton botonCesta;
 	protected static JButton botonUsuario;
 	protected static JButton botonGestionUsuario;
-	protected JTextField barraBusqueda;
 	protected JPanel backgroundPanel;
 	protected List<Producto> productos;
 	
@@ -319,8 +318,6 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 		
-		barraBusqueda = new JTextField(20);
-		
 		iconoGAO = new ImageIcon("resources/imagenes/GAOmarket.png");
 		iconoGAO = new ImageIcon(iconoGAO.getImage().getScaledInstance(404, 114, Image.SCALE_SMOOTH));
 		
@@ -332,7 +329,6 @@ public class VentanaPrincipal extends JFrame {
 		JPanel panelSubIconos = new JPanel(new FlowLayout());
 
 		panelArriba.add(imagenGAO);
-		panelArriba.add(barraBusqueda);
 		panelArriba.add(panelIconos);
 		panelSubIconos.add(botonGestionUsuario);
 		panelSubIconos.add(botonUsuario);
