@@ -258,15 +258,16 @@ public class VentanaPrincipal extends JFrame {
 				String[] gestion = {"Administrar Usuarios", "Administrar Empleados", "Administrar Stock"};
 				String resp = (String) JOptionPane.showInputDialog( null, "Selecciona que quiere administar", "Modo de trabajo", JOptionPane.QUESTION_MESSAGE, null, gestion, "Administrar Usuarios");
 				if(resp != null){
-					if (resp.equals(gestion[0]))
-						ventanaAdministracionUsuarios.setVisible(true);	
-					else {
-						if (resp.equals(gestion[1]))
-							ventanaAdministracionEmpleados.setVisible(true);
-						else {
-							VentanaStock stock = new VentanaStock(gestor);
-							stock.setVisible(true);
-						}
+					if (resp.equals(gestion[2])) {
+						VentanaStock stock = new VentanaStock(gestor);
+						stock.setVisible(true);
+					}else {
+						if(gestor.getEmpleado().getNomUsuario().equals("admin")) {
+							if (resp.equals(gestion[0])) ventanaAdministracionUsuarios.setVisible(true);
+							else ventanaAdministracionEmpleados.setVisible(true);
+						}else
+							JOptionPane.showMessageDialog(null, "Solo el usuario Administrador puede gestionar esta sección.");
+
 					}
 				}
 			}
