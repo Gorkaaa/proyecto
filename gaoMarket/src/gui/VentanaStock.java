@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -28,6 +29,7 @@ import javax.swing.tree.TreePath;
 
 import domain.GestorMarket;
 import domain.Producto;
+import domain.Producto.Estado;
 import domain.TipoAlimento;
 import domain.TipoHigieneYBelleza;
 import domain.TipoLimpieza;
@@ -159,6 +161,15 @@ public class VentanaStock extends JFrame {
         });
         
         JButton botonAnyadir = new JButton("Añadir Producto");
+        botonAnyadir.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 manejarAccionAnadirProducto();
+				
+			}
+        	
+        });
         panelAbajo.add(botonAnyadir);
         panelAbajo.add(botonEliminar);
         
@@ -185,7 +196,86 @@ public class VentanaStock extends JFrame {
         });
         
 	}
+    
+    private void manejarAccionAnadirProducto() {
+        // Obtener información del usuario para crear un nuevo producto
+        String nombre = JOptionPane.showInputDialog("Ingrese el nombre del producto:");
+        String imagen = (nombre + ".png").toLowerCase();
+        double precio = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el precio del producto:"));
+        int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Ingresa la cantidad de stock que hay del producto: "));
+        TipoProducto tipoProducto = obtenerTipoProductoDesdeUsuario();
+        Enum<?> categoria = obtenerCategoria(tipoProducto);
+        int descuento = Integer.parseInt(JOptionPane.showInputDialog("Ingresa el descuento que tendra el producto: "));
 
+        Producto nuevoProducto = new Producto();
+        nuevoProducto.setNombre(nombre);
+        nuevoProducto.setImagen(imagen);
+        nuevoProducto.setPrecio(precio);
+        nuevoProducto.setCantidad(cantidad);
+        nuevoProducto.setTipoProducto(tipoProducto);
+        nuevoProducto.setCategoria(categoria);
+        if (cantidad > 10) nuevoProducto.setEstado(Estado.NORMAL);
+        else if (cantidad == 0) nuevoProducto.setEstado(Estado.AGOTADO);
+        else nuevoProducto.setEstado(Estado.POCAS_UNIDADES);
+        nuevoProducto.setDescuento(descuento);
+
+       
+        if (gestor.getGestorBD().anyadirProducto(nuevoProducto)) {
+        	 listaProductos.add(gestor.getGestorBD().buscarProducto(nuevoProducto.getNombre()));
+             tabla.setModel(new ModeloStock(listaProductos));
+        }
+    }
+
+    private TipoProducto obtenerTipoProductoDesdeUsuario() {
+    	TipoProducto[] opciones = TipoProducto.values();
+
+        JComboBox<TipoProducto> comboTipoProducto = new JComboBox<>(opciones);
+        int resultado = JOptionPane.showConfirmDialog(
+                null,
+                comboTipoProducto,
+                "Seleccione el tipo de producto:",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (resultado == JOptionPane.OK_OPTION) {
+            return (TipoProducto) comboTipoProducto.getSelectedItem();
+        } else {
+
+            return null;
+        }
+    }
+
+    private Enum<?> obtenerCategoria(TipoProducto tipoProducto) {
+    	Enum<?>[] opciones;
+    	
+    	if (tipoProducto == TipoProducto.ALIMENTO) {
+    		opciones = TipoAlimento.values();
+    		
+    	} else if (tipoProducto == TipoProducto.HIGIENE_Y_BELLEZA) {
+    		opciones = TipoHigieneYBelleza.values();
+    	} else {
+    		opciones = TipoLimpieza.values();
+    	}
+    	
+    	JComboBox<Enum<?>> comboCategoria = new JComboBox<>(opciones);
+        int resultado = JOptionPane.showConfirmDialog(
+                null,
+                comboCategoria,
+                "Seleccione la categoría del producto:",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (resultado == JOptionPane.OK_OPTION) {
+            return (Enum<?>) comboCategoria.getSelectedItem();
+        } else {
+            return null;
+        }
+
+        
+    }
+    
 	private void cargarArbol() {
 		DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloArbol.getRoot();
 

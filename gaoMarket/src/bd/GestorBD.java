@@ -488,24 +488,26 @@ public class GestorBD {
 	////Consultas de Productos
 	
 	public boolean anyadirProducto(Producto p) {
-		boolean anyadir = true;
-		String sql = String.format("INSERT INTO producto "
-				+ "(id, nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		boolean anyadir = false;
+		if(buscarProducto(p.getNombre()) == null) {
+			return anyadir;
+		}
+		
+		String sql = "INSERT INTO producto "
+				+ "(nombre, imagen, precio, cantidad, tipoProducto, categoria, estado, descuento) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)){
-	        ps.setInt(1, p.getId());
-	        ps.setString(2, p.getNombre());
-	        ps.setString(3, p.getImagen());
-	        ps.setDouble(4, p.getPrecio());
-	        ps.setInt(5, p.getCantidad());
-	        ps.setString(6, p.getTipoProducto().toString());
-	        ps.setString(7, p.getCategoria().toString());
-	        ps.setString(8, p.getEstado().toString());
-	        ps.setInt(9, p.getDescuento());
+	        ps.setString(1, p.getNombre());
+	        ps.setString(2, p.getImagen());
+	        ps.setDouble(3, p.getPrecio());
+	        ps.setInt(4, p.getCantidad());
+	        ps.setString(5, p.getTipoProducto().toString());
+	        ps.setString(6, p.getCategoria().toString());
+	        ps.setString(7, p.getEstado().toString());
+	        ps.setInt(8, p.getDescuento());
 			
-           ResultSet rs = ps.executeQuery();        
-           if (rs.next()) anyadir = true;
-           rs.close();
-           ps.close();
+	        ps.executeUpdate();
+	        anyadir = true;
+	        ps.close();
 		
 		} catch (SQLException e) {
 			logger.log(Level.WARNING, "Error en metodo anyadirProducto: " + e);
