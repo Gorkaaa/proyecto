@@ -84,24 +84,26 @@ public class ModeloStock extends DefaultTableModel {
 	            Producto producto = productos.get(row);
 
 	            switch (column) {
-	                case 1: // Nombre
+	                case 1:
 	                    producto.setNombre((String) aValue);
 	                    break;
-	                case 2: // Imagen
+	                case 2:
 	                    producto.setImagen((String) aValue);
 	                    break;
-	                case 3: // Precio
+	                case 3:
 	                    producto.setPrecio(Double.parseDouble(aValue.toString()));
 	                    break;
-	                case 4: // Cantidad
+	                case 4:
 	                    producto.setCantidad(Integer.parseInt(aValue.toString()));
 	                    break;
 	                default:
-	                    // No realizar ninguna acción en otras columnas
 	                    break;
 	            }
 
-	            gestor.getGestorBD().anyadirProducto(producto);
+	            if (!productos.contains(producto)) {
+	                gestor.getGestorBD().anyadirProducto(producto);
+		            CadenaProductos.guardarProductos("resources/datos/productos.csv", gestor.getGestorBD().listarProductos());
+	            }
 
 	            fireTableCellUpdated(row, column);
 	        }
@@ -111,6 +113,7 @@ public class ModeloStock extends DefaultTableModel {
 	        JOptionPane.showMessageDialog(null, "Error: Los datos no son correctos", "Error", JOptionPane.ERROR_MESSAGE);
 	    }
 	}
+
 
 
 	
