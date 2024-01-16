@@ -169,6 +169,30 @@ public class VentanaPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				backgroundPanel.removeAll();
+				productos = gestor.getGestorBD().listarProductosPorTipo(TipoProducto.ALIMENTO);
+				createRowPanels(backgroundPanel);
+				
+			}
+			
+		});
+		
+		jHigieneYBelleza.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				backgroundPanel.removeAll();
+				productos = gestor.getGestorBD().listarProductosPorTipo(TipoProducto.HIGIENE_Y_BELLEZA);
+				createRowPanels(backgroundPanel);
+				
+			}
+			
+		});
+		
+		jLimpieza.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				backgroundPanel.removeAll();
 				productos = gestor.getGestorBD().listarProductosPorTipo(TipoProducto.LIMPIEZA);
 				createRowPanels(backgroundPanel);
 				
