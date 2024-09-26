@@ -69,177 +69,75 @@ public class VentanaPrincipal extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		
 		JMenu jMenu = new JMenu("Menú");
-		jMenu.addMouseListener((MouseListener) new MouseListener() {
+		jMenu.addMouseListener(new MouseListener() {
 
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-				
-			}
+			public void mouseClicked(MouseEvent e) {}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				backgroundPanel.removeAll();
-				productos = gestor.getGestorBD().listarProductos();
-				backgroundPanel.repaint();
-				createRowPanels(backgroundPanel);
-				
-				
+				updatePanelProductos(gestor.getGestorBD().listarProductos());
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseReleased(MouseEvent e) {}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseEntered(MouseEvent e) {}
 
 			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			
+			public void mouseExited(MouseEvent e) {}
 		});
 		
 		JMenu jProductos = new JMenu("Productos");
 
-		JMenuItem jAlimentos = new JMenu("Alimentos");
+		// Menú Alimentos
+		JMenu jAlimentos = new JMenu("Alimentos");
 		for (TipoAlimento tipo : TipoAlimento.values()) {
 			JMenuItem menuTipo = new JMenuItem(tipo.toString());
 			jAlimentos.add(menuTipo);
-			menuTipo.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					backgroundPanel.removeAll();
-					productos = gestor.getGestorBD().listarProductosPorCategoria(tipo.toString());
-					createRowPanels(backgroundPanel);
-					
-				}
-				
-			});
+			menuTipo.addActionListener(e -> updatePanelProductos(gestor.getGestorBD().listarProductosPorCategoria(tipo.toString())));
 		}
 		
-		JMenuItem jHigieneYBelleza = new JMenu("Higiene y Belleza");
+		// Menú Higiene y Belleza
+		JMenu jHigieneYBelleza = new JMenu("Higiene y Belleza");
 		for (TipoHigieneYBelleza tipo : TipoHigieneYBelleza.values()) {
 			JMenuItem menuTipo = new JMenuItem(tipo.toString());
 			jHigieneYBelleza.add(menuTipo);
-			menuTipo.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					backgroundPanel.removeAll();
-					productos = gestor.getGestorBD().listarProductosPorCategoria(tipo.toString());
-					createRowPanels(backgroundPanel);
-					
-				}
-				
-			});
+			menuTipo.addActionListener(e -> updatePanelProductos(gestor.getGestorBD().listarProductosPorCategoria(tipo.toString())));
 		}
 		
-		JMenuItem jLimpieza = new JMenu("Limpieza");
+		// Menú Limpieza
+		JMenu jLimpieza = new JMenu("Limpieza");
 		for (TipoLimpieza tipo : TipoLimpieza.values()) {
 			JMenuItem menuTipo = new JMenuItem(tipo.toString());
 			jLimpieza.add(menuTipo);
-			
-			menuTipo.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					backgroundPanel.removeAll();
-					productos = gestor.getGestorBD().listarProductosPorCategoria(tipo.toString());
-					createRowPanels(backgroundPanel);
-					
-				}
-				
-			});
+			menuTipo.addActionListener(e -> updatePanelProductos(gestor.getGestorBD().listarProductosPorCategoria(tipo.toString())));
 		}
-		
-		jAlimentos.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				backgroundPanel.removeAll();
-				productos = gestor.getGestorBD().listarProductosPorTipo(TipoProducto.ALIMENTO);
-				createRowPanels(backgroundPanel);
-				
-			}
-			
-		});
-		
-		jHigieneYBelleza.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				backgroundPanel.removeAll();
-				productos = gestor.getGestorBD().listarProductosPorTipo(TipoProducto.HIGIENE_Y_BELLEZA);
-				createRowPanels(backgroundPanel);
-				
-			}
-			
-		});
-		
-		jLimpieza.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				backgroundPanel.removeAll();
-				productos = gestor.getGestorBD().listarProductosPorTipo(TipoProducto.LIMPIEZA);
-				createRowPanels(backgroundPanel);
-				
-			}
-			
-		});
-		
 
 		jProductos.add(jAlimentos);
 		jProductos.add(jHigieneYBelleza);
 		jProductos.add(jLimpieza);
 
+		// Menú Promociones
 		JMenu jPromociones = new JMenu("Promociones");
-		
-		jPromociones.addMouseListener((MouseListener) new MouseListener() {
-
+		jPromociones.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-				
-			}
+			public void mouseClicked(MouseEvent e) {}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
-				backgroundPanel.removeAll();
-				productos = gestor.getGestorBD().listarProductosConDescuento();
-				backgroundPanel.repaint();
-				createRowPanels(backgroundPanel);
+				updatePanelProductos(gestor.getGestorBD().listarProductosConDescuento());
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseReleased(MouseEvent e) {}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseEntered(MouseEvent e) {}
 
 			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
+			public void mouseExited(MouseEvent e) {}
 		});
 
 		menuBar.add(jMenu);
@@ -247,6 +145,7 @@ public class VentanaPrincipal extends JFrame {
 		menuBar.add(jPromociones);
 
 		this.setJMenuBar(menuBar);
+		
 		
 		ventanaInicioSesion = new VentanaInicioSesion(gestor);
 		ventanaAdministracionUsuarios = new VentanaAdministracionUsuarios(gestor);
@@ -482,6 +381,14 @@ public class VentanaPrincipal extends JFrame {
 		panel.add(panelContenido, BorderLayout.SOUTH);
 
 		return panel;
+	}
+	
+	private void updatePanelProductos(List<Producto> nuevosProductos) {
+		backgroundPanel.removeAll();
+		productos = nuevosProductos;
+		createRowPanels(backgroundPanel);
+		backgroundPanel.revalidate(); // Importante para actualizar el layout
+		backgroundPanel.repaint();    // Importante para repintar
 	}
 
 }
