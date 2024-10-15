@@ -22,9 +22,9 @@ public class RendererStock extends DefaultTableCellRenderer {
 		Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		
 //		if (column == 0) {
-//            table.getColumnModel().getColumn(0).setPreferredWidth(3);
+//            table.getColumnModel().getColumn(0).setWidth(5);   Esto no funciona bien, tampoco se si es setWidth o setPreferredWidth
 //        } else if (column == 3) {
-//            table.getColumnModel().getColumn(3).setPreferredWidth(5);
+//            table.getColumnModel().getColumn(3).setWidth(5);
 //        } else if (column == 4) {
 //            table.getColumnModel().getColumn(4).setPreferredWidth(4);
 //        } else if (column == 8) {

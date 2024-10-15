@@ -113,11 +113,16 @@ public class VentanaStock extends JFrame {
                 } else if (selectedObject instanceof TipoAlimento) {
                 	categoriaSeleccionada = ((TipoAlimento) selectedObject).toString();
 
-                    if (CadenaProductos.getMapaCategoriaProducto().containsKey(TipoAlimento.valueOf(categoriaSeleccionada))) {
-                    	listaProductos = CadenaProductos.obtenerListaCategoriaProductos(TipoAlimento.valueOf(categoriaSeleccionada));
-                        Collections.sort(listaProductos);
-                        tabla.setModel(new ModeloStock(listaProductos));
-                    }
+					if (CadenaProductos.getMapaCategoriaProducto().containsKey(TipoAlimento.valueOf(categoriaSeleccionada))) {
+						listaProductos = CadenaProductos.obtenerListaCategoriaProductos(TipoAlimento.valueOf(categoriaSeleccionada));
+					    Collections.sort(listaProductos);
+					    tabla.setModel(new ModeloStock(listaProductos));
+	//                  tabla.getColumnModel().getColumn(0).setPreferredWidth(1);  // Ajusta según el tamaño que desees
+	//                  tabla.getColumnModel().getColumn(3).setPreferredWidth(100);
+	//                  tabla.getColumnModel().getColumn(4).setPreferredWidth(75);
+	//                  tabla.getColumnModel().getColumn(8).setPreferredWidth(50);
+	//                  tabla.getColumnModel().getColumn(9).setPreferredWidth(100);
+					}
                 } else if (selectedObject instanceof TipoHigieneYBelleza) {
                 	categoriaSeleccionada = ((TipoHigieneYBelleza) selectedObject).toString();
 
